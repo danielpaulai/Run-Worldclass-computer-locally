@@ -1,2 +1,10 @@
 .selected-model
 .DS_Store
+
+# Runtime state created by skills
+.benchmarks/
+.rag-index/
+.sessions/
+.journal/
+.agent-state/
+.ollama-history/

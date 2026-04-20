@@ -1,0 +1,52 @@
+{
+  "name": "local-ai-toolkit",
+  "version": "1.0.0",
+  "description": "Run a world-class AI fully on your laptop. 15 layered skills covering private chat, summarization, RAG, coding, writing, research, autonomous agents, teaching, journaling, workflows, model management, benchmarking, quality comparison, privacy auditing, and self-healing.",
+  "author": {
+    "name": "danielpaulai",
+    "url": "https://github.com/danielpaulai"
+  },
+  "homepage": "https://github.com/danielpaulai/Run-Worldclass-computer-locally",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/danielpaulai/Run-Worldclass-computer-locally.git"
+  },
+  "license": "MIT",
+  "keywords": [
+    "ollama",
+    "local-ai",
+    "privacy",
+    "offline",
+    "rag",
+    "coding-assistant",
+    "small-business",
+    "teaching",
+    "skills"
+  ],
+  "skills": [
+    "local-ai",
+    "summarize",
+    "local-rag",
+    "local-code",
+    "local-writer",
+    "local-research",
+    "local-agent",
+    "local-tutor",
+    "local-journal",
+    "local-workflow",
+    "model-manager",
+    "benchmark",
+    "compare",
+    "privacy-audit",
+    "model-doctor"
+  ],
+  "requirements": {
+    "ollama": ">=0.1.0",
+    "platform": ["macos", "linux", "windows"],
+    "ram_gb_min": 8,
+    "disk_gb_min": 15
+  },
+  "install": {
+    "postinstall": "./setup.sh"
+  }
+}

@@ -1,0 +1,9 @@
+name: daily-brief
+description: Summarize yesterday's journal and plan today's priorities
+steps:
+  - name: review-yesterday
+    run: ./ai local-journal reflect
+
+  - name: plan-today
+    run: ./ai local-ai persona engineer "Given the journal reflection above, list the 3 highest-leverage things to do today. Be specific. Rank them. For each, say why it belongs above the others."
+    input: ${previous}
