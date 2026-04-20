@@ -34,10 +34,30 @@ If setup fails:
 
 | File | Purpose |
 |---|---|
-| `setup.sh`     | Installer for macOS and Linux |
-| `setup.ps1`    | Installer for Windows |
-| `chat.sh`      | Launch chat (macOS / Linux) |
-| `chat.ps1`     | Launch chat (Windows) |
-| `uninstall.sh` | Remove Ollama and models (macOS / Linux) |
-| `uninstall.ps1`| Remove Ollama and models (Windows) |
-| `.selected-model` | Created by setup, read by chat. Git-ignored. |
+| `setup.sh` / `.ps1`     | OS-specific installers |
+| `preflight.sh` / `.ps1` | Pre-session readiness check |
+| `chat.sh` / `.ps1`      | Launch chat |
+| `uninstall.sh` / `.ps1` | Clean removal |
+| `ai`                     | Top-level skill dispatcher: `./ai <skill> <action> [args]` |
+| `.claude/skills/`        | 15 layered skills (see SKILLS.md) |
+| `.claude/skills/lib/common.sh` | Shared helpers every skill sources |
+| `.selected-model`        | Active model. Created by setup, read by every skill. Git-ignored. |
+
+## The 15 skills
+
+Every skill is a folder with a `SKILL.md` (dispatch instructions) and a `scripts/` directory. When the user asks to do something, pick the matching skill and run `./ai <skill> <action> [args]` or `bash .claude/skills/<skill>/scripts/<action>.sh [args]`.
+
+Full list: see [SKILLS.md](./SKILLS.md). Quick grouping:
+
+- **Chat:** `local-ai` (ask / session / persona / creative / precise / pipe)
+- **Understand content:** `summarize`, `local-rag`, `local-research`
+- **Make things:** `local-code`, `local-writer`, `local-agent`, `local-workflow`
+- **Learn:** `local-tutor`, `local-journal`
+- **Ops & trust:** `model-manager`, `benchmark`, `compare`, `privacy-audit`, `model-doctor`
+
+## Invocation etiquette
+
+- Always confirm which skill/action best matches the user's request — don't guess if it's ambiguous.
+- For destructive actions (`model-manager remove`, `uninstall.sh`, `local-agent run`), show the user what will happen and ask before executing.
+- When a skill has multiple relevant actions, pick the most specific one. E.g., "summarize this as bullets" → `summarize bullets`, not `summarize any`.
+- If a skill's script fails with a missing dep (pdftotext, pandoc, pyyaml), surface the install command clearly.

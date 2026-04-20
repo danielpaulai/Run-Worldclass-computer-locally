@@ -1,0 +1,24 @@
+{
+  "general": [
+    {"name": "llama3.2:3b",     "ram_gb": 8,  "size_gb": 2,  "notes": "Small, fast, surprisingly capable"},
+    {"name": "qwen2.5:7b",      "ram_gb": 16, "size_gb": 5,  "notes": "Great all-rounder"},
+    {"name": "qwen2.5:14b",     "ram_gb": 32, "size_gb": 9,  "notes": "Noticeably smarter than 7b"},
+    {"name": "gpt-oss:20b",     "ram_gb": 64, "size_gb": 13, "notes": "Near-frontier open model"}
+  ],
+  "code": [
+    {"name": "qwen2.5-coder:7b",  "ram_gb": 16, "size_gb": 5,  "notes": "Strong coding variant"},
+    {"name": "qwen2.5-coder:14b", "ram_gb": 32, "size_gb": 9,  "notes": "Best local coding model under 32 GB"},
+    {"name": "deepseek-coder-v2", "ram_gb": 32, "size_gb": 9,  "notes": "Strong on multiple languages"}
+  ],
+  "reasoning": [
+    {"name": "deepseek-r1:7b",  "ram_gb": 16, "size_gb": 5,  "notes": "Reasoning-tuned small"},
+    {"name": "deepseek-r1:14b", "ram_gb": 32, "size_gb": 9,  "notes": "Strong reasoning at mid size"}
+  ],
+  "embedding": [
+    {"name": "nomic-embed-text", "ram_gb": 8, "size_gb": 1, "notes": "Required by local-rag"}
+  ],
+  "vision": [
+    {"name": "llava:7b",     "ram_gb": 16, "size_gb": 5, "notes": "Vision-capable (image input)"},
+    {"name": "moondream:1.8b","ram_gb": 8,  "size_gb": 2, "notes": "Tiny vision model"}
+  ]
+}

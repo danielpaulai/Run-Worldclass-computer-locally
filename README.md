@@ -5,7 +5,8 @@ A one-command setup for running a serious AI model fully on your own computer. N
 > **New here?** Pick the right starting point for you:
 > - **Beginner, never run a local model?** → [WALKTHROUGH.md](./WALKTHROUGH.md) (step-by-step with diagrams)
 > - **Teaching a session?** → [VIDEO-SCRIPT.md](./VIDEO-SCRIPT.md) + [CHEATSHEET.md](./CHEATSHEET.md) ([PDF](./cheatsheet/cheatsheet.pdf))
-> - **Want to know what's pre-installed?** → [SKILLS.md](./SKILLS.md) (the 5 bundled Claude Code skills)
+> - **Want to see what's pre-installed?** → [SKILLS.md](./SKILLS.md) (15 bundled Claude Code skills + `./ai` dispatcher)
+> - **Just want to start using it?** → `./preflight.sh && ./setup.sh && ./ai`
 
 ---
 

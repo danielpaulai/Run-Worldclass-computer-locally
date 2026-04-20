@@ -1,0 +1,71 @@
+#!/usr/bin/env bash
+#
+# ./ai — top-level dispatcher for all skills.
+# Usage:
+#   ./ai                      # list all skills
+#   ./ai <skill>              # list a skill's actions
+#   ./ai <skill> <action> ... # run an action
+#
+# Examples:
+#   ./ai                             # show everything
+#   ./ai local-ai ask "hello"
+#   ./ai summarize tldr README.md
+#   ./ai rag ingest ~/notes
+#   ./ai rag query "what did I say about pricing?"
+#   ./ai benchmark full
+#
+set -e
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SKILLS_DIR="$SCRIPT_DIR/.claude/skills"
+
+# shellcheck disable=SC1091
+source "$SKILLS_DIR/lib/common.sh"
+
+# --- no args: list skills ---
+if [[ $# -eq 0 ]]; then
+  printf "\n  Local-AI skills available in this repo:\n\n"
+  for dir in "$SKILLS_DIR"/*/; do
+    name="$(basename "$dir")"
+    [[ "$name" == "lib" ]] && continue
+    desc=""
+    if [[ -f "$dir/SKILL.md" ]]; then
+      # Extract description from YAML frontmatter
+      desc=$(awk '/^description:/ {sub(/^description: */,""); print; exit}' "$dir/SKILL.md" | cut -c1-70)
+    fi
+    printf "    %-18s  %s\n" "$name" "$desc"
+  done
+  printf "\n  Usage:  ./ai <skill> <action> [args...]\n"
+  printf "  For a skill's actions:  ./ai <skill>\n\n"
+  exit 0
+fi
+
+SKILL="$1"
+shift
+
+SKILL_DIR="$SKILLS_DIR/$SKILL"
+[[ -d "$SKILL_DIR" ]] || die "Unknown skill: $SKILL.  Run ./ai to list skills."
+
+# --- no action: list actions ---
+if [[ $# -eq 0 ]]; then
+  printf "\n  %s — available actions:\n\n" "$SKILL"
+  if [[ -d "$SKILL_DIR/scripts" ]]; then
+    for s in "$SKILL_DIR/scripts"/*.sh; do
+      [[ -f "$s" ]] || continue
+      action="$(basename "$s" .sh)"
+      # Extract first-line description from script (# comment)
+      desc=$(awk 'NR<=5 && /^# / {sub(/^# */,""); print; exit}' "$s")
+      printf "    %-18s  %s\n" "$action" "$desc"
+    done
+  fi
+  printf "\n  Usage:  ./ai %s <action> [args...]\n\n" "$SKILL"
+  exit 0
+fi
+
+ACTION="$1"
+shift
+
+SCRIPT="$SKILL_DIR/scripts/$ACTION.sh"
+[[ -f "$SCRIPT" ]] || die "Unknown action '$ACTION' for skill '$SKILL'.  Run ./ai $SKILL to list actions."
+
+exec bash "$SCRIPT" "$@"

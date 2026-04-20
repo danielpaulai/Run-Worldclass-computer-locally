@@ -1,0 +1,9 @@
+name: code-review
+description: Review a file, then generate tests, then suggest documentation
+steps:
+  - name: review
+    run: ./ai local-code review $FILE
+  - name: tests
+    run: ./ai local-code test-gen $FILE
+  - name: docs
+    run: ./ai local-code doc $FILE
