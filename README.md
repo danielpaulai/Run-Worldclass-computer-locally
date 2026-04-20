@@ -2,6 +2,8 @@
 
 A one-command setup for running a serious AI model fully on your own computer. No cloud, no API keys, no subscription. Your data never leaves your machine.
 
+> **New to this?** Start with the step-by-step **[WALKTHROUGH](./WALKTHROUGH.md)** — it shows exactly what will happen, minute by minute, with diagrams.
+
 ---
 
 ## The whole picture
