@@ -3,6 +3,7 @@
 A one-command setup for running a serious AI model fully on your own computer. No cloud, no API keys, no subscription. Your data never leaves your machine.
 
 > **New here?** Pick the right starting point for you:
+> - **Not sure what this is FOR?** → [USE-CASES.md](./USE-CASES.md) (five real small-business owners, their real Mondays)
 > - **Beginner, never run a local model?** → [WALKTHROUGH.md](./WALKTHROUGH.md) (step-by-step with diagrams)
 > - **Teaching a session?** → [VIDEO-SCRIPT.md](./VIDEO-SCRIPT.md) + [CHEATSHEET.md](./CHEATSHEET.md) ([PDF](./cheatsheet/cheatsheet.pdf))
 > - **Want to see what's pre-installed?** → [SKILLS.md](./SKILLS.md) (15 bundled Claude Code skills + `./ai` dispatcher)
