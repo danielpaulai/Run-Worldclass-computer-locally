@@ -2,7 +2,10 @@
 
 A one-command setup for running a serious AI model fully on your own computer. No cloud, no API keys, no subscription. Your data never leaves your machine.
 
-> **New to this?** Start with the step-by-step **[WALKTHROUGH](./WALKTHROUGH.md)** — it shows exactly what will happen, minute by minute, with diagrams.
+> **New here?** Pick the right starting point for you:
+> - **Beginner, never run a local model?** → [WALKTHROUGH.md](./WALKTHROUGH.md) (step-by-step with diagrams)
+> - **Teaching a session?** → [VIDEO-SCRIPT.md](./VIDEO-SCRIPT.md) + [CHEATSHEET.md](./CHEATSHEET.md) ([PDF](./cheatsheet/cheatsheet.pdf))
+> - **Want to know what's pre-installed?** → [SKILLS.md](./SKILLS.md) (the 5 bundled Claude Code skills)
 
 ---
 
@@ -91,8 +94,9 @@ No network calls after the one-time model download. Ollama binds only to `localh
 ```bash
 git clone https://github.com/danielpaulai/Run-Worldclass-computer-locally.git
 cd Run-Worldclass-computer-locally
-./setup.sh
-./chat.sh
+./preflight.sh       # confirms your laptop is ready
+./setup.sh           # installs everything
+./chat.sh            # start chatting
 ```
 
 ### Windows (PowerShell)
@@ -100,6 +104,7 @@ cd Run-Worldclass-computer-locally
 ```powershell
 git clone https://github.com/danielpaulai/Run-Worldclass-computer-locally.git
 cd Run-Worldclass-computer-locally
+.\preflight.ps1
 .\setup.ps1
 .\chat.ps1
 ```
