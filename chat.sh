@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Launch a chat with the model chosen by setup.sh.
+# Launch a chat with the model chosen by setup.sh.  macOS and Linux.
 #
 set -e
 
@@ -16,7 +16,15 @@ MODEL=$(cat "$SCRIPT_DIR/.selected-model")
 # Make sure Ollama is up
 if ! curl -s http://localhost:11434/api/version >/dev/null 2>&1; then
   echo "Ollama is not running. Starting it..."
-  brew services start ollama >/dev/null
+  case "$(uname -s)" in
+    Darwin) brew services start ollama >/dev/null ;;
+    Linux)
+      if command -v systemctl >/dev/null 2>&1; then
+        sudo systemctl start ollama 2>/dev/null || nohup ollama serve >/tmp/ollama.log 2>&1 &
+      else
+        nohup ollama serve >/tmp/ollama.log 2>&1 &
+      fi ;;
+  esac
   sleep 2
 fi
 
