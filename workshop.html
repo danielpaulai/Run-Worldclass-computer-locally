@@ -587,6 +587,51 @@
     word-wrap: break-word;
     font-family: inherit;
   }
+  /* Markdown rendering inside message bodies */
+  .msg-body.rendered { white-space: normal; }
+  .msg-body.rendered p { margin: 0 0 10px; }
+  .msg-body.rendered p:last-child { margin-bottom: 0; }
+  .msg-body.rendered h4 { font-size: 17px; margin: 14px 0 6px; font-weight: 700; font-family: "Iowan Old Style", Charter, Georgia, serif; }
+  .msg-body.rendered h5 { font-size: 15px; margin: 12px 0 6px; font-weight: 700; }
+  .msg-body.rendered h6 { font-size: 13.5px; margin: 10px 0 5px; font-weight: 700; letter-spacing: 0.02em; }
+  .msg-body.rendered ul, .msg-body.rendered ol { margin: 6px 0 10px; padding-left: 24px; }
+  .msg-body.rendered li { margin-bottom: 4px; }
+  .msg-body.rendered li > p { margin: 0; }
+  .msg-body.rendered code {
+    background: var(--cream-deep);
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 0.88em;
+  }
+  .msg-body.rendered pre {
+    background: var(--terminal-bg);
+    color: var(--terminal-fg);
+    padding: 12px 14px;
+    border-radius: 5px;
+    overflow-x: auto;
+    margin: 10px 0;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .msg-body.rendered pre code {
+    background: none;
+    padding: 0;
+    color: inherit;
+    font-size: 13px;
+  }
+  .msg-body.rendered strong { font-weight: 700; }
+  .msg-body.rendered em { font-style: italic; }
+  .msg-body.rendered blockquote {
+    border-left: 3px solid var(--coral);
+    padding-left: 12px;
+    color: var(--muted);
+    margin: 8px 0;
+  }
+  .msg-body.rendered a { color: var(--coral); text-decoration: underline; }
+  .msg-body.rendered table { border-collapse: collapse; margin: 8px 0; font-size: 13px; }
+  .msg-body.rendered th, .msg-body.rendered td { border: 1px solid var(--line); padding: 5px 10px; text-align: left; }
+  .msg-body.rendered th { background: var(--cream-deep); font-weight: 700; }
   .msg-body .cursor {
     display: inline-block;
     width: 2px;
@@ -686,6 +731,40 @@
     font-family: inherit;
   }
   .attached-file .remove-attach:hover { color: var(--coral); }
+
+  /* ---------- ATTACHMENT QUICK-ACTION PRESETS ---------- */
+  .attach-presets {
+    display: none;
+    gap: 8px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .attach-presets.visible { display: flex; }
+  .attach-presets .preset-label {
+    font-size: 10.5px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-right: 4px;
+    font-weight: 700;
+  }
+  .attach-presets button {
+    background: var(--card);
+    border: 1px solid var(--coral);
+    color: var(--coral-deep);
+    padding: 7px 13px;
+    font-size: 12.5px;
+    font-weight: 600;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background .12s, color .12s;
+  }
+  .attach-presets button:hover {
+    background: var(--coral);
+    color: #fff;
+  }
 
   .chat-input-row {
     display: flex;
@@ -1055,9 +1134,42 @@
   </div>
   <div class="brand-right">
     <span class="brand-privacy">Local only</span>
+    <button type="button" class="brand-btn" id="new-chat">New chat</button>
+    <button type="button" class="brand-btn" id="open-history">History</button>
+    <button type="button" class="brand-btn" id="open-prompts">Prompts</button>
     <button type="button" class="brand-btn" id="open-kit">Marketing kit</button>
     <button type="button" class="brand-btn" id="theme-toggle">Dark</button>
     <button type="button" class="brand-btn" id="save-convo">Save chat</button>
+  </div>
+</div>
+
+<!-- CONVERSATION HISTORY POPOVER -->
+<div class="popover-backdrop" id="history-backdrop">
+  <div class="popover" id="history-popover" role="dialog" aria-labelledby="history-title">
+    <div class="popover-head">
+      <h3 id="history-title">Past conversations</h3>
+      <button type="button" class="popover-close" data-close="history">\u2715</button>
+    </div>
+    <div class="popover-body" id="history-list"></div>
+    <div class="popover-foot">
+      <p class="foot-help">Every chat auto-saves here. Click "Resume" to pick up where you left off, or "Delete" to remove forever. All stored locally.</p>
+    </div>
+  </div>
+</div>
+
+<!-- SAVED PROMPTS POPOVER -->
+<div class="popover-backdrop" id="prompts-backdrop">
+  <div class="popover" id="prompts-popover" role="dialog" aria-labelledby="prompts-title">
+    <div class="popover-head">
+      <h3 id="prompts-title">Your prompts</h3>
+      <button type="button" class="popover-close" data-close="prompts">\u2715</button>
+    </div>
+    <div class="popover-body" id="prompts-list"></div>
+    <div class="popover-foot">
+      <input type="text" id="new-prompt-name" placeholder="Name (e.g. 'Review contract as lawyer')" maxlength="60">
+      <button type="button" class="foot-btn" id="save-prompt-btn">Save current chat input as a prompt</button>
+      <p class="foot-help">Type a prompt into the chat box, name it above, hit Save. It'll show up here for one-click reuse.</p>
+    </div>
   </div>
 </div>
 
@@ -1114,6 +1226,15 @@
 
     <div class="chat-drop-hint">Drop it anywhere on this box \u2014 the file will be attached to your next message</div>
     <div class="attachments-row" id="attachments-row"></div>
+
+    <div class="attach-presets" id="attach-presets">
+      <span class="preset-label">Do this with the file:</span>
+      <button type="button" data-preset="tldr">TLDR</button>
+      <button type="button" data-preset="bullets">Key bullets</button>
+      <button type="button" data-preset="actions">Action items</button>
+      <button type="button" data-preset="risks">Find risks</button>
+      <button type="button" data-preset="draft-reply">Draft a reply</button>
+    </div>
 
     <div class="chat-quickstart">
       <div class="quickstart-label">Try a real use case \u2014 one click, realistic output</div>
@@ -1451,6 +1572,262 @@ copyBtn.addEventListener("click", async () => {
   }, 1600);
 });
 
+/* ---------- CONVERSATION HISTORY ---------- */
+// Auto-save the current conversation to localStorage after every assistant
+// response. Show past conversations in a popover so users can resume them.
+
+let currentConvoId = null;   // id of the conversation currently loaded
+
+function allConvos() {
+  try { return JSON.parse(localStorage.getItem("pp-conversations") || "[]"); }
+  catch { return []; }
+}
+function saveAllConvos(arr) {
+  localStorage.setItem("pp-conversations", JSON.stringify(arr));
+}
+
+function autosaveCurrentConvo() {
+  if (!convo || convo.length === 0) return;
+  const all = allConvos();
+  // Derive a title from the first user message, trimmed.
+  const firstUser = convo.find(m => m.role === "user");
+  const title = (firstUser?.content || "Chat")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, 80);
+
+  if (currentConvoId) {
+    const idx = all.findIndex(c => c.id === currentConvoId);
+    if (idx >= 0) {
+      all[idx].messages = convo;
+      all[idx].updated = Date.now();
+      all[idx].title = title || all[idx].title;
+      saveAllConvos(all);
+      return;
+    }
+  }
+  // New convo
+  const id = "c" + Date.now() + "-" + Math.random().toString(36).slice(2, 7);
+  all.push({
+    id,
+    title,
+    messages: convo.slice(),
+    created: Date.now(),
+    updated: Date.now(),
+    model: chatModel.textContent || "unknown",
+  });
+  saveAllConvos(all);
+  currentConvoId = id;
+}
+
+function newChat() {
+  // Save current before clearing
+  autosaveCurrentConvo();
+  convo.length = 0;
+  currentConvoId = null;
+  chatMsgs.innerHTML = `<div class="msg msg-system">Type a question, try a real use case below, or <strong>drag a text file onto this window</strong> to include it as context. The model runs on this laptop, nothing leaves your machine.</div>`;
+  chatInput.value = "";
+  attachedFile = null;
+  renderAttachment();
+  chatInput.focus();
+}
+
+function loadConvo(id) {
+  const all = allConvos();
+  const c = all.find(x => x.id === id);
+  if (!c) return;
+  // Save current first
+  autosaveCurrentConvo();
+
+  // Clear UI
+  chatMsgs.innerHTML = "";
+  convo.length = 0;
+
+  // Replay each message into the UI + memory
+  c.messages.forEach(m => {
+    const el = addChatMessage(m.role, m.content);
+    if (m.role === "assistant") {
+      const bodyEl = el.querySelector(".msg-body");
+      bodyEl.classList.add("rendered");
+      bodyEl.innerHTML = renderMarkdown(m.content);
+    }
+    convo.push(m);
+  });
+
+  currentConvoId = id;
+  closeHistory();
+  chatMsgs.scrollTop = chatMsgs.scrollHeight;
+}
+
+function renderHistory() {
+  const list = document.getElementById("history-list");
+  const all = allConvos();
+  if (all.length === 0) {
+    list.innerHTML = `<div class="popover-empty">No past conversations yet. Your next chat will auto-save here.</div>`;
+    return;
+  }
+  const sorted = [...all].sort((a, b) => (b.updated || 0) - (a.updated || 0));
+  list.innerHTML = "";
+  sorted.forEach(c => {
+    const row = document.createElement("div");
+    row.className = "popover-item";
+    const when = new Date(c.updated || c.created || Date.now());
+    const dateStr = when.toLocaleDateString() + " " + when.toLocaleTimeString([], {hour:"2-digit", minute:"2-digit"});
+    const badge = (c.id === currentConvoId) ? ` <span style="font-size:10px;color:var(--coral);font-weight:700;letter-spacing:0.08em;">\u00b7 CURRENT</span>` : "";
+    row.innerHTML = `
+      <div class="item-name">${escapeHtml(c.title || "Untitled")}${badge}</div>
+      <div class="item-preview">${escapeHtml(c.messages.length + " messages")} \u00b7 ${escapeHtml(dateStr)} \u00b7 ${escapeHtml(c.model || "")}</div>
+      <div class="item-actions">
+        <button type="button" data-action="resume" data-id="${c.id}">Resume</button>
+        <button type="button" data-action="delete" data-id="${c.id}" class="delete">Delete</button>
+      </div>
+    `;
+    list.appendChild(row);
+  });
+  list.querySelectorAll("[data-action]").forEach(btn => {
+    btn.addEventListener("click", (ev) => {
+      ev.stopPropagation();
+      const id = btn.getAttribute("data-id");
+      const action = btn.getAttribute("data-action");
+      if (action === "resume") {
+        loadConvo(id);
+      } else if (action === "delete") {
+        const c = allConvos().find(x => x.id === id);
+        if (!confirm(`Delete "${c?.title || "this chat"}"? This can't be undone.`)) return;
+        saveAllConvos(allConvos().filter(x => x.id !== id));
+        if (currentConvoId === id) { currentConvoId = null; }
+        renderHistory();
+      }
+    });
+  });
+}
+
+function openHistory() {
+  renderHistory();
+  document.getElementById("history-backdrop").classList.add("open");
+}
+function closeHistory() {
+  document.getElementById("history-backdrop").classList.remove("open");
+}
+document.getElementById("open-history").addEventListener("click", openHistory);
+document.getElementById("new-chat").addEventListener("click", newChat);
+document.getElementById("history-backdrop").addEventListener("click", (e) => {
+  if (e.target.id === "history-backdrop") closeHistory();
+});
+document.querySelectorAll("[data-close='history']").forEach(btn => btn.addEventListener("click", closeHistory));
+
+/* ---------- SAVED PROMPTS LIBRARY ---------- */
+// Stored as JSON in localStorage under "pp-prompts".
+// Each entry: { id, name, content, created }
+
+function loadSavedPrompts() {
+  try {
+    const raw = localStorage.getItem("pp-prompts");
+    return raw ? JSON.parse(raw) : [];
+  } catch { return []; }
+}
+
+function saveSavedPrompts(arr) {
+  localStorage.setItem("pp-prompts", JSON.stringify(arr));
+}
+
+function renderSavedPrompts() {
+  const list = document.getElementById("prompts-list");
+  const prompts = loadSavedPrompts();
+  if (prompts.length === 0) {
+    list.innerHTML = `<div class="popover-empty">No saved prompts yet.<br><br>Type any prompt into the chat box, then come back here, give it a name, and hit Save. It'll become a one-click button you can reuse forever.</div>`;
+    return;
+  }
+  // Most recent first
+  const sorted = [...prompts].sort((a, b) => (b.created || 0) - (a.created || 0));
+  list.innerHTML = "";
+  sorted.forEach((p) => {
+    const row = document.createElement("div");
+    row.className = "popover-item";
+    const preview = (p.content || "").slice(0, 180);
+    row.innerHTML = `
+      <div class="item-name">${escapeHtml(p.name)}</div>
+      <div class="item-preview">${escapeHtml(preview)}${(p.content || "").length > 180 ? "\u2026" : ""}</div>
+      <div class="item-actions">
+        <button type="button" data-action="load" data-id="${p.id}">Load</button>
+        <button type="button" data-action="delete" data-id="${p.id}" class="delete">Delete</button>
+      </div>
+    `;
+    list.appendChild(row);
+  });
+  list.querySelectorAll("[data-action]").forEach((btn) => {
+    btn.addEventListener("click", (ev) => {
+      ev.stopPropagation();
+      const id = btn.getAttribute("data-id");
+      const action = btn.getAttribute("data-action");
+      const all = loadSavedPrompts();
+      const p = all.find((x) => x.id === id);
+      if (!p) return;
+      if (action === "load") {
+        chatInput.value = p.content;
+        closePrompts();
+        chatInput.focus();
+      } else if (action === "delete") {
+        if (!confirm(`Delete "${p.name}"?`)) return;
+        saveSavedPrompts(all.filter((x) => x.id !== id));
+        renderSavedPrompts();
+      }
+    });
+  });
+}
+
+function escapeHtml(s) {
+  return (s || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+function openPrompts() {
+  renderSavedPrompts();
+  document.getElementById("new-prompt-name").value = "";
+  document.getElementById("prompts-backdrop").classList.add("open");
+}
+
+function closePrompts() {
+  document.getElementById("prompts-backdrop").classList.remove("open");
+}
+
+document.getElementById("open-prompts").addEventListener("click", openPrompts);
+document.getElementById("prompts-backdrop").addEventListener("click", (e) => {
+  if (e.target.id === "prompts-backdrop") closePrompts();
+});
+document.querySelectorAll("[data-close='prompts']").forEach((btn) => {
+  btn.addEventListener("click", closePrompts);
+});
+
+document.getElementById("save-prompt-btn").addEventListener("click", () => {
+  const nameEl = document.getElementById("new-prompt-name");
+  const name   = nameEl.value.trim();
+  const content = chatInput.value.trim();
+
+  if (!content) {
+    alert("Type something into the chat box first \u2014 then click Save.");
+    return;
+  }
+  if (!name) {
+    alert("Give the prompt a short name so you can find it later.");
+    nameEl.focus();
+    return;
+  }
+  const prompts = loadSavedPrompts();
+  prompts.push({
+    id: "p" + Date.now() + "-" + Math.random().toString(36).slice(2, 7),
+    name,
+    content,
+    created: Date.now(),
+  });
+  saveSavedPrompts(prompts);
+  nameEl.value = "";
+  renderSavedPrompts();
+});
+
 /* ---------- MARKETING KIT POPOVER ---------- */
 // Each entry: title, one-line blurb, suggested "adapt" prompt, full content (markdown).
 // Content is a trimmed excerpt — enough for the model to grasp the shape without
@@ -1466,9 +1843,9 @@ const kitItems = [
   {
     id: "linkedin",
     title: "LinkedIn launch post",
-    blurb: "The long variant, ~1,800 characters. Short line rhythm, specific stories, one CTA.",
-    adapt: "Rewrite this LinkedIn post in my voice for [your audience]. Same pattern \u2014 pattern interrupt, short lines, specific stories \u2014 but swap the consultant/lawyer/accountant examples for ones from [your industry].",
-    content: `Most people don't use AI for half of what matters.\n\nThe confidential half.\n\nThe half you signed NDAs about.\n\n---\n\nHere's how the pattern usually goes:\n\nYou open ChatGPT.\n\nYou're about to paste the client's strategy deck.\n\nYou hesitate.\n\nYou close the tab.\n\nYou summarize it by hand.\n\nTakes 45 minutes.\n\n---\n\nI built the thing for those 45 minutes.\n\nIt's called Purely Personal.\n\nIt runs a world-class AI model entirely on your laptop.\n\nNo cloud. No login. No subscription.\n\nYour document never leaves your hard drive.\n\n---\n\nA lawyer drops a 40-page NDA. Asks \"what are the 3 riskiest clauses?\" Gets an answer in 12 seconds. Never uploaded.\n\nAn accountant pastes a messy expense CSV. Asks for categorization. Gets a clean table with 3 anomalies flagged. Still offline.\n\nA coach pastes her session notes. Asks \"what did they commit to, what did they dodge?\" Gets both lists. Private, the way her notes are supposed to be.\n\n---\n\nCosts: $0.\nWorks: offline.\nOpen source: MIT.\nInstall: 15 minutes.\n\n---\n\nIf you've ever felt that sting of guilt pasting a confidential file into ChatGPT \u2014 this is the answer.\n\nDownload link in the comments.`,
+    blurb: "In Daniel's voice. Reflective opener, short beat lines, P.S. question at the end.",
+    adapt: "Rewrite this LinkedIn post in my voice for [your audience]. Keep the \"I think\" opener, the one-thought-per-line rhythm, the \"Yeah, so this is what I want you to take away from this\" pivot, and the P.S. that asks the reader a question. Swap the examples for ones that fit [your industry]. No em dashes.",
+    content: `I think no one is saying this out loud.\n\nWe all got excited about AI.\n\nChatGPT. Claude. Everyone's talking about it.\n\nBut here is what nobody's admitting.\n\nYou're not actually using AI for half of what matters.\n\nThe confidential half.\n\nThe files you signed NDAs about.\n\nThe ones you'd never paste into a cloud service.\n\nSo what do you do with those?\n\nYou do them by hand.\n\n45 minutes. Twice a week. Maybe more.\n\nAnd yes.\n\nAI is replacing many things.\n\nBut it never touches the work you actually get paid to handle.\n\nThat is what nobody is talking about.\n\nYeah, so this is what I want you to take away from this.\n\nUse AI for the public stuff.\n\nBut for the private stuff, use an AI that runs entirely on your laptop.\n\nNothing uploaded. No login. No monthly fee.\n\nYour file stays yours.\n\nYour NDA is still an NDA.\n\nThat is what the next year of AI should actually look like.\n\nNot smarter. Not faster. Private.\n\nP.S. What is one document on your laptop right now that you'd love AI help with, but you'd never paste into ChatGPT?`,
   },
   {
     id: "twitter",
@@ -1575,7 +1952,11 @@ document.querySelectorAll("[data-close='kit']").forEach((btn) => {
   btn.addEventListener("click", closeKit);
 });
 document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape") closeKit();
+  if (e.key === "Escape") {
+    closeKit();
+    closePrompts();
+    closeHistory();
+  }
 });
 
 /* ---------- DARK / LIGHT THEME TOGGLE ---------- */
@@ -1656,7 +2037,12 @@ const MAX_ATTACH_BYTES = 500 * 1024;  // 500 KB — keep prompt from blowing up
 
 function renderAttachment() {
   const row = document.getElementById("attachments-row");
-  if (!attachedFile) { row.innerHTML = ""; return; }
+  const presets = document.getElementById("attach-presets");
+  if (!attachedFile) {
+    row.innerHTML = "";
+    presets.classList.remove("visible");
+    return;
+  }
   const kb = (attachedFile.size / 1024).toFixed(1);
   row.innerHTML = `
     <div class="attached-file">
@@ -1669,7 +2055,29 @@ function renderAttachment() {
     attachedFile = null;
     renderAttachment();
   });
+  presets.classList.add("visible");
 }
+
+/* ---------- ATTACHMENT QUICK-ACTION PRESETS ---------- */
+// When a file is attached, these buttons give one-click common tasks.
+// Each fills the input and submits the form (same path as typing + Enter).
+const attachPresetPrompts = {
+  "tldr":        "Summarize this in exactly 3 sentences. Focus on what actually matters.",
+  "bullets":     "Pull 5 to 8 key takeaways from this document. Short bullets, specific nouns, no filler.",
+  "actions":     "Extract every action item, commitment, and deadline from this. Group by who owns each one. If any deadlines are implied but not stated, flag them.",
+  "risks":       "Identify the top 3 risks, red flags, or concerns in this document. For each, explain in one sentence what could go wrong and who would bear the consequence.",
+  "draft-reply": "Draft a professional, warm-but-firm response to this. Under 120 words. Three paragraphs: acknowledge, address, next step.",
+};
+
+document.querySelectorAll("#attach-presets [data-preset]").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const key = btn.getAttribute("data-preset");
+    const prompt = attachPresetPrompts[key];
+    if (!prompt) return;
+    chatInput.value = prompt;
+    chatForm.dispatchEvent(new Event("submit", { cancelable: true, bubbles: true }));
+  });
+});
 
 async function handleDroppedFile(file) {
   // Accept text-like files only for this MVP. PDFs/DOCX are a follow-up.
@@ -1781,6 +2189,89 @@ chatModelSel.addEventListener("change", () => {
 
 checkOllama();
 
+/* ---------- MINIMAL MARKDOWN RENDERER ---------- */
+// Renders common GitHub-flavored-markdown we care about inside chat bubbles.
+// Also strips em/en dashes (an AI-tell the user explicitly doesn't want)
+// and replaces them with sentence breaks when possible.
+function cleanVoice(text) {
+  return text
+    // " — " (em/en with spaces) -> ", "  (gentle: preserves flow, no broken titles)
+    .replace(/\s+[\u2014\u2013]\s+/g, ", ")
+    // "word—word" (em glued)  -> "word, word"
+    .replace(/([\w\)])[\u2014\u2013]([\w\(])/g, "$1, $2")
+    // any remaining stray em/en -> comma
+    .replace(/[\u2014\u2013]/g, ",")
+    // collapse repeated commas
+    .replace(/,,+/g, ",")
+    // ", ." left over from a sentence-end dash  ->  "."
+    .replace(/,\s*\./g, ".")
+    // collapse double spaces
+    .replace(/  +/g, " ");
+}
+
+function renderMarkdown(src) {
+  if (!src) return "";
+
+  // 1. Clean the voice first (em/en dash strip etc.)
+  let md = cleanVoice(src);
+
+  // 2. Escape HTML so injected content can't break out of the renderer.
+  md = md.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+  // 3. Protect fenced code blocks from further processing.
+  const codeBlocks = [];
+  md = md.replace(/```(\w*)\n([\s\S]*?)```/g, (_m, _lang, code) => {
+    codeBlocks.push(`<pre><code>${code.replace(/\s+$/,"")}</code></pre>`);
+    return `\u0000CB${codeBlocks.length - 1}\u0000`;
+  });
+
+  // 4. Inline code `like this`
+  md = md.replace(/`([^`\n]+)`/g, "<code>$1</code>");
+
+  // 5. Bold **x** and italic _x_
+  md = md.replace(/\*\*([^*\n]+?)\*\*/g, "<strong>$1</strong>");
+  md = md.replace(/(^|[\s(>])\*([^*\n]+?)\*(?=[\s).,!?:;]|$)/g, "$1<em>$2</em>");
+
+  // 6. Headings (### is an h6, ## is h5, # is h4 — keep them small in chat)
+  md = md.replace(/^######\s+(.+)$/gm, "<h6>$1</h6>");
+  md = md.replace(/^#####\s+(.+)$/gm,  "<h6>$1</h6>");
+  md = md.replace(/^####\s+(.+)$/gm,   "<h6>$1</h6>");
+  md = md.replace(/^###\s+(.+)$/gm,    "<h6>$1</h6>");
+  md = md.replace(/^##\s+(.+)$/gm,     "<h5>$1</h5>");
+  md = md.replace(/^#\s+(.+)$/gm,      "<h4>$1</h4>");
+
+  // 7. Blockquotes
+  md = md.replace(/^>\s+(.+)$/gm, "<blockquote>$1</blockquote>");
+
+  // 8. Split into paragraphs on blank lines, then process each
+  const paras = md.split(/\n{2,}/);
+  const rendered = paras.map((p) => {
+    p = p.trim();
+    if (!p) return "";
+    // Code block placeholder — keep as-is
+    if (/^\u0000CB\d+\u0000$/.test(p)) return p;
+    // Already a block element
+    if (/^<(h[4-6]|blockquote)/.test(p)) return p;
+    // Unordered list: every line starts with "- " or "* "
+    if (/^[-*]\s+/.test(p) && p.split("\n").every(l => /^[-*]\s+/.test(l) || l.trim() === "")) {
+      const items = p.split("\n").filter(l => l.trim()).map(l => `<li>${l.replace(/^[-*]\s+/, "")}</li>`).join("");
+      return `<ul>${items}</ul>`;
+    }
+    // Ordered list: "1. ", "2. " etc.
+    if (/^\d+\.\s+/.test(p) && p.split("\n").every(l => /^\d+\.\s+/.test(l) || l.trim() === "")) {
+      const items = p.split("\n").filter(l => l.trim()).map(l => `<li>${l.replace(/^\d+\.\s+/, "")}</li>`).join("");
+      return `<ol>${items}</ol>`;
+    }
+    // Regular paragraph: convert single newlines to <br>
+    return `<p>${p.replace(/\n/g, "<br>")}</p>`;
+  }).join("\n");
+
+  // 9. Restore code blocks
+  const out = rendered.replace(/\u0000CB(\d+)\u0000/g, (_m, i) => codeBlocks[+i]);
+
+  return out;
+}
+
 function addChatMessage(role, content) {
   // Remove the empty "system" placeholder on first real message.
   const sys = chatMsgs.querySelector(".msg-system");
@@ -1790,7 +2281,15 @@ function addChatMessage(role, content) {
   el.className = `msg msg-${role}`;
   const label = role === "user" ? "You" : role === "error" ? "Error" : "Local AI";
   el.innerHTML = `<div class="msg-label">${label}</div><div class="msg-body"></div>`;
-  el.querySelector(".msg-body").textContent = content;
+  const bodyEl = el.querySelector(".msg-body");
+  // User messages: render markdown immediately (they don't stream).
+  // Assistant/error messages: caller decides (we stream text then render at end).
+  if (role === "user") {
+    bodyEl.classList.add("rendered");
+    bodyEl.innerHTML = renderMarkdown(content);
+  } else {
+    bodyEl.textContent = content;
+  }
   chatMsgs.appendChild(el);
   chatMsgs.scrollTop = chatMsgs.scrollHeight;
   return el;
@@ -1940,13 +2439,21 @@ chatForm.addEventListener("submit", async (e) => {
     }
 
     cursor.remove();
+    // Re-render the final body as markdown (bold, lists, headings, etc.)
+    bodyEl.classList.add("rendered");
+    bodyEl.innerHTML = renderMarkdown(fullText);
     convo.push({ role: "assistant", content: fullText });
+    // Auto-save after each complete exchange so nothing's lost on close
+    try { autosaveCurrentConvo(); } catch {}
   } catch (err) {
     cursor.remove();
     if (err.name === "AbortError") {
       // User clicked Stop — keep whatever streamed so far, just mark it stopped
       if (fullText) {
+        bodyEl.classList.add("rendered");
+        bodyEl.innerHTML = renderMarkdown(fullText + "\n\n_(generation stopped by user)_");
         convo.push({ role: "assistant", content: fullText + "\n\n_(generation stopped by user)_" });
+        try { autosaveCurrentConvo(); } catch {}
       } else {
         assistantEl.remove();
         convo.pop();

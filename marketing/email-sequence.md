@@ -1,10 +1,10 @@
-# 5-Email Launch Sequence — Purely Personal
+# 5-Email Launch Sequence, Purely Personal
 
 Five emails. One per week-critical moment. Punchy voice, one idea per line, always one CTA.
 
 ---
 
-## Email 1 — Pre-launch (send 24–48 hrs before)
+## Email 1, Pre-launch (send 24,48 hrs before)
 
 **Subject:** About the tool you use for half your work
 
@@ -34,13 +34,11 @@ Walk away during the 12-minute download. You don't need to sit there.
 
 If it fails, come anyway. I've built a fallback so nobody gets left behind.
 
-See you tomorrow.
-
-— Daniel
+See you tomorrow., Daniel
 
 ---
 
-## Email 2 — Launch-day morning (send 2 hours before session)
+## Email 2, Launch-day morning (send 2 hours before session)
 
 **Subject:** Doors open in 2 hours
 
@@ -48,20 +46,18 @@ Quick list:
 
 - Laptop, charged.
 - The app installed (DMG link in last email).
-- **One document you'd like summarized.** Non-confidential, 2–10 pages.
+- **One document you'd like summarized.** Non-confidential, 2,10 pages.
 - **One thing you do manually** that AI might help with.
 
-If your install didn't finish — still come. You'll be in the session fully. We'll fix yours in the first 5 minutes.
+If your install didn't finish, still come. You'll be in the session fully. We'll fix yours in the first 5 minutes.
 
 One link, one time: [GitHub]
 
-See you at [time].
-
-— Daniel
+See you at [time]., Daniel
 
 ---
 
-## Email 3 — Day-1 recap (evening of workshop)
+## Email 3, Day-1 recap (evening of workshop)
 
 **Subject:** Your 5-day plan
 
@@ -81,21 +77,19 @@ You have a private AI on your laptop now. That's the expensive part. The rest is
 
 **Thursday.** Run a document through it that you'd never have put in ChatGPT. Feel the difference.
 
-**Friday.** Ask it to teach you something. Use Socratic mode — it asks YOU questions.
+**Friday.** Ask it to teach you something. Use Socratic mode, it asks YOU questions.
 
 By Friday, you'll know.
 
-If it's in your workflow — keep going.
+If it's in your workflow, keep going.
 
-If it's not — tell me why. I'll fix it.
-
-— Daniel
+If it's not, tell me why. I'll fix it., Daniel
 
 P.S. The repo is open. If you make something cool on top, ship it.
 
 ---
 
-## Email 4 — Day-3 "the one trick" (Wednesday)
+## Email 4, Day-3 "the one trick" (Wednesday)
 
 **Subject:** The feature I didn't explain properly
 
@@ -130,13 +124,11 @@ Command:
 
 (In v0.2 this is a button inside the app. v0.2 ships next week.)
 
-Try it. Reply and tell me what it found that you'd forgotten.
-
-— Daniel
+Try it. Reply and tell me what it found that you'd forgotten., Daniel
 
 ---
 
-## Email 5 — Day-7 check (Monday after)
+## Email 5, Day-7 check (Monday after)
 
 **Subject:** Did it stick?
 
@@ -160,9 +152,7 @@ Either way, here's what's shipping in v0.2 (next week):
 - A real app icon
 - Auto-updates
 
-Reply with your verdict. I'm reading every one.
-
-— Daniel
+Reply with your verdict. I'm reading every one., Daniel
 
 ---
 

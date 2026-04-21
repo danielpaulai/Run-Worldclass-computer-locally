@@ -1,4 +1,4 @@
-# Landing Page Copy — Purely Personal
+# Landing Page Copy, Purely Personal
 
 Ready for Framer / Webflow / plain HTML. Top to bottom. Hard-stop wherever you see `---`.
 
@@ -114,7 +114,7 @@ Privacy you can verify in 30 seconds.
 3. Ask it a question.
 4. Watch the answer stream back.
 
-If the answer arrives — the model is running inside your laptop. The internet isn't part of the conversation.
+If the answer arrives, the model is running inside your laptop. The internet isn't part of the conversation.
 
 You don't take our word for anything.
 
@@ -157,7 +157,7 @@ If you want to support the project, star the repo. Or send a pull request.
 
 ## TECH SPECS (collapsible)
 
-**Runs on:** Apple Silicon (M1–M4) · Intel Macs · Windows 10/11 (x64 and ARM64) · Linux (AppImage)
+**Runs on:** Apple Silicon (M1,M4) · Intel Macs · Windows 10/11 (x64 and ARM64) · Linux (AppImage)
 
 **Model:** Qwen 2.5, 7 billion parameters, 5 GB on disk. Swappable to ~100 other open-weights models (Llama 3, Mistral, DeepSeek, GPT-OSS, etc.) with one command.
 

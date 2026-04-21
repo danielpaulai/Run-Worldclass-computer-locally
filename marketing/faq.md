@@ -1,4 +1,4 @@
-# FAQ — Purely Personal
+# FAQ, Purely Personal
 
 The 12 questions you'll get asked. Short, specific, no dodging.
 
@@ -8,7 +8,7 @@ The 12 questions you'll get asked. Short, specific, no dodging.
 
 Yes.
 
-The app talks to an AI model running on your own hard drive via `localhost:11434` — a network interface that only exists inside your laptop. No cloud account, no API key, no telemetry, no login.
+The app talks to an AI model running on your own hard drive via `localhost:11434`, a network interface that only exists inside your laptop. No cloud account, no API key, no telemetry, no login.
 
 You can prove it: turn off your WiFi, ask a question, watch the answer stream back.
 
@@ -24,7 +24,7 @@ ChatGPT is smarter on hard reasoning.
 
 Purely Personal is private, offline, and free.
 
-For the 80% of daily AI work — summarize, draft, extract, explain — they're roughly equivalent. For the confidential 80% — Purely Personal is the only option.
+For the 80% of daily AI work, summarize, draft, extract, explain, they're roughly equivalent. For the confidential 80%, Purely Personal is the only option.
 
 ### "How is this different from Ollama?"
 
@@ -40,10 +40,10 @@ Swappable to ~100 other models (Llama 3, Mistral, DeepSeek, GPT-OSS) with one co
 
 ### "How much RAM do I need?"
 
-- **8 GB:** Llama 3.2 3B — fast, good for basic Q&A and short summaries.
-- **16 GB:** Qwen 2.5 7B — the default, strong on most daily work.
-- **32 GB+:** 14B-class models — noticeably smarter.
-- **64 GB+:** GPT-OSS 20B — closest open model to frontier cloud.
+- **8 GB:** Llama 3.2 3B, fast, good for basic Q&A and short summaries.
+- **16 GB:** Qwen 2.5 7B, the default, strong on most daily work.
+- **32 GB+:** 14B-class models, noticeably smarter.
+- **64 GB+:** GPT-OSS 20B, closest open model to frontier cloud.
 
 ### "Does it work on Windows?"
 
@@ -63,9 +63,9 @@ Honest answer: no, not on hard reasoning.
 
 A 7B local model is roughly GPT-3.5 from 2023. Strong on summarization, drafting, extraction. Weaker on complex reasoning, long context, specialized tasks.
 
-For the everyday stuff you'd use AI for 20 times a day — it's right there.
+For the everyday stuff you'd use AI for 20 times a day, it's right there.
 
-For once-a-month hard problems — still use the cloud.
+For once-a-month hard problems, still use the cloud.
 
 ### "Can I use it for legal / medical / financial work?"
 
@@ -73,7 +73,7 @@ The tool doesn't care. The output is the same quality whether you're asking abou
 
 **You** are responsible for verifying output before you rely on it professionally.
 
-For regulated work (HIPAA, legal privilege, SEC) where you can't upload to the cloud — Purely Personal is often the only workable AI option at all.
+For regulated work (HIPAA, legal privilege, SEC) where you can't upload to the cloud, Purely Personal is often the only workable AI option at all.
 
 ### "What about my IT department?"
 
@@ -81,7 +81,7 @@ The app installs on your own machine, no server component, no phoning home, no p
 
 If IT lets you install Slack, Zoom, or Notion, they'll let you install this.
 
-If you're on a locked-down corporate laptop with no install rights — you can't install Purely Personal either. That's a policy limit, not a product limit.
+If you're on a locked-down corporate laptop with no install rights, you can't install Purely Personal either. That's a policy limit, not a product limit.
 
 ### "What if I need a feature you don't have?"
 

@@ -1,4 +1,4 @@
-# Twitter / X Launch Thread — Purely Personal
+# Twitter / X Launch Thread, Purely Personal
 
 One thread. 12 tweets. Post as a single thread. Pin it.
 
@@ -70,13 +70,7 @@ Both lists, instantly. Never uploaded.
 
 **8/**
 
-Under the hood:
-
-— Qwen 2.5 (7B, open-weights, Apache-2.0)
-— Ollama runtime
-— Electron app, MIT-licensed
-— ~5 GB one-time model download
-— $0/month
+Under the hood:, Qwen 2.5 (7B, open-weights, Apache-2.0), Ollama runtime, Electron app, MIT-licensed, ~5 GB one-time model download, $0/month
 
 Mac + Windows + Linux.
 
@@ -86,20 +80,13 @@ Honest caveat:
 
 A 7B local model doesn't beat frontier Claude on hard reasoning.
 
-But for what you do 20 times a day — summarize, draft, review, extract — it's right there.
+But for what you do 20 times a day, summarize, draft, review, extract, it's right there.
 
 And it's the only option for privileged work.
 
 **10/**
 
-Who this is for:
-
-— Consultants under NDA
-— Lawyers handling privileged matters
-— Accountants during tax season
-— Coaches with session notes
-— Clinicians (HIPAA-adjacent work)
-— Founders with proprietary code
+Who this is for:, Consultants under NDA, Lawyers handling privileged matters, Accountants during tax season, Coaches with session notes, Clinicians (HIPAA-adjacent work), Founders with proprietary code
 
 If you handle private docs daily, this is the thing.
 

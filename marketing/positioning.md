@@ -1,4 +1,4 @@
-# Positioning — Purely Personal
+# Positioning, Purely Personal
 
 ## The one-line pitch
 
@@ -59,8 +59,8 @@ Six real things. Not "AI-powered productivity." Actual things people do every da
 
 In order of strength. Pick one and use it everywhere.
 
-1. **"Your AI. Your laptop. Your data. Nothing ever leaves."**  *(ownership — what they want to feel)*
-2. **"ChatGPT-grade answers on the stuff you can't send to ChatGPT."**  *(contrast — what they already know)*
+1. **"Your AI. Your laptop. Your data. Nothing ever leaves."**  *(ownership, what they want to feel)*
+2. **"ChatGPT-grade answers on the stuff you can't send to ChatGPT."**  *(contrast, what they already know)*
 3. **"The AI that doesn't phone home."**  *(negative positioning)*
 4. **"Private by default."**  *(two words, memorable)*
 
@@ -97,7 +97,7 @@ Three things your buyer already believes that you need to disarm. First, name wh
 Reality: Qwen 2.5 on a 2024 MacBook feels as fast as ChatGPT for summarization, code review, and drafts. 7B parameters is not 2022 anymore.
 
 **Belief 2:** *"If it's free, it's a toy."*
-Reality: The code is MIT. The model weights are Apache-2.0. The reason it's free is that the components were already free — this project just assembled them into something your mom could install.
+Reality: The code is MIT. The model weights are Apache-2.0. The reason it's free is that the components were already free, this project just assembled them into something your mom could install.
 
 **Belief 3:** *"I'll have to become a Linux person."*
 Reality: You double-click a DMG. Drag to Applications. Open. Type a question. Same as installing Slack.
@@ -112,9 +112,9 @@ Open the app.
 
 Ask it to summarize any document on your laptop.
 
-If the answer streams back — it's running 100% locally.
+If the answer streams back, it's running 100% locally.
 
-If it doesn't — email me and I'll personally get you set up.
+If it doesn't, email me and I'll personally get you set up.
 
 That's the guarantee. Verifiable, not vibes.
 
@@ -125,7 +125,7 @@ That's the guarantee. Verifiable, not vibes.
 | | Purely Personal | ChatGPT / Claude | Generic local OSS |
 | --- | --- | --- | --- |
 | Private | ✓ | ✗ | ✓ |
-| Free forever | ✓ | $20–200/mo | ✓ |
+| Free forever | ✓ | $20,200/mo | ✓ |
 | Works offline | ✓ | ✗ | ✓ |
 | Beautiful app | ✓ | ✓ | ✗ |
 | Installs in 15 min | ✓ | ✓ | ✗ |

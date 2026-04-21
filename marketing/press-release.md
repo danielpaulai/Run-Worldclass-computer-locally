@@ -1,4 +1,4 @@
-# Press Release — Purely Personal
+# Press Release, Purely Personal
 
 For tech blogs, AI newsletters, and podcast hosts. Short, specific, pattern-interrupting. 390 words.
 
@@ -10,13 +10,13 @@ For tech blogs, AI newsletters, and podcast hosts. Short, specific, pattern-inte
 
 ## Free, open-source desktop app runs a world-class AI model entirely on your laptop. No cloud, no login, no subscription.
 
-**San Francisco, CA — April 2026** — Most AI users stopped using AI for half of what matters.
+**San Francisco, CA, April 2026**, Most AI users stopped using AI for half of what matters.
 
 The confidential half. Client contracts under NDA. Session notes. Legal work. Tax documents. Medical data. The private 80% of what professionals actually get paid to handle.
 
 Today Purely Personal launches to fix that gap.
 
-Purely Personal is a free, open-source desktop app that runs Qwen 2.5 — an Apache-2.0 open-weights AI model from Alibaba — entirely on the user's own laptop. No data ever leaves the machine. No account required. No monthly bill.
+Purely Personal is a free, open-source desktop app that runs Qwen 2.5, an Apache-2.0 open-weights AI model from Alibaba, entirely on the user's own laptop. No data ever leaves the machine. No account required. No monthly bill.
 
 "Every consultant I know has a folder of documents they won't paste into ChatGPT," said Daniel Paul, the developer behind Purely Personal. "Contracts under NDA. Session notes. Financial records. Things signed under ethics rules. They use AI for the easy 30% of their work and do the hard 70% manually. Purely Personal is for the hard 70%."
 

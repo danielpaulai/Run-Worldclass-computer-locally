@@ -1,6 +1,6 @@
 # Skills Bundled With This Repo
 
-This repo ships **15 layered skills** that turn your local AI into a real working system. Each skill is a folder under `.claude/skills/` with:
+This repo ships **16 layered skills** that turn your local AI into a real working system. Each skill is a folder under `.claude/skills/` with:
 
 - A `SKILL.md` telling Claude Code *when* to use it
 - A `scripts/` directory of 3–7 focused actions
@@ -57,6 +57,12 @@ You can invoke them two ways:
 | `compare` | single, local-vs-local, rubric | Side-by-side evaluation. Self-scoring rubric mode. |
 | `privacy-audit` | listeners, network-watch, check, report | Prove nothing's leaving your machine. Generates shareable privacy report. |
 | `model-doctor` | health, restart, clear-cache, repair, logs | Self-diagnose and heal. Cross-platform service restart. |
+
+### Workshop visuals
+
+| Skill | What it does |
+|---|---|
+| `workshop-image-builder` | Generate pixel-accurate workshop visuals in the Taki Moore / Black Belt Launchpad style. 12 visual types (worksheets, diagrams, slides). Triggers on "workshop visual", "session slide", "framework diagram", "hero slide", "worksheet", etc. Ships with 7 reference files: code templates, SVG primitives, content library, design system, slide patterns, interactive patterns, and visual catalog. |
 
 ## Quick session for teachers
 

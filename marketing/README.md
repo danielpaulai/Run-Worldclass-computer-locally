@@ -1,16 +1,16 @@
-# Purely Personal — Marketing Kit
+# Purely Personal, Marketing Kit
 
 Everything you need to launch, pitch, and talk about Purely Personal.
 
 ## What's in here
 
-- **[positioning.md](./positioning.md)** — the one-sentence pitch, tagline options, target user, value props
-- **[launch-post-linkedin.md](./launch-post-linkedin.md)** — LinkedIn launch post (copy-paste ready)
-- **[launch-post-twitter.md](./launch-post-twitter.md)** — Twitter/X thread (copy-paste ready)
-- **[email-sequence.md](./email-sequence.md)** — 5-email launch sequence (pre-launch, launch day, day 3, day 7, day 14)
-- **[faq.md](./faq.md)** — 12 questions you'll get asked, with sharp answers
-- **[landing-copy.md](./landing-copy.md)** — hero, features, pricing section, footer — ready for a landing page
-- **[press-release.md](./press-release.md)** — short release for tech blogs / newsletters
+- **[positioning.md](./positioning.md)**, the one-sentence pitch, tagline options, target user, value props
+- **[launch-post-linkedin.md](./launch-post-linkedin.md)**, LinkedIn launch post (copy-paste ready)
+- **[launch-post-twitter.md](./launch-post-twitter.md)**, Twitter/X thread (copy-paste ready)
+- **[email-sequence.md](./email-sequence.md)**, 5-email launch sequence (pre-launch, launch day, day 3, day 7, day 14)
+- **[faq.md](./faq.md)**, 12 questions you'll get asked, with sharp answers
+- **[landing-copy.md](./landing-copy.md)**, hero, features, pricing section, footer, ready for a landing page
+- **[press-release.md](./press-release.md)**, short release for tech blogs / newsletters
 
 ## Core positioning (memorize this)
 
