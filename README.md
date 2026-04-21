@@ -4,7 +4,7 @@ A one-command setup for running a serious AI model fully on your own computer. N
 
 > **New here?** Pick the right starting point for you:
 > - **Not sure what this is FOR?** → [USE-CASES.md](./USE-CASES.md) (five real small-business owners, their real Mondays)
-> - **Running a live session?** → [PRE-CLASS.md](./PRE-CLASS.md) · [IN-CLASS.md](./IN-CLASS.md) · [POST-CLASS.md](./POST-CLASS.md)
+> - **Running a live session?** → [PRE-CLASS.md](./PRE-CLASS.md) · [IN-CLASS.md](./IN-CLASS.md) · [POST-CLASS.md](./POST-CLASS.md) · `./session-day-check.sh` 10 min before class
 > - **Want to see real outputs before you install?** → [examples/](./examples/) (six real model runs, unedited)
 > - **Beginner, never run a local model?** → [WALKTHROUGH.md](./WALKTHROUGH.md) (step-by-step with diagrams)
 > - **Teaching a session?** → [VIDEO-SCRIPT.md](./VIDEO-SCRIPT.md) + [CHEATSHEET.md](./CHEATSHEET.md) ([PDF](./cheatsheet/cheatsheet.pdf))

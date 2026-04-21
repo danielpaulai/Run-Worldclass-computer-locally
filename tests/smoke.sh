@@ -15,13 +15,25 @@ SKIP_SLOW=0
 PASS=0; FAIL=0; SKIP=0
 PASSED=(); FAILED=(); SKIPPED=()
 
+# Pick a working timeout command (macOS has neither `timeout` nor coreutils by default).
+if command -v timeout  >/dev/null 2>&1; then TIMEOUT=(timeout 120)
+elif command -v gtimeout >/dev/null 2>&1; then TIMEOUT=(gtimeout 120)
+else TIMEOUT=()    # no timeout available; rely on the test itself to finish
+fi
+
 run() {
   local name="$1"; shift
   printf "  %-40s " "$name"
   local tmp; tmp=$(mktemp)
-  if timeout 120 "$@" > "$tmp" 2>&1; then
-    printf "\033[1;32mPASS\033[0m\n"
-    PASS=$((PASS+1)); PASSED+=("$name")
+  if "${TIMEOUT[@]+"${TIMEOUT[@]}"}" "$@" > "$tmp" 2>&1; then
+    # Also require non-empty output — empty output means a silent failure
+    if [[ -s "$tmp" ]]; then
+      printf "\033[1;32mPASS\033[0m\n"
+      PASS=$((PASS+1)); PASSED+=("$name")
+    else
+      printf "\033[1;33mEMPTY\033[0m\n"
+      FAIL=$((FAIL+1)); FAILED+=("$name (ran but produced no output)")
+    fi
   else
     printf "\033[1;31mFAIL\033[0m\n"
     FAIL=$((FAIL+1)); FAILED+=("$name")
