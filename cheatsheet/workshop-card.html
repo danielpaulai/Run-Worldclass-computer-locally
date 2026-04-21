@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Workshop Card — Run a World-Class AI on Your Laptop</title>
+<style>
+  @page { size: Letter; margin: 0.35in; }
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Helvetica, sans-serif;
+    color: #111;
+    font-size: 10pt;
+    line-height: 1.35;
+    margin: 0;
+  }
+  .sheet { max-width: 7.5in; margin: 0 auto; padding: 0; }
+  header {
+    border-bottom: 2pt solid #000;
+    padding-bottom: 6pt;
+    margin-bottom: 10pt;
+  }
+  h1 {
+    font-size: 19pt;
+    margin: 0;
+    letter-spacing: -0.5px;
+  }
+  h1 .sub {
+    display: block;
+    font-size: 10pt;
+    font-weight: 400;
+    color: #555;
+    margin-top: 3pt;
+  }
+  .step {
+    display: grid;
+    grid-template-columns: 36pt 1fr;
+    gap: 12pt;
+    margin-bottom: 10pt;
+    padding: 8pt 10pt;
+    border-left: 3pt solid #3366cc;
+    background: #f8f8fb;
+    border-radius: 3pt;
+    page-break-inside: avoid;
+  }
+  .step .num {
+    font-size: 22pt;
+    font-weight: 800;
+    color: #3366cc;
+    line-height: 1;
+    text-align: center;
+  }
+  .step h2 {
+    font-size: 11pt;
+    margin: 0 0 4pt;
+    color: #111;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .step .time {
+    color: #777;
+    font-size: 8.5pt;
+    font-weight: normal;
+    text-transform: none;
+    letter-spacing: 0;
+    margin-left: 6pt;
+  }
+  .do, .see {
+    margin: 4pt 0;
+    font-size: 9.5pt;
+  }
+  .do .label, .see .label {
+    display: inline-block;
+    font-size: 7.5pt;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    width: 36pt;
+    color: #888;
+    vertical-align: top;
+  }
+  code {
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 9pt;
+    background: #eceef2;
+    padding: 1pt 4pt;
+    border-radius: 2pt;
+  }
+  pre {
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 8.5pt;
+    background: #111;
+    color: #b8f080;
+    padding: 5pt 8pt;
+    border-radius: 3pt;
+    margin: 2pt 0;
+    overflow-x: auto;
+    white-space: pre-wrap;
+  }
+  .os {
+    display: inline-block;
+    font-size: 7.5pt;
+    font-weight: 700;
+    padding: 0 5pt;
+    border-radius: 6pt;
+    margin-right: 4pt;
+    letter-spacing: 0.3px;
+  }
+  .os.mac { background: #e0f0ff; color: #0a3a6a; }
+  .os.win { background: #fff0e0; color: #7a3a00; }
+  .win-note { color: #666; font-size: 8.5pt; font-style: italic; margin-top: 4pt; }
+  footer {
+    margin-top: 10pt;
+    padding-top: 6pt;
+    border-top: 0.5pt solid #ccc;
+    font-size: 8pt;
+    color: #666;
+    display: flex;
+    justify-content: space-between;
+  }
+  .win-cmd { color: #9fd0ff; }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <header>
+    <h1>Workshop Card — Run a World-Class AI on Your Laptop
+      <span class="sub">Five steps, ~45 minutes, one outcome: your own private AI running on your machine.</span>
+    </h1>
+  </header>
+
+  <!-- Step 1 -->
+  <section class="step">
+    <div class="num">1</div>
+    <div>
+      <h2>Install <span class="time">· Do tonight · ~20 min, mostly waiting</span></h2>
+      <div class="do"><span class="label">Do</span><span><span class="os mac">macOS</span>Terminal:</span></div>
+<pre>git clone https://github.com/danielpaulai/Run-Worldclass-computer-locally
+cd Run-Worldclass-computer-locally
+./preflight.sh && ./setup.sh</pre>
+      <div class="do"><span class="label">Do</span><span><span class="os win">Windows</span>PowerShell:</span></div>
+<pre class="win-cmd">git clone https://github.com/danielpaulai/Run-Worldclass-computer-locally
+cd Run-Worldclass-computer-locally
+.\preflight.ps1 ; .\setup.ps1</pre>
+      <div class="see"><span class="label">See</span>A green "<strong>Setup complete</strong>" banner at the end. Done.</div>
+    </div>
+  </section>
+
+  <!-- Step 2 -->
+  <section class="step">
+    <div class="num">2</div>
+    <div>
+      <h2>First chat — "is it alive?" <span class="time">· In class · 3 min</span></h2>
+      <div class="do"><span class="label">Do</span></div>
+<pre>./ai local-ai ask "hi in 3 words"</pre>
+      <div class="see"><span class="label">See</span>~15 seconds later: something like <code>Hello! Nice meeting.</code></div>
+    </div>
+  </section>
+
+  <!-- Step 3 -->
+  <section class="step">
+    <div class="num">3</div>
+    <div>
+      <h2>Summarize a known doc — the "wow" <span class="time">· 5 min</span></h2>
+      <div class="do"><span class="label">Do</span></div>
+<pre>./ai summarize tldr README.md</pre>
+      <div class="see"><span class="label">See</span>A clean 3-sentence summary of the repo. Accurate. Fast.</div>
+    </div>
+  </section>
+
+  <!-- Step 4 -->
+  <section class="step">
+    <div class="num">4</div>
+    <div>
+      <h2>Summarize YOUR document — the conversion moment <span class="time">· 20 min</span></h2>
+      <div class="do"><span class="label">Do</span></div>
+<pre>./ai summarize tldr ~/Documents/your-file.pdf
+./ai summarize actions ~/Documents/your-file.pdf
+./ai local-writer draft "Reply to this email politely declining..."</pre>
+      <div class="see"><span class="label">See</span>Useful output on YOUR stuff. Nothing leaves your machine.</div>
+    </div>
+  </section>
+
+  <!-- Step 5 -->
+  <section class="step">
+    <div class="num">5</div>
+    <div>
+      <h2>Prove it's private — the moment that sticks <span class="time">· 2 min</span></h2>
+      <div class="do"><span class="label">Do</span>Turn off WiFi. Airplane mode. Then:</div>
+<pre>./ai local-ai ask "Still working without internet?"</pre>
+      <div class="see"><span class="label">See</span>The model answers. Offline. That's the whole point.</div>
+    </div>
+  </section>
+
+  <footer>
+    <div>Run a World-Class AI on Your Laptop · Workshop Card v1</div>
+    <div>github.com/danielpaulai/Run-Worldclass-computer-locally</div>
+  </footer>
+
+</div>
+</body>
+</html>
