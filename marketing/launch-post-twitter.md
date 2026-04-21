@@ -1,88 +1,126 @@
-# Twitter / X Launch Thread
+# Twitter / X Launch Thread — Purely Personal
 
-11 tweets. Designed to be read top-to-bottom.
+One thread. 12 tweets. Post as a single thread. Pin it.
 
 ---
 
 **1/**
-I built an AI that runs entirely on your laptop.
 
-No cloud.
-No subscription.
-No data ever leaves your machine.
+Most people don't use AI for half of what matters.
+
+The confidential half.
+
+The half you signed NDAs about.
+
+**2/**
+
+You open ChatGPT. You're about to paste the client contract.
+
+You hesitate.
+
+You close the tab.
+
+You summarize the 40 pages by hand.
+
+45 minutes gone.
+
+**3/**
+
+I built the thing for those 45 minutes.
 
 It's called Purely Personal.
 
-**2/**
-The problem: every consultant, lawyer, accountant I know has a folder of documents they will NEVER paste into ChatGPT.
+A private AI that runs entirely on your laptop.
 
-Client contracts. Financial docs. Session notes. Things they signed NDAs about.
-
-They use AI for the easy stuff and do the hard stuff manually.
-
-**3/**
-That's the wrong half of the value.
-
-The hours you want AI to save you are the *confidential* hours. Reading contracts. Parsing client emails. Summarizing sensitive meetings.
-
-Which is exactly the work you can't put in the cloud.
+No cloud. No login. No subscription.
 
 **4/**
-Purely Personal runs on your own Mac or Windows laptop.
 
-Open an app. Drop a file. Ask a question. It answers.
+Your file never leaves your hard drive.
 
-The file never touches the internet.
+The model runs on your own CPU or GPU, via a tiny runtime listening only on localhost.
+
+You can verify it yourself by turning off your WiFi. The chat keeps working.
 
 **5/**
+
 A lawyer drops a 40-page NDA.
 
 Asks: "What are the 3 riskiest clauses?"
 
 Gets a specific, professional answer in 12 seconds.
 
-All offline.
+Offline.
 
 **6/**
+
 An accountant pastes 20 messy expense rows.
 
 Asks for categorization.
 
-Clean table + 3 anomalies flagged.
-
-Still offline.
+Clean table back. Three anomalies flagged. Still offline.
 
 **7/**
+
 A coach pastes her session notes.
 
-Asks: "What did the client commit to and what did they dodge?"
+Asks: "What did the client commit to, and what did they dodge?"
 
-Both lists. Instantly. Private.
+Both lists, instantly. Never uploaded.
 
 **8/**
-Under the hood: Qwen 2.5 (open-weights) running via Ollama, with a native desktop app in front of it.
 
-- 5-10 GB one-time model download
-- $0/month
-- Works on a plane
-- Mac + Windows + Linux
+Under the hood:
+
+— Qwen 2.5 (7B, open-weights, Apache-2.0)
+— Ollama runtime
+— Electron app, MIT-licensed
+— ~5 GB one-time model download
+— $0/month
+
+Mac + Windows + Linux.
 
 **9/**
-Honest caveat: local AI doesn't beat frontier Claude on hard reasoning.
 
-But for the stuff you do 20x a day — summarize, draft, review, extract — it's right there.
+Honest caveat:
 
-And it's the only one you can use on privileged documents.
+A 7B local model doesn't beat frontier Claude on hard reasoning.
+
+But for what you do 20 times a day — summarize, draft, review, extract — it's right there.
+
+And it's the only option for privileged work.
 
 **10/**
-This is v0.1. Open-source, MIT.
 
-If you want an AI for the work you can't put in the cloud — install it.
+Who this is for:
 
-If you build on top — send a PR.
+— Consultants under NDA
+— Lawyers handling privileged matters
+— Accountants during tax season
+— Coaches with session notes
+— Clinicians (HIPAA-adjacent work)
+— Founders with proprietary code
 
-**11/** Link:
+If you handle private docs daily, this is the thing.
+
+**11/**
+
+v0.1 is out.
+
+Install: 15 minutes.
+
+Cost: $0.
+
+Works for the rest of your career.
+
+Open-source, MIT licensed.
+
+If you build on top, send a PR.
+
+**12/** Link:
 
 https://github.com/danielpaulai/Run-Worldclass-computer-locally
 
-Works in 15 minutes on any laptop with 8 GB RAM.
+Mac DMG and Windows EXE in Releases. Install guide in the README.
+
+If it changes your workflow, reply and tell me how.

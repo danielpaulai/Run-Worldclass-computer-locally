@@ -146,6 +146,154 @@
     box-shadow: 0 0 6px var(--mint);
   }
 
+  /* ---------- POPOVERS (saved prompts, history) ---------- */
+  .popover-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: rgba(0,0,0,0.15);
+    display: none;
+    -webkit-app-region: no-drag;
+  }
+  .popover-backdrop.open { display: block; }
+  .popover {
+    position: fixed;
+    top: 54px;
+    right: 18px;
+    width: 380px;
+    max-width: calc(100vw - 36px);
+    max-height: 70vh;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    box-shadow: 0 20px 60px -10px rgba(0,0,0,0.25);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+  .popover-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--line);
+  }
+  .popover-head h3 {
+    font-family: "Iowan Old Style", Charter, Georgia, serif;
+    font-size: 18px;
+    margin: 0;
+    color: var(--ink);
+  }
+  .popover-close {
+    background: none;
+    border: none;
+    font-size: 18px;
+    color: var(--muted);
+    cursor: pointer;
+    padding: 0 4px;
+    line-height: 1;
+    font-family: inherit;
+  }
+  .popover-close:hover { color: var(--coral); }
+  .popover-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 4px 0;
+  }
+  .popover-empty {
+    padding: 32px 20px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .popover-item {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--line);
+    cursor: pointer;
+    transition: background .12s;
+  }
+  .popover-item:hover { background: var(--cream-deep); }
+  .popover-item:last-child { border-bottom: none; }
+  .popover-item .item-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 4px;
+    word-break: break-word;
+  }
+  .popover-item .item-preview {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .popover-item .item-actions {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+  }
+  .popover-item .item-actions button {
+    font-size: 11px;
+    padding: 4px 9px;
+    border-radius: 4px;
+    border: 1px solid var(--line);
+    background: var(--card);
+    color: var(--ink);
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .popover-item .item-actions button:hover { border-color: var(--coral); color: var(--coral); }
+  .popover-item .item-actions .delete:hover { border-color: var(--coral); color: var(--coral); }
+
+  .popover-foot {
+    border-top: 1px solid var(--line);
+    padding: 12px 16px;
+    background: var(--cream-deep);
+  }
+  .popover-foot input[type=text] {
+    width: 100%;
+    padding: 9px 12px;
+    font-size: 13px;
+    font-family: inherit;
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    background: var(--card);
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+  .popover-foot input[type=text]:focus {
+    outline: none;
+    border-color: var(--coral);
+  }
+  .popover-foot .foot-btn {
+    width: 100%;
+    padding: 9px;
+    background: var(--coral);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .popover-foot .foot-btn:hover { background: var(--coral-deep); }
+  .popover-foot .foot-btn:disabled {
+    background: var(--muted);
+    cursor: not-allowed;
+  }
+  .popover-foot .foot-help {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 8px;
+    text-align: center;
+  }
+
   /* adjust main padding for fixed brand bar */
   main { padding-top: 100px; }
 
@@ -353,6 +501,30 @@
     display: flex;
     align-items: center;
     gap: 8px;
+  }
+  .model-switcher {
+    position: relative;
+    display: inline-block;
+  }
+  .model-switcher select {
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 12px;
+    padding: 3px 22px 3px 8px;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    background: var(--card);
+    color: var(--ink);
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path d='M0 0l5 6 5-6z' fill='%236b655c'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 7px center;
+    min-width: 140px;
+  }
+  .model-switcher select:focus {
+    outline: none;
+    border-color: var(--coral);
   }
   .privacy-dot {
     width: 8px; height: 8px;
@@ -883,8 +1055,23 @@
   </div>
   <div class="brand-right">
     <span class="brand-privacy">Local only</span>
+    <button type="button" class="brand-btn" id="open-kit">Marketing kit</button>
     <button type="button" class="brand-btn" id="theme-toggle">Dark</button>
     <button type="button" class="brand-btn" id="save-convo">Save chat</button>
+  </div>
+</div>
+
+<!-- MARKETING KIT POPOVER -->
+<div class="popover-backdrop" id="kit-backdrop">
+  <div class="popover" id="kit-popover" role="dialog" aria-labelledby="kit-title">
+    <div class="popover-head">
+      <h3 id="kit-title">Marketing Kit</h3>
+      <button type="button" class="popover-close" data-close="kit">\u2715</button>
+    </div>
+    <div class="popover-body" id="kit-list"></div>
+    <div class="popover-foot">
+      <p class="foot-help">Click "Load" to drop a file into the chat as context. Then tell the AI how to adapt it for you \u2014 your voice, your niche, your audience.</p>
+    </div>
   </div>
 </div>
 
@@ -910,10 +1097,15 @@
       <div class="chat-status">
         <div class="model-line">
           <span class="privacy-dot"></span>
-          <span id="chat-model">qwen2.5:7b</span>
+          <div class="model-switcher">
+            <select id="chat-model-select" aria-label="Model"><option value="">\u2026</option></select>
+          </div>
         </div>
         <div id="chat-health">checking\u2026</div>
       </div>
+      <!-- Hidden element kept in sync with the selected model for any code that
+           still reads chatModel.textContent -->
+      <span id="chat-model" hidden></span>
     </div>
 
     <div class="chat-messages" id="chat-messages">
@@ -1259,6 +1451,133 @@ copyBtn.addEventListener("click", async () => {
   }, 1600);
 });
 
+/* ---------- MARKETING KIT POPOVER ---------- */
+// Each entry: title, one-line blurb, suggested "adapt" prompt, full content (markdown).
+// Content is a trimmed excerpt — enough for the model to grasp the shape without
+// blowing the context window.
+const kitItems = [
+  {
+    id: "positioning",
+    title: "Positioning — the core pitch",
+    blurb: "One-line pitch, three-line problem, value stack, tagline options, belief breakers.",
+    adapt: "Adapt this positioning for [your niche]. Keep the same punchy rhythm \u2014 one idea per line, specific nouns, no jargon.",
+    content: `# Positioning — Purely Personal\n\n## The one-line pitch\nA private AI that runs on your laptop. Your files never leave.\n\n## The one-line that converts\nEvery consultant has a folder of documents they won't paste into ChatGPT.\nWe built the AI for that folder.\n\n## The problem, in three lines\nYou pay $20/month for ChatGPT.\nBut you've never pasted a client contract, session notes, or tax returns into it.\nBecause those aren't yours to share.\n\n## What you get\n- Summarize a 40-page contract in 12 seconds. Never uploaded.\n- Draft a response to a frustrated client. Their email never leaves your screen.\n- Extract action items from meeting notes. The meeting stays private.\n- Spot hidden risks in a clause. The clause stays privileged.\n- Categorize a messy expense CSV. Your financials stay on disk.\n- Index a folder of your own notes and query it. Your past work, searchable.\n\n## The tagline options\n1. Your AI. Your laptop. Your data. Nothing ever leaves.\n2. ChatGPT-grade answers on the stuff you can't send to ChatGPT.\n3. The AI that doesn't phone home.\n4. Private by default.\n\n## The belief breakers\n- \"Local AI must be janky.\" Qwen 2.5 on a 2024 MacBook feels as fast as ChatGPT for summarization, code review, drafts.\n- \"If it's free, it's a toy.\" The code is MIT. Weights are Apache-2.0. It's free because the components were already free.\n- \"I'll have to become a Linux person.\" You double-click a DMG, drag to Applications, open. Same as Slack.\n\n## The guarantee\nTurn off your WiFi. Open the app. Ask a question. If the answer arrives, the model is running 100% locally.`,
+  },
+  {
+    id: "linkedin",
+    title: "LinkedIn launch post",
+    blurb: "The long variant, ~1,800 characters. Short line rhythm, specific stories, one CTA.",
+    adapt: "Rewrite this LinkedIn post in my voice for [your audience]. Same pattern \u2014 pattern interrupt, short lines, specific stories \u2014 but swap the consultant/lawyer/accountant examples for ones from [your industry].",
+    content: `Most people don't use AI for half of what matters.\n\nThe confidential half.\n\nThe half you signed NDAs about.\n\n---\n\nHere's how the pattern usually goes:\n\nYou open ChatGPT.\n\nYou're about to paste the client's strategy deck.\n\nYou hesitate.\n\nYou close the tab.\n\nYou summarize it by hand.\n\nTakes 45 minutes.\n\n---\n\nI built the thing for those 45 minutes.\n\nIt's called Purely Personal.\n\nIt runs a world-class AI model entirely on your laptop.\n\nNo cloud. No login. No subscription.\n\nYour document never leaves your hard drive.\n\n---\n\nA lawyer drops a 40-page NDA. Asks \"what are the 3 riskiest clauses?\" Gets an answer in 12 seconds. Never uploaded.\n\nAn accountant pastes a messy expense CSV. Asks for categorization. Gets a clean table with 3 anomalies flagged. Still offline.\n\nA coach pastes her session notes. Asks \"what did they commit to, what did they dodge?\" Gets both lists. Private, the way her notes are supposed to be.\n\n---\n\nCosts: $0.\nWorks: offline.\nOpen source: MIT.\nInstall: 15 minutes.\n\n---\n\nIf you've ever felt that sting of guilt pasting a confidential file into ChatGPT \u2014 this is the answer.\n\nDownload link in the comments.`,
+  },
+  {
+    id: "twitter",
+    title: "X / Twitter launch thread",
+    blurb: "12-tweet thread. Same pattern-interrupt opener, specific stories, one link at the end.",
+    adapt: "Adapt this 12-tweet thread for [your audience]. Keep the numbered structure and hook. Swap the examples for things [your audience] would recognize.",
+    content: `1/ Most people don't use AI for half of what matters.\nThe confidential half.\nThe half you signed NDAs about.\n\n2/ You open ChatGPT. You're about to paste the client contract. You hesitate. You close the tab. You summarize 40 pages by hand. 45 minutes gone.\n\n3/ I built the thing for those 45 minutes. It's called Purely Personal. A private AI that runs entirely on your laptop.\n\n4/ Your file never leaves your hard drive. Model runs on your own CPU/GPU via a runtime listening only on localhost. Verifiable: turn off WiFi, it keeps working.\n\n5/ Lawyer drops a 40-page NDA. Asks \"3 riskiest clauses?\" Specific answer in 12 seconds. Offline.\n\n6/ Accountant pastes 20 messy expense rows. Clean categorized table back, 3 anomalies flagged. Offline.\n\n7/ Coach pastes session notes. \"What did they commit to vs. dodge?\" Both lists, instantly.\n\n8/ Under the hood: Qwen 2.5 (7B, Apache-2.0) + Ollama + Electron app (MIT). ~5 GB one-time. $0/month. Mac+Windows+Linux.\n\n9/ Honest: 7B local doesn't beat frontier Claude on hard reasoning. But for the 20x-a-day stuff \u2014 summarize, draft, review, extract \u2014 it's right there. And it's the only option for privileged work.\n\n10/ Who it's for: consultants under NDA, lawyers on privileged matters, accountants in tax season, coaches with session notes, clinicians, founders with proprietary code.\n\n11/ v0.1 shipped. 15-minute install. $0. Works forever. Open-source, MIT.\n\n12/ Link: github.com/danielpaulai/Run-Worldclass-computer-locally`,
+  },
+  {
+    id: "email-sequence",
+    title: "5-email launch sequence",
+    blurb: "Pre-launch through day 7. Punchy voice, one CTA per email.",
+    adapt: "Rewrite these 5 emails for [your niche]. Keep the structure (pre-launch, launch day, day-1 recap, day-3 tip, day-7 verdict). Adapt the stories for [your audience].",
+    content: `## Email 1 \u2014 Pre-launch (24\u201348h before)\nSubject: About the tool you use for half your work\n\nYou have a folder.\nContracts. Session notes. Internal docs. Things under NDA.\nYou've never pasted those into ChatGPT.\nSo you do them by hand. 45 minutes each time.\nTomorrow's session is about those 45 minutes.\n\n## Email 2 \u2014 Launch morning (2h before session)\nSubject: Doors open in 2 hours\n\nQuick list:\n- Laptop, charged.\n- The app installed.\n- One document you'd like summarized (non-confidential).\n- One thing you do manually that AI might help with.\nIf your install didn't finish \u2014 come anyway.\n\n## Email 3 \u2014 Day-1 recap (evening)\nSubject: Your 5-day plan\n\nMonday: summarize a real document.\nTuesday: draft something you dread writing.\nWednesday: drop a folder of your own notes in, ask it a question.\nThursday: run a document through it you'd never paste into ChatGPT.\nFriday: ask it to teach you something.\n\n## Email 4 \u2014 Day-3 (Wednesday)\nSubject: The feature I didn't explain properly\n\nDrop a folder of your own notes into the app.\nIndex takes 60 seconds.\nThen ask it questions \u2014 from YOUR archive.\nYour past self becomes a colleague you can query.\n\n## Email 5 \u2014 Day-7 check\nSubject: Did it stick?\n\nTwo honest answers:\n1. Yes. It's in my workflow for [X]. Tell me X.\n2. No. I installed it, didn't use it. Tell me why.\n\nBoth answers are useful. Reply.`,
+  },
+  {
+    id: "faq",
+    title: "FAQ \u2014 12 questions people ask",
+    blurb: "The 12 objections you'll hear, with sharp answers. Belief-breakers, receipts.",
+    adapt: "Adapt this FAQ for [your niche]. Add 3\u20135 questions specific to [your audience]'s concerns (regulations, workflows, team size). Keep the direct answer style.",
+    content: `### Is this really private?\nYes. The app talks to a model running on your hard drive via localhost:11434. No account, no API key, no telemetry. Verify: turn off WiFi, ask a question, answer streams back.\n\n### Is it really free?\nYes. MIT-licensed open-source. No subscription, no per-token billing, no tier. Install once, use for your career.\n\n### How is this different from ChatGPT?\nChatGPT is smarter on hard reasoning. Purely Personal is private, offline, free. For daily work \u2014 summarize, draft, extract \u2014 they're equivalent. For confidential work \u2014 Purely Personal is the only option.\n\n### How is this different from Ollama?\nOllama is the engine. Purely Personal is the desktop app on top. Docker vs. Docker Desktop.\n\n### What model does it run?\nDefault: Qwen 2.5 (7B), ~5 GB. Swappable to ~100 others. Picks by RAM automatically.\n\n### How much RAM do I need?\n8 GB: Llama 3.2 3B. 16 GB: Qwen 2.5 7B (default). 32 GB+: 14B. 64 GB+: GPT-OSS 20B.\n\n### Does it work on Windows?\nYes. EXE installer ships alongside the Mac DMG.\n\n### Does it work offline?\nYes. After the ~5 GB one-time download, zero internet required.\n\n### Is it as smart as ChatGPT?\nHonest: no, not on hard reasoning. A 7B local model is roughly GPT-3.5 from 2023. Strong on summarization, drafting, extraction. For once-a-month hard problems, use cloud.\n\n### Can I use it for legal/medical/financial work?\nYou're responsible for verifying output. For regulated work (HIPAA, privilege, SEC) where you can't upload to cloud, it's often the only workable AI option.\n\n### What about my IT department?\nIf IT lets you install Slack/Zoom/Notion, they'll let you install this. No server component, no phone-home, no ports.\n\n### Is this a business?\nNot yet. A tool I built and shared. If it has pull, paid tier comes with signed builds + easier team install.`,
+  },
+  {
+    id: "landing",
+    title: "Landing page copy",
+    blurb: "Full landing page \u2014 hero, 3-step how-it-works, 6 use cases, comparison, pricing, final CTA.",
+    adapt: "Rewrite this landing page for [your niche]. Keep the section order. Replace the 6 use cases with ones specific to [your audience].",
+    content: `# Your AI. Your laptop. Nothing ever leaves.\n\nA private AI that runs entirely on your own machine. No cloud, no login, no monthly bill.\n\nBuilt for the documents you'd never paste into ChatGPT.\n\n---\n\n## You already stopped using AI for the important half.\n\nYou have a folder.\nClient contracts. Session notes. Financial docs. Things you signed NDAs about.\nYou don't paste those into ChatGPT.\nSo you do them by hand.\n\nThat's the half Purely Personal handles.\n\n---\n\n## How it works\n\n1. Install. Download, drag to Applications, open. One minute.\n2. Drop a file in. Any document. It stays on your hard drive.\n3. Ask anything. Summarize, find risks, draft a reply, extract items. 12 seconds to answer.\n\n---\n\n## The six real things\n\n- Spot risks in a contract clause\n- Draft a reply to a tough email\n- Extract meeting action items\n- Categorize messy expenses\n- Generate interview questions\n- Explain a concept at client level\n\nEach one: click to try. All run locally.\n\n---\n\n## The comparison\n\nChatGPT: not private.\nClaude: not private.\nRaw Ollama: not easy.\n\nPurely Personal: private AND easy. The only one.\n\n---\n\n## Privacy you can verify in 30 seconds\n\n1. Install the app.\n2. Turn off your WiFi.\n3. Ask a question.\n4. Watch the answer stream back.\n\nYou don't take our word for anything.\n\n---\n\n## Pricing\n\nFree. Forever. Yours.\nNo tier. No subscription. No gated pro plan.\nMIT app. Apache-2.0 model. Install once, use forever.`,
+  },
+  {
+    id: "press-release",
+    title: "Press release (~390 words)",
+    blurb: "For tech blogs, newsletters, podcast hosts. Specific, pattern-interrupting, quote-ready.",
+    adapt: "Adapt this press release for [your launch target]. Swap the developer quote for one in my voice. Add one specific use case from [your industry].",
+    content: `FOR IMMEDIATE RELEASE\n\n# Purely Personal launches: the AI for the half of work you couldn't put in the cloud\n\n## Free, open-source desktop app runs a world-class AI model entirely on your laptop. No cloud, no login, no subscription.\n\nSAN FRANCISCO, CA \u2014 April 2026 \u2014 Most AI users stopped using AI for half of what matters.\n\nThe confidential half. Client contracts under NDA. Session notes. Legal work. Tax documents. Medical data. The private 80% of what professionals actually get paid to handle.\n\nToday Purely Personal launches to fix that gap.\n\nPurely Personal is a free, open-source desktop app that runs Qwen 2.5 \u2014 an Apache-2.0 open-weights AI model from Alibaba \u2014 entirely on the user's own laptop. No data ever leaves the machine.\n\nSix real-world use cases are built in as one-click templates: spot contract risks, draft a reply to a tough email, extract meeting action items, categorize messy expenses, generate interview questions, explain a concept at client level.\n\nThe privacy claim is verifiable by the user. Turn off WiFi. The app keeps working.\n\nInstall: 15 minutes. Cost: $0. Open-source: MIT.`,
+  },
+  {
+    id: "readme",
+    title: "Kit index (this folder)",
+    blurb: "Your reference doc for the whole marketing kit \u2014 what's in here, how to use it.",
+    adapt: "Summarize the marketing kit for a teammate in one paragraph.",
+    content: `# Purely Personal \u2014 Marketing Kit\n\n8 files in this folder, each a standalone asset.\n\n- positioning.md \u2014 the foundation. Read this first and memorize the taglines.\n- launch-post-linkedin.md \u2014 three variants. Post Variant A on launch day.\n- launch-post-twitter.md \u2014 a 12-tweet thread. Post as one thread, pin it.\n- email-sequence.md \u2014 5 emails from pre-launch through day-7 verdict.\n- faq.md \u2014 12 questions people ask, with direct answers.\n- landing-copy.md \u2014 full landing page, ready for Framer/Webflow.\n- press-release.md \u2014 390-word release for tech blogs.\n- README.md \u2014 this index.\n\nVoice rules: short sentences, one idea per line, specific nouns, no jargon, name the objection, prove the claim.`,
+  },
+];
+
+function openKit() {
+  const listEl = document.getElementById("kit-list");
+  listEl.innerHTML = "";
+  kitItems.forEach((item) => {
+    const row = document.createElement("div");
+    row.className = "popover-item";
+    row.innerHTML = `
+      <div class="item-name">${item.title}</div>
+      <div class="item-preview">${item.blurb}</div>
+      <div class="item-actions">
+        <button type="button" data-action="load" data-id="${item.id}">Load into chat</button>
+        <button type="button" data-action="copy" data-id="${item.id}">Copy text</button>
+      </div>
+    `;
+    listEl.appendChild(row);
+  });
+
+  // Wire up the buttons (delegation would also work — explicit is clearer)
+  listEl.querySelectorAll("[data-action]").forEach((btn) => {
+    btn.addEventListener("click", async (ev) => {
+      ev.stopPropagation();
+      const id = btn.getAttribute("data-id");
+      const action = btn.getAttribute("data-action");
+      const item = kitItems.find((k) => k.id === id);
+      if (!item) return;
+      if (action === "copy") {
+        await navigator.clipboard.writeText(item.content);
+        const orig = btn.textContent;
+        btn.textContent = "Copied \u2713";
+        setTimeout(() => (btn.textContent = orig), 1500);
+      } else if (action === "load") {
+        // Attach the content as if the user had dragged the file in,
+        // and pre-fill the input with the suggested adapt prompt.
+        attachedFile = {
+          name: item.id + ".md",
+          size: new Blob([item.content]).size,
+          content: item.content,
+        };
+        renderAttachment();
+        chatInput.value = item.adapt;
+        closeKit();
+        chatInput.focus();
+      }
+    });
+  });
+
+  document.getElementById("kit-backdrop").classList.add("open");
+}
+
+function closeKit() {
+  document.getElementById("kit-backdrop").classList.remove("open");
+}
+
+document.getElementById("open-kit").addEventListener("click", openKit);
+document.getElementById("kit-backdrop").addEventListener("click", (e) => {
+  if (e.target.id === "kit-backdrop") closeKit();
+});
+document.querySelectorAll("[data-close='kit']").forEach((btn) => {
+  btn.addEventListener("click", closeKit);
+});
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") closeKit();
+});
+
 /* ---------- DARK / LIGHT THEME TOGGLE ---------- */
 (function initTheme() {
   const saved = localStorage.getItem("pp-theme");
@@ -1403,12 +1722,14 @@ const chatForm    = document.getElementById("chat-form");
 const chatInput   = document.getElementById("chat-input");
 const chatSend    = document.getElementById("chat-send");
 const chatMsgs    = document.getElementById("chat-messages");
-const chatModel   = document.getElementById("chat-model");
-const chatHealth  = document.getElementById("chat-health");
+const chatModel     = document.getElementById("chat-model");        // hidden sync target
+const chatModelSel  = document.getElementById("chat-model-select"); // visible dropdown
+const chatHealth    = document.getElementById("chat-health");
 const convo       = [];   // {role, content}
 let currentAbortController = null;   // non-null while a chat request is streaming
 
-// Startup: check if Ollama is reachable, and report which model is loaded.
+// Startup: check if Ollama is reachable, populate the model dropdown,
+// and restore the user's last-used model from localStorage.
 async function checkOllama() {
   try {
     const r = await fetch(`${OLLAMA_BASE}/api/tags`, { cache: "no-store" });
@@ -1418,11 +1739,25 @@ async function checkOllama() {
     if (models.length === 0) {
       chatHealth.textContent = "no models yet \u2014 run setup.sh";
       chatHealth.style.color = "var(--coral)";
+      chatModelSel.innerHTML = `<option value="">(no models)</option>`;
       return;
     }
-    // Prefer qwen2.5:7b, otherwise first installed
-    const preferred = models.find(m => m.startsWith("qwen2.5:7b")) || models[0];
-    chatModel.textContent = preferred;
+
+    // Remember the user's last choice if it's still installed.
+    const saved = localStorage.getItem("pp-model");
+    const preferred =
+      (saved && models.includes(saved) && saved) ||
+      models.find(m => m.startsWith("qwen2.5:7b")) ||
+      models[0];
+
+    // Populate the dropdown — sort, pin preferred to top
+    const sorted = [...models].sort((a, b) => a.localeCompare(b));
+    chatModelSel.innerHTML = sorted
+      .map(m => `<option value="${m}"${m === preferred ? " selected" : ""}>${m}</option>`)
+      .join("");
+
+    setActiveModel(preferred, /*fromUser*/ false);
+
     chatHealth.textContent = `\u2713 ready  \u00b7  ${models.length} model${models.length>1?"s":""} installed`;
     chatHealth.style.color = "var(--mint)";
   } catch (e) {
@@ -1431,6 +1766,19 @@ async function checkOllama() {
     addChatMessage("error", "Couldn't reach Ollama at localhost:11434. Open Terminal and run:  brew services start ollama  \u2014 then reload this window.");
   }
 }
+
+function setActiveModel(name, fromUser) {
+  chatModel.textContent = name;
+  chatModelSel.value = name;
+  if (fromUser) localStorage.setItem("pp-model", name);
+}
+
+chatModelSel.addEventListener("change", () => {
+  const choice = chatModelSel.value;
+  if (!choice) return;
+  setActiveModel(choice, /*fromUser*/ true);
+});
+
 checkOllama();
 
 function addChatMessage(role, content) {

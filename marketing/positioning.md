@@ -1,72 +1,150 @@
 # Positioning — Purely Personal
 
-## One-sentence pitch
+## The one-line pitch
 
-**Purely Personal is a private AI that runs entirely on your laptop.**
+**A private AI that runs on your laptop. Your files never leave.**
 
-## Tagline (pick one)
+## The one-line that converts
 
-Ranked by strength. #1 is my recommendation.
+Every consultant has a folder of documents they won't paste into ChatGPT.
 
-1. **Your AI. Your laptop. Your data. Nothing ever leaves.** *(ownership — what they want to feel)*
-2. ChatGPT-grade answers on the stuff you can't send to ChatGPT. *(contrast — what they already know)*
-3. The AI that doesn't phone home. *(negative positioning — what makes it different)*
-4. Private by default. *(two words, memorable)*
-5. AI without the cloud. *(plain)*
+We built the AI for that folder.
 
-## The 12-second pitch (elevator)
+---
 
-> "You know how you want to use AI for confidential work — client contracts, financial docs, sensitive notes — but you can't paste them into ChatGPT? Purely Personal is the same kind of AI, but it runs on your laptop. Nothing ever leaves. It's free. And it works offline."
+## The problem, in three lines
 
-## The target user (ICP)
+You pay $20/month for ChatGPT.
 
-Anyone whose daily work includes documents or data they shouldn't be uploading:
+But you've never pasted a client contract, session notes, or tax returns into it.
 
-| Role | The thing they can't paste |
-| --- | --- |
-| Consultants | Client strategy decks under NDA |
-| Lawyers | Privileged client matters |
-| Accountants | Books, P&Ls, tax docs |
-| Therapists / coaches | Session notes |
-| Healthcare practitioners | Patient info (HIPAA) |
-| HR consultants | Performance reviews, comp |
-| Solo founders | Proprietary code, customer feedback |
-| Teachers / tutors | Student work |
-| Real estate agents | Buyer financial profiles |
-| Insurance agents | Client SSNs, claim details |
+Because those aren't yours to share.
 
-They are **not**: engineers at big tech (they already have internal AI), casual users (ChatGPT works fine for them), people who never handle sensitive data (not a problem they have).
+---
 
-## The four value props
+## What you get
 
-In order of importance:
+- **Summarize** a 40-page contract in 12 seconds. Never uploaded.
+- **Draft** a response to a frustrated client. Their email never leaves your screen.
+- **Extract** action items from meeting notes. The meeting stays private.
+- **Spot** hidden risks in a clause. The clause stays privileged.
+- **Categorize** a messy expense CSV. Your financials stay on disk.
+- **Index** a folder of your own notes and query it. Your past work, searchable.
 
-1. **Privacy** — nothing leaves your laptop, ever. No uploads, no logs, no training data. This is the headline.
-2. **Free** — no subscription, no per-token bills, no surprise charges. Install once, use forever.
-3. **Offline** — works on a plane, in a cafe, in a client conference room with bad wifi. Your productivity doesn't depend on someone else's uptime.
-4. **Yours** — the app is open-source. The model is open-weights. You can customize it, run it on old laptops, share it with your team, fork it. Nobody can take it away.
+Six real things. Not "AI-powered productivity." Actual things people do every day.
 
-## What to NOT lead with
+---
 
-These are the wrong hooks — they compete with giants you'll lose to:
+## What you don't get
 
-- ❌ "Smarter than ChatGPT" (it isn't, on hard reasoning)
-- ❌ "Fastest AI" (speed alone is commoditized)
-- ❌ "Most features" (ChatGPT has way more)
-- ❌ "AI for productivity" (too generic)
+- A monthly bill.
+- A login screen.
+- A dashboard that tracks your usage.
+- A company that owns your prompts.
 
-Lead with **privacy + independence**. Those are the places ChatGPT cannot compete.
+---
 
-## Positioning against the competition
+## The numbers
 
-| | Purely Personal | ChatGPT | Claude | Local OSS (Ollama alone) |
-| --- | --- | --- | --- | --- |
-| Private | ✓ | ✗ | ✗ | ✓ |
-| Free | ✓ | Tiered | Tiered | ✓ |
-| Offline | ✓ | ✗ | ✗ | ✓ |
-| Easy install | ✓ | ✓ | ✓ | ✗ |
-| Beautiful UI | ✓ | ✓ | ✓ | ✗ |
-| Real use cases built in | ✓ | Partial | Partial | ✗ |
-| Works on ARM Macs | ✓ | ✓ | ✓ | ✓ |
+- **$0.** Forever. Open source, MIT licensed.
+- **15 minutes.** From nothing installed to first working chat.
+- **0 bytes.** Leave your laptop. Ever.
+- **12 seconds.** Average answer time on an M2 MacBook.
+- **5 GB.** One-time model download.
+- **100%.** Works offline after that.
 
-**The unique middle:** easy install + beautiful UI + fully private. Ollama is private but hard. ChatGPT is easy but not private. Purely Personal is the only one that's both.
+---
+
+## The one-sentence tagline options
+
+In order of strength. Pick one and use it everywhere.
+
+1. **"Your AI. Your laptop. Your data. Nothing ever leaves."**  *(ownership — what they want to feel)*
+2. **"ChatGPT-grade answers on the stuff you can't send to ChatGPT."**  *(contrast — what they already know)*
+3. **"The AI that doesn't phone home."**  *(negative positioning)*
+4. **"Private by default."**  *(two words, memorable)*
+
+---
+
+## Who this is for
+
+If your daily work includes any of these, you're the target:
+
+- NDAs you sign with every client
+- Privileged conversations (legal, therapy, medical)
+- Tax documents, books, P&Ls
+- Proprietary code or internal playbooks
+- Session notes, 1:1 notes, employee reviews
+- Anything you've ever copy-pasted with a wave of guilt
+
+---
+
+## Who this is NOT for
+
+- People who don't handle confidential work. (ChatGPT is fine for you.)
+- People chasing absolute cutting-edge reasoning. (Stay on Claude / GPT-5.)
+- People who love paying $20/month on principle.
+
+Don't sell to these people. You'll lose them, and they'll spread doubt.
+
+---
+
+## The belief breakers
+
+Three things your buyer already believes that you need to disarm. First, name what they believe. Then replace it.
+
+**Belief 1:** *"Local AI must be janky."*
+Reality: Qwen 2.5 on a 2024 MacBook feels as fast as ChatGPT for summarization, code review, and drafts. 7B parameters is not 2022 anymore.
+
+**Belief 2:** *"If it's free, it's a toy."*
+Reality: The code is MIT. The model weights are Apache-2.0. The reason it's free is that the components were already free — this project just assembled them into something your mom could install.
+
+**Belief 3:** *"I'll have to become a Linux person."*
+Reality: You double-click a DMG. Drag to Applications. Open. Type a question. Same as installing Slack.
+
+---
+
+## The guarantee
+
+Turn off your WiFi.
+
+Open the app.
+
+Ask it to summarize any document on your laptop.
+
+If the answer streams back — it's running 100% locally.
+
+If it doesn't — email me and I'll personally get you set up.
+
+That's the guarantee. Verifiable, not vibes.
+
+---
+
+## The contrast table
+
+| | Purely Personal | ChatGPT / Claude | Generic local OSS |
+| --- | --- | --- | --- |
+| Private | ✓ | ✗ | ✓ |
+| Free forever | ✓ | $20–200/mo | ✓ |
+| Works offline | ✓ | ✗ | ✓ |
+| Beautiful app | ✓ | ✓ | ✗ |
+| Installs in 15 min | ✓ | ✓ | ✗ |
+| Smartest on hard reasoning | ✗ | ✓ | ✗ |
+
+The unique middle: private **and** easy.
+
+Ollama alone is private but intimidating. ChatGPT is easy but not private. Purely Personal is the only thing that's both.
+
+---
+
+## The one thing to do now
+
+Download it. [link]
+
+Works on any Mac or Windows laptop with 8 GB RAM.
+
+Install is 15 minutes, you walk away during 12 of those.
+
+If it changes your workflow, keep it. It's yours.
+
+If it doesn't, uninstall in 3 clicks. No account to delete, no strings attached, nothing to unsubscribe from.

@@ -1,34 +1,45 @@
 # Press Release — Purely Personal
 
-For sending to tech blogs, AI newsletters, and podcast hosts. 380 words. Edit the quote to match your voice.
+For tech blogs, AI newsletters, and podcast hosts. Short, specific, pattern-interrupting. 390 words.
 
 ---
 
 **FOR IMMEDIATE RELEASE**
 
-# Purely Personal launches: a private AI that runs entirely on your laptop
+# Purely Personal launches: the AI for the half of work you couldn't put in the cloud
 
-## The new desktop app lets small business professionals use AI on confidential work — without sending data to the cloud
+## Free, open-source desktop app runs a world-class AI model entirely on your laptop. No cloud, no login, no subscription.
 
-**San Francisco, CA — April 2026** — Purely Personal, a new open-source desktop application that runs AI models locally on users' laptops, launched today. The app is free, works offline, and never transmits user data to any external server — a sharp contrast to cloud-based AI services like ChatGPT and Claude.
+**San Francisco, CA — April 2026** — Most AI users stopped using AI for half of what matters.
 
-The tool targets a gap familiar to every consultant, lawyer, accountant, coach, and therapist: they want to use AI to speed through their work, but they can't paste confidential client data, legal documents, or protected health information into a cloud service.
+The confidential half. Client contracts under NDA. Session notes. Legal work. Tax documents. Medical data. The private 80% of what professionals actually get paid to handle.
 
-"Every small business professional I know has the same folder on their desktop," said Daniel Paul, the developer behind Purely Personal. "It's full of contracts under NDA, client session notes, financial documents they can't upload anywhere. Those are exactly the documents they'd benefit most from having AI help with. Purely Personal is built for that folder."
+Today Purely Personal launches to fix that gap.
 
-The app runs Qwen 2.5, an open-weights AI model from Alibaba, using the Ollama runtime. A one-time 5 GB download installs the model locally. From that point forward, the application requires no internet connection — users can fly on planes, sit in client conference rooms with bad WiFi, or disable networking entirely, and the app continues to function.
+Purely Personal is a free, open-source desktop app that runs Qwen 2.5 — an Apache-2.0 open-weights AI model from Alibaba — entirely on the user's own laptop. No data ever leaves the machine. No account required. No monthly bill.
 
-Purely Personal includes six one-click real-world use cases built into the interface: spotting risks in contract clauses, drafting responses to difficult client emails, extracting action items from meeting notes, categorizing messy expense lists, generating interview questions, and explaining specialist concepts in client-friendly language.
+"Every consultant I know has a folder of documents they won't paste into ChatGPT," said Daniel Paul, the developer behind Purely Personal. "Contracts under NDA. Session notes. Financial records. Things signed under ethics rules. They use AI for the easy 30% of their work and do the hard 70% manually. Purely Personal is for the hard 70%."
 
-"The privacy claim is verifiable by the user," Paul said. "You can turn off your WiFi, and the chat keeps working. You don't have to trust anyone."
+The app installs in about 15 minutes on any Mac or Windows laptop with 8 GB of RAM. Users drop a document into the chat window, ask a question, and get a streamed answer in about 12 seconds on modern hardware.
 
-Purely Personal is released under the MIT license. The application binaries, source code, and documentation are all publicly available on GitHub. The project supports macOS (Apple Silicon and Intel), Windows 10/11, and Linux.
+Six real-world use cases are built into the interface as one-click templates:
+
+- Spot the 3 riskiest clauses in a contract
+- Draft a response to a frustrated client
+- Extract action items from messy meeting notes
+- Categorize an expense CSV and flag anomalies
+- Generate targeted interview questions with listen-for cues
+- Explain a technical concept in client-friendly language
+
+"The privacy claim is verifiable by the user," Paul said. "You turn off your WiFi. You open the app. You ask a question. If the answer arrives, the model is running inside your laptop. You don't have to trust anyone."
+
+Purely Personal is MIT-licensed. The full source code, Mac DMG installer, and Windows EXE installer are publicly available on GitHub. The project supports macOS (Apple Silicon and Intel), Windows 10/11, and Linux.
 
 ---
 
 ## About Purely Personal
 
-Purely Personal is an open-source desktop application that makes private AI accessible to non-technical small business professionals. The project is maintained by [Daniel Paul] and contributors at [github.com/danielpaulai/Run-Worldclass-computer-locally](https://github.com/danielpaulai/Run-Worldclass-computer-locally).
+Purely Personal is an open-source desktop application that makes private AI accessible to non-technical professionals who handle confidential work daily. Maintained by [Daniel Paul] and contributors at [github.com/danielpaulai/Run-Worldclass-computer-locally](https://github.com/danielpaulai/Run-Worldclass-computer-locally).
 
 ---
 

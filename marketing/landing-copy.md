@@ -1,160 +1,185 @@
 # Landing Page Copy — Purely Personal
 
-Structured top to bottom, ready to drop into Framer / Webflow / any static site.
+Ready for Framer / Webflow / plain HTML. Top to bottom. Hard-stop wherever you see `---`.
 
 ---
 
 ## HERO
 
-### H1
-**Purely Personal.**
-**Your AI on your laptop.**
+### H1 (two lines)
+**Your AI. Your laptop.**
+**Nothing ever leaves.**
 
 ### Subhead
-A private AI that runs entirely on your machine. No cloud. No subscription. Your data never leaves your hard drive — ever.
+A private AI that runs entirely on your own machine. No cloud, no login, no monthly bill. Built for the documents you'd never paste into ChatGPT.
 
 ### Primary CTA
-**Download for Mac** (Apple Silicon, 91 MB)
+**Download for Mac · 91 MB**
 
-### Secondary CTA
-Download for Windows · Get the source
+### Secondary CTAs
+Download for Windows · See the source (MIT)
 
-### Trust line (under CTAs)
-Free · Open-source · MIT licensed · Works offline
+### Trust strip (under CTAs)
+Free forever · Open source · Works offline · 15-minute install
 
 ---
 
-## WHY SECTION (above the fold-and-a-half)
+## PATTERN INTERRUPT (above-the-fold, left-aligned)
 
 ### H2
-The AI you can use on the work you can't upload.
+You already stopped using AI for the important half.
 
-### Body
-Every consultant, lawyer, accountant, and coach has the same problem.
+### Body (very short lines)
+You have a folder.
 
-A folder of documents they'll never paste into ChatGPT. Client contracts. Session notes. Financial statements. Things under NDA.
+Client contracts. Session notes. Financial docs. Things you signed NDAs about.
 
-So they use AI for the easy 30% and do the hard 70% by hand.
+You don't paste those into ChatGPT.
 
-That's the wrong half of the value.
+So you do them by hand.
 
-The hours you want AI to save you are the *confidential* hours. Purely Personal is built for exactly those hours.
-
----
-
-## HOW IT WORKS (3-column)
-
-### Column 1: Install
-Download the installer. Drag to Applications. Open the app.
-
-One minute.
-
-### Column 2: Drop a file
-Drop any document into the chat. A contract, an email, meeting notes, a CSV.
-
-It stays on your hard drive.
-
-### Column 3: Ask anything
-Summarize it. Find the risks. Extract action items. Draft a reply.
-
-Answer streams back in seconds. Nothing uploaded.
+**That's the half Purely Personal handles.**
 
 ---
 
-## REAL USE CASES (grid, 6 cards)
+## HOW IT WORKS (3 steps, equal weight)
+
+### 1. Install
+Download. Double-click. Drag to Applications.
+
+**One minute.**
+
+### 2. Drop a file in
+Any document you have. Contract, spreadsheet, meeting notes, email thread.
+
+**The file stays on your hard drive.**
+
+### 3. Ask anything
+Summarize. Find the risks. Draft a reply. Extract action items.
+
+**The answer streams back in 12 seconds. Nothing uploaded.**
+
+---
+
+## THE SIX REAL THINGS (grid, 2×3)
 
 ### "Spot risks in a contract clause"
-Drop an NDA. Ask for the three riskiest items. Get a specific, professional analysis — without the document ever leaving your laptop.
+Drop a 40-page NDA. Ask for the 3 riskiest items. Get a professional analysis in under 20 seconds. Never leaves your machine.
 
 ### "Draft a reply to a tough email"
-Paste a client's frustrated message. Get three warm, honest response options in different tones — private, because the client's words stay on your machine.
+Paste a frustrated client's message. Get 3 warm, honest response options. Their words stay on your screen.
 
 ### "Extract meeting action items"
-Paste rough meeting notes. Get clean lists of commitments, follow-ups, and the questions you should have asked but didn't.
+Paste messy notes. Get clean lists: who committed to what, follow-up questions, red flags. Private forever.
 
 ### "Categorize messy expenses"
-Paste a CSV-like list of transactions. Get a clean categorized table with anomalies flagged — offline, because your financial data never leaves.
+Paste a CSV of transactions. Get a clean categorized table with anomalies flagged. Your financials stay on disk.
 
 ### "Generate interview questions"
-Give it a role context. Get five targeted questions, plus what to listen for in the answer — none of which gets added to a third-party's training set.
+Give it a role and context. Get 5 targeted questions plus what to listen for in each answer. No training data contribution.
 
 ### "Explain a concept at client level"
-Ask for a plain-English explanation of a specialist topic. Use it in your next client meeting. Private, so you can feed in your actual client details if you want.
+Ask for a plain-English explanation of anything technical. Use it straight in your next meeting. Your client details stay yours.
+
+Each one: click to try.
 
 ---
 
-## COMPARISON TABLE
-
-| | ChatGPT | Claude | Purely Personal |
-| --- | --- | --- | --- |
-| Private (never leaves device) | ✗ | ✗ | **✓** |
-| Offline | ✗ | ✗ | **✓** |
-| Free forever | Partial | Partial | **✓** |
-| Works on NDA'd docs | ✗ | ✗ | **✓** |
-| Strongest on hard reasoning | ✓ | ✓ | ✗ |
-| Open-source | ✗ | ✗ | **✓** |
-
-Purely Personal isn't trying to replace the cloud AIs. It's the one you use **when you can't use them.**
-
----
-
-## PRIVACY PROOF
+## THE COMPARISON
 
 ### H2
-Privacy you can verify.
+The only one that does all three.
+
+| | Private | Easy to install | Beautiful UI |
+| --- | --- | --- | --- |
+| ChatGPT | ✗ | ✓ | ✓ |
+| Claude | ✗ | ✓ | ✓ |
+| Raw Ollama | ✓ | ✗ | ✗ |
+| **Purely Personal** | **✓** | **✓** | **✓** |
+
+Private AI wasn't easy. Easy AI wasn't private. Now both.
+
+---
+
+## PROOF (not vibes)
+
+### H2
+Privacy you can verify in 30 seconds.
 
 ### Body
-"Trust us" is a bad privacy promise. Here's one that doesn't need trust:
+"Trust us" is a bad privacy promise. Here's one that doesn't need trust.
 
 1. Install the app.
-2. Turn off your WiFi. Literally.
-3. Open a chat. Ask a question.
+2. Turn off your WiFi. Literally. Airplane mode.
+3. Ask it a question.
 4. Watch the answer stream back.
 
-The model is running inside your laptop. The "internet" isn't involved at all.
+If the answer arrives — the model is running inside your laptop. The internet isn't part of the conversation.
+
+You don't take our word for anything.
 
 ---
 
-## FOR WHOM (bullet list)
+## FOR WHOM
 
 ### H2
-Who this is for.
+Built for people who get paid to handle the private stuff.
 
 - Consultants who sign NDAs with every client
 - Lawyers and paralegals handling privileged work
-- Accountants and tax professionals during Q1 burnout
+- Accountants and tax preparers during Q1 burnout
 - Therapists and executive coaches with session notes
-- Small clinics and healthcare pros (HIPAA-sensitive work)
-- HR consultants handling performance reviews
+- Clinicians and solo healthcare practices (HIPAA-adjacent work)
+- HR consultants handling performance reviews and comp
 - Solo founders whose codebase is IP
-- Teachers and tutors working with student material
-- Anyone who has ever felt guilty pasting a confidential doc into ChatGPT
+- Real estate and mortgage professionals with buyer financials
+- Anyone who's ever felt that flash of guilt pasting a confidential file into ChatGPT
 
 ---
 
 ## PRICING
 
-### H2
-Free forever.
+### H2 (just three words)
+Free. Forever. Yours.
 
 ### Body
-No tier. No subscription. No "pro" version waiting to gate you.
+No tier.
 
-The app is MIT-licensed open-source. The model is Apache-2.0 open-weights. Install once, use for the rest of your career.
+No subscription.
 
-If you want to support the project, star the repo. Or contribute a PR.
+No "Pro" version waiting behind a paywall.
+
+The app is MIT-licensed. The model is Apache-2.0. Install once, use for the rest of your career.
+
+If you want to support the project, star the repo. Or send a pull request.
 
 ---
 
-## TECH DETAILS (collapsed by default on mobile)
+## TECH SPECS (collapsible)
 
-**Runs on:** Apple Silicon (M1/M2/M3/M4) and Intel Macs · Windows 10/11 (x64 and ARM64) · Linux (AppImage)
+**Runs on:** Apple Silicon (M1–M4) · Intel Macs · Windows 10/11 (x64 and ARM64) · Linux (AppImage)
 
-**Model:** Qwen 2.5, 7 billion parameters, 5 GB on disk. Swappable to ~100 other open-weights models via one command (Llama 3, Mistral, DeepSeek, GPT-OSS, etc.)
+**Model:** Qwen 2.5, 7 billion parameters, 5 GB on disk. Swappable to ~100 other open-weights models (Llama 3, Mistral, DeepSeek, GPT-OSS, etc.) with one command.
 
-**Requirements:** 8 GB RAM minimum, 16 GB+ recommended. 15 GB of free disk space. Any OS from the last 5 years.
+**Requirements:** 8 GB RAM minimum (16 GB+ recommended). 15 GB free disk. Any OS from the last 5 years.
 
-**Under the hood:** Electron shell + Chromium renderer + Ollama runtime + local HTTP to `localhost:11434`. No telemetry, no phone-home, no account system. All source on GitHub.
+**Under the hood:** Electron + Chromium + Ollama via `localhost:11434`. No telemetry, no accounts, no phone-home, no external services.
+
+---
+
+## FINAL CTA
+
+### H2
+Stop using AI for half your work.
+
+### Sub
+Download it. 15 minutes from zero to a private AI you can use on anything.
+
+### Button
+**Download for Mac · 91 MB**
+
+### Sub-sub
+No sign-up. No email required. No "free trial." Just the file.
 
 ---
 
@@ -165,11 +190,26 @@ If you want to support the project, star the repo. Or contribute a PR.
 Your AI on your laptop.
 
 ### Middle
-Product · Docs · GitHub · Download
+Product · Install guide · GitHub · Download
 
 ### Right
-Built by [Daniel Paul]
+Built by Daniel Paul
 MIT licensed · No rights reserved
 
 ### Bottom line
-The model runs on your hardware. Your data belongs to you. That's it.
+The model runs on your hardware. Your data belongs to you.
+
+That's the whole product.
+
+---
+
+## WRITING NOTES (delete before publishing)
+
+- **No "unlock your potential."**
+- **No "leverage."**
+- **No "AI-powered."**
+- **No "synergy" or "seamless" or "cutting-edge."**
+- **Specific numbers > adjectives** every time.
+- **One idea per line.** Scanners win on landing pages.
+- **Every promise has a receipt.** (Install time, model size, privacy verification).
+- **The only selling is contrast.** (Cloud = not private. Raw OSS = not easy. Here = both.)
