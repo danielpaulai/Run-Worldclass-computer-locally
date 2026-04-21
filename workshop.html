@@ -204,6 +204,204 @@
     line-height: 1.7;
   }
 
+  /* ---------- CHAT (the live chat box) ---------- */
+  .chat {
+    background: var(--card);
+    border: 2px solid var(--ink);
+    border-radius: var(--radius);
+    padding: 28px 32px;
+    margin-bottom: 80px;
+    box-shadow: 0 10px 40px -12px rgba(0,0,0,0.12);
+  }
+  .chat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--line);
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .chat-header h2 {
+    font-size: 28px;
+    margin: 0 0 6px;
+    line-height: 1.15;
+  }
+  .chat-sub {
+    color: var(--muted);
+    font-size: 14.5px;
+    margin: 0;
+    max-width: 48ch;
+  }
+  .chat-status {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .chat-status .model-line {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .privacy-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--mint);
+    box-shadow: 0 0 8px var(--mint);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%      { opacity: 0.6; transform: scale(0.85); }
+  }
+  .chat-messages {
+    max-height: 400px;
+    min-height: 120px;
+    overflow-y: auto;
+    margin-bottom: 18px;
+    padding: 4px 4px 0 4px;
+  }
+  .msg {
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    line-height: 1.5;
+    font-size: 15px;
+  }
+  .msg-system {
+    background: transparent;
+    color: var(--muted);
+    font-style: italic;
+    text-align: center;
+    padding: 20px 0;
+    font-size: 14px;
+  }
+  .msg-user {
+    background: var(--cream-deep);
+    margin-left: 40px;
+  }
+  .msg-assistant {
+    background: #f0f7f4;
+    margin-right: 40px;
+    border-left: 2px solid var(--mint);
+  }
+  .msg-error {
+    background: #fff0e8;
+    color: var(--coral-deep);
+    border-left: 2px solid var(--coral);
+    margin-right: 40px;
+  }
+  .msg-label {
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+  }
+  .msg-body {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-family: inherit;
+  }
+  .msg-body .cursor {
+    display: inline-block;
+    width: 2px;
+    background: var(--mint);
+    margin-left: 2px;
+    animation: blink 1s step-end infinite;
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: 0; }
+  }
+  .chat-quickstart {
+    background: var(--cream-deep);
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-bottom: 14px;
+  }
+  .quickstart-label {
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .quickstart-btns {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .quickstart-btns button {
+    background: var(--card);
+    border: 1px solid var(--line);
+    color: var(--ink);
+    padding: 9px 14px;
+    font-size: 13px;
+    font-family: inherit;
+    font-weight: 500;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: border-color .15s, color .15s, background .15s;
+  }
+  .quickstart-btns button:hover:not(:disabled) {
+    border-color: var(--coral);
+    color: var(--coral-deep);
+    background: #fff9f4;
+  }
+  .quickstart-btns button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .chat-input-row {
+    display: flex;
+    gap: 10px;
+  }
+  .chat-input-row input[type=text] {
+    flex: 1;
+    padding: 14px 18px;
+    font-size: 15px;
+    font-family: inherit;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: var(--cream);
+    color: var(--ink);
+    transition: border-color .15s;
+  }
+  .chat-input-row input[type=text]:focus {
+    outline: none;
+    border-color: var(--coral);
+  }
+  .chat-input-row input[type=text]:disabled {
+    background: #f0f0f0;
+    color: var(--muted);
+  }
+  .chat-send {
+    background: var(--coral);
+    color: white;
+    border: none;
+    padding: 0 28px;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background .15s;
+  }
+  .chat-send:hover:not(:disabled) { background: var(--coral-deep); }
+  .chat-send:disabled {
+    background: var(--muted);
+    cursor: not-allowed;
+  }
+
   /* ---------- FILLABLE "MAKE IT YOURS" ---------- */
   .try {
     background: var(--card);
@@ -531,6 +729,44 @@
     <div class="scroll-cue">Scroll to pick your persona</div>
   </section>
 
+  <!-- CHAT (real, talks to local Ollama) -->
+  <section class="chat">
+    <div class="chat-header">
+      <div>
+        <h2>Talk to your local AI now.</h2>
+        <p class="chat-sub">Your machine, your data, no internet. Ask anything below. The response streams back in real time.</p>
+      </div>
+      <div class="chat-status">
+        <div class="model-line">
+          <span class="privacy-dot"></span>
+          <span id="chat-model">qwen2.5:7b</span>
+        </div>
+        <div id="chat-health">checking\u2026</div>
+      </div>
+    </div>
+
+    <div class="chat-messages" id="chat-messages">
+      <div class="msg msg-system">Type a question, or try one of the real use cases below. The model runs on this laptop \u2014 nothing leaves your machine.</div>
+    </div>
+
+    <div class="chat-quickstart">
+      <div class="quickstart-label">Try a real use case \u2014 one click, realistic output</div>
+      <div class="quickstart-btns" id="quickstart-btns">
+        <button type="button" data-key="contract-risks">Spot risks in a contract clause</button>
+        <button type="button" data-key="draft-reply">Draft a reply to a tough email</button>
+        <button type="button" data-key="action-items">Extract meeting action items</button>
+        <button type="button" data-key="categorize-expenses">Categorize messy expenses</button>
+        <button type="button" data-key="interview-questions">Generate interview questions</button>
+        <button type="button" data-key="explain-concept">Explain a concept for a client</button>
+      </div>
+    </div>
+
+    <form class="chat-input-row" id="chat-form">
+      <input type="text" id="chat-input" placeholder="e.g. Explain HTTPS in 3 sentences" autocomplete="off">
+      <button type="submit" class="chat-send" id="chat-send">Send</button>
+    </form>
+  </section>
+
   <!-- PERSONAS -->
   <div class="section-head">
     <div class="number">One</div>
@@ -848,6 +1084,196 @@ copyBtn.addEventListener("click", async () => {
     copyBtn.classList.remove("copied");
   }, 1600);
 });
+
+/* ---------- LIVE CHAT (streams from Ollama at localhost:11434) ---------- */
+const OLLAMA_BASE = "http://localhost:11434";
+const chatForm    = document.getElementById("chat-form");
+const chatInput   = document.getElementById("chat-input");
+const chatSend    = document.getElementById("chat-send");
+const chatMsgs    = document.getElementById("chat-messages");
+const chatModel   = document.getElementById("chat-model");
+const chatHealth  = document.getElementById("chat-health");
+const convo       = [];   // {role, content}
+
+// Startup: check if Ollama is reachable, and report which model is loaded.
+async function checkOllama() {
+  try {
+    const r = await fetch(`${OLLAMA_BASE}/api/tags`, { cache: "no-store" });
+    if (!r.ok) throw new Error("bad status");
+    const data = await r.json();
+    const models = (data.models || []).map(m => m.name);
+    if (models.length === 0) {
+      chatHealth.textContent = "no models yet \u2014 run setup.sh";
+      chatHealth.style.color = "var(--coral)";
+      return;
+    }
+    // Prefer qwen2.5:7b, otherwise first installed
+    const preferred = models.find(m => m.startsWith("qwen2.5:7b")) || models[0];
+    chatModel.textContent = preferred;
+    chatHealth.textContent = `\u2713 ready  \u00b7  ${models.length} model${models.length>1?"s":""} installed`;
+    chatHealth.style.color = "var(--mint)";
+  } catch (e) {
+    chatHealth.textContent = "Ollama not reachable";
+    chatHealth.style.color = "var(--coral)";
+    addChatMessage("error", "Couldn't reach Ollama at localhost:11434. Open Terminal and run:  brew services start ollama  \u2014 then reload this window.");
+  }
+}
+checkOllama();
+
+function addChatMessage(role, content) {
+  // Remove the empty "system" placeholder on first real message.
+  const sys = chatMsgs.querySelector(".msg-system");
+  if (sys && role !== "system") sys.remove();
+
+  const el = document.createElement("div");
+  el.className = `msg msg-${role}`;
+  const label = role === "user" ? "You" : role === "error" ? "Error" : "Local AI";
+  el.innerHTML = `<div class="msg-label">${label}</div><div class="msg-body"></div>`;
+  el.querySelector(".msg-body").textContent = content;
+  chatMsgs.appendChild(el);
+  chatMsgs.scrollTop = chatMsgs.scrollHeight;
+  return el;
+}
+
+/* ---------- Real-use-case prompts (click a button, auto-fill + send) ---------- */
+const quickstartPrompts = {
+  "contract-risks": `Here's a clause from an NDA a client sent me. Identify the 3 most risky items in plain English, one sentence each. Be specific about what could go wrong:
+
+"The Recipient shall hold all Confidential Information in strict confidence for a period of five (5) years from the date of disclosure. The Recipient shall not use any Confidential Information for any purpose other than evaluating the proposed transaction. The Discloser may, at its sole discretion, require the immediate return or destruction of all Confidential Information, and the Recipient must certify such destruction in writing within 10 business days. Recipient agrees that monetary damages would be insufficient remedy for any breach, and the Discloser shall be entitled to injunctive relief without posting any bond. Recipient shall be liable for all fees and costs, including attorneys' fees, incurred by Discloser in enforcing this Agreement."`,
+
+  "draft-reply": `A client emailed me frustrated that a project is behind schedule. Draft a professional, warm response that (1) acknowledges their frustration honestly, (2) explains the cause without making excuses (a supplier delay), and (3) proposes two concrete next steps. Keep it under 120 words.
+
+Their email:
+"I'm incredibly disappointed. You promised we'd have this by Monday and it's now Thursday with no update from your side. This is unacceptable for the rates I'm paying. I need to know exactly when this will be done and what you're doing about it."`,
+
+  "action-items": `Here are rough notes from a client meeting I just had. Extract: (1) commitments I made, (2) commitments they made, (3) the 3 follow-up questions I should have asked but didn't.
+
+Notes:
+- Discussed Q3 strategy
+- Client wants to expand to EU next quarter
+- I agreed to research GDPR requirements by Friday
+- They said they'd send their Q2 numbers Tuesday
+- Mentioned possibly hiring a second consultant
+- Budget seemed tight but they didn't say explicitly
+- Next meeting: Thursday 2pm
+- They asked if I had capacity for a separate branding project`,
+
+  "categorize-expenses": `Here's a messy list of business expenses from last month. For each line: (1) assign a category from [Software, Travel, Meals, Office, Marketing, Contractor, Other], (2) flag anything that looks unusual or worth a second look.
+
+Return as a clean table.
+
+- 2024-10-15: $847.23 "Stripe fees October"
+- 2024-10-16: $32.50 "Lunch with client Acme"
+- 2024-10-17: $14,230 "Facebook ads Q4 launch"
+- 2024-10-18: $89 "Adobe Creative Cloud"
+- 2024-10-20: $1,247 "United Airlines SFO-JFK"
+- 2024-10-21: $45 "Uber to airport"
+- 2024-10-22: $380 "W Hotel New York - 1 night"
+- 2024-10-23: $12 "Starbucks"
+- 2024-10-24: $9,500 "Bonus to Alex (contractor)"
+- 2024-10-25: $23 "Printer paper Staples"`,
+
+  "interview-questions": `Generate 5 interview questions for a candidate applying to a Senior Product Designer role at a Series A SaaS startup. Role focus: redesigning a clunky onboarding flow.
+
+Mix: 2 behavioral, 2 portfolio-walkthrough, 1 situational.
+
+For each, include a one-line "what I'm listening for" note so I know when the answer is strong.`,
+
+  "explain-concept": `A client asked me to explain what a "backdoor Roth conversion" is and whether it applies to their situation. Write a plain-English explanation in exactly 5 sentences, aimed at someone with basic finance knowledge but no tax background. At the end, include one specific scenario where it WOULD be a smart move and one where it WOULDN'T.`,
+};
+
+document.querySelectorAll("#quickstart-btns button").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const key = btn.getAttribute("data-key");
+    const prompt = quickstartPrompts[key];
+    if (!prompt) return;
+    chatInput.value = prompt;
+    // Fire the form submit (same path as Enter-to-send)
+    chatForm.dispatchEvent(new Event("submit", { cancelable: true, bubbles: true }));
+  });
+});
+
+chatForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const text = chatInput.value.trim();
+  if (!text) return;
+
+  // UI state: user message in, input disabled, show streaming assistant
+  addChatMessage("user", text);
+  convo.push({ role: "user", content: text });
+  chatInput.value = "";
+  chatInput.disabled = true;
+  chatSend.disabled = true;
+  chatSend.textContent = "\u2026";
+
+  const assistantEl = addChatMessage("assistant", "");
+  const bodyEl = assistantEl.querySelector(".msg-body");
+  // Add a blinking cursor while streaming
+  const cursor = document.createElement("span");
+  cursor.className = "cursor";
+  cursor.innerHTML = "&nbsp;";
+  bodyEl.appendChild(cursor);
+
+  let fullText = "";
+  try {
+    const resp = await fetch(`${OLLAMA_BASE}/api/chat`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: chatModel.textContent,
+        messages: convo,
+        stream: true,
+      }),
+    });
+    if (!resp.ok) throw new Error(`Ollama returned ${resp.status}`);
+
+    const reader  = resp.body.getReader();
+    const decoder = new TextDecoder();
+    let buf = "";
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buf += decoder.decode(value, { stream: true });
+      // Ollama sends newline-delimited JSON; process complete lines only.
+      let nl;
+      while ((nl = buf.indexOf("\n")) !== -1) {
+        const line = buf.slice(0, nl).trim();
+        buf = buf.slice(nl + 1);
+        if (!line) continue;
+        try {
+          const data = JSON.parse(line);
+          const tok = data.message?.content || "";
+          if (tok) {
+            fullText += tok;
+            // Keep cursor at end while streaming
+            bodyEl.textContent = fullText;
+            bodyEl.appendChild(cursor);
+            chatMsgs.scrollTop = chatMsgs.scrollHeight;
+          }
+        } catch {
+          // partial/malformed — skip
+        }
+      }
+    }
+
+    cursor.remove();
+    convo.push({ role: "assistant", content: fullText });
+  } catch (err) {
+    cursor.remove();
+    assistantEl.classList.remove("msg-assistant");
+    assistantEl.classList.add("msg-error");
+    assistantEl.querySelector(".msg-label").textContent = "ERROR";
+    bodyEl.textContent = `${err.message}. Is Ollama running? Try: brew services start ollama`;
+    convo.pop(); // remove the user msg from context so retry starts clean
+  } finally {
+    chatInput.disabled = false;
+    chatSend.disabled = false;
+    chatSend.textContent = "Send";
+    chatInput.focus();
+  }
+});
+
 
 /* ---------- NATIVE FILE PICKER (Electron) / HTML fallback (browser) ---------- */
 async function pickFilePath(kind) {
