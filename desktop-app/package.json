@@ -1,7 +1,7 @@
 {
-  "name": "local-ai-workshop",
+  "name": "purely-personal",
   "version": "0.1.0",
-  "description": "Desktop wrapper for the Run-a-World-Class-AI-on-Your-Laptop workshop — opens the interactive Five Real Mondays page as a native window.",
+  "description": "Purely Personal — your AI on your laptop. Private by default. Nothing ever leaves your machine.",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
@@ -24,8 +24,8 @@
     "electron-builder": "^24.13.3"
   },
   "build": {
-    "appId": "com.danielpaulai.localai-workshop",
-    "productName": "Local AI Workshop",
+    "appId": "com.danielpaulai.purely-personal",
+    "productName": "Purely Personal",
     "directories": {
       "output": "dist"
     },

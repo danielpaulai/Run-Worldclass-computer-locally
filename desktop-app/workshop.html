@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Five Real Mondays — Run a World-Class AI on Your Laptop</title>
+<title>Purely Personal — Your AI on your laptop</title>
 <style>
   :root {
     --cream: #faf7f2;
@@ -16,7 +16,28 @@
     --coral-deep: #8a3d21;
     --card: #ffffff;
     --mint: #3d8a7c;
+    --msg-user-bg: #f2ede2;
+    --msg-asst-bg: #f0f7f4;
+    --terminal-bg: #1a1a1a;
+    --terminal-fg: #b8f080;
     --radius: 10px;
+  }
+
+  :root[data-theme="dark"] {
+    --cream: #14110d;
+    --cream-deep: #1e1a15;
+    --ink: #f0ebe1;
+    --muted: #938a80;
+    --line: #332d26;
+    --coral: #e8724e;
+    --coral-soft: #3d1f14;
+    --coral-deep: #f1896b;
+    --card: #1e1a15;
+    --mint: #68b9a7;
+    --msg-user-bg: #262019;
+    --msg-asst-bg: #1a2620;
+    --terminal-bg: #0a0a0a;
+    --terminal-fg: #8dd766;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -42,6 +63,91 @@
     margin: 0 auto;
     padding: 80px 28px 140px;
   }
+
+  /* ---------- BRAND BAR ---------- */
+  .brand {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 24px;
+    background: color-mix(in srgb, var(--cream) 92%, transparent);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+    z-index: 10;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif;
+    -webkit-app-region: drag;   /* make top bar draggable on macOS */
+  }
+  .brand-mark {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+  .brand-logo {
+    width: 28px; height: 28px;
+    border-radius: 6px;
+    background: var(--coral);
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Iowan Old Style", Charter, Georgia, serif;
+    font-size: 15px;
+    font-weight: 700;
+    font-style: italic;
+    letter-spacing: -0.02em;
+    flex-shrink: 0;
+  }
+  .brand-right {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    font-size: 12px;
+    color: var(--muted);
+    -webkit-app-region: no-drag;  /* buttons clickable */
+  }
+  .brand-btn {
+    background: transparent;
+    border: 1px solid var(--line);
+    color: var(--ink);
+    padding: 5px 12px;
+    font-size: 12px;
+    font-weight: 500;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: border-color .15s, color .15s, background .15s;
+  }
+  .brand-btn:hover {
+    border-color: var(--coral);
+    color: var(--coral);
+  }
+  .brand-privacy {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--mint);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .brand-privacy::before {
+    content: "";
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--mint);
+    box-shadow: 0 0 6px var(--mint);
+  }
+
+  /* adjust main padding for fixed brand bar */
+  main { padding-top: 100px; }
 
   /* ---------- HERO ---------- */
   .hero {
@@ -361,6 +467,54 @@
     cursor: not-allowed;
   }
 
+  .chat.drag-over {
+    border-color: var(--coral);
+    background: #fffaf5;
+    box-shadow: 0 0 0 4px var(--coral-soft);
+  }
+  .chat-drop-hint {
+    text-align: center;
+    color: var(--coral);
+    font-size: 13px;
+    padding: 8px 0;
+    display: none;
+  }
+  .chat.drag-over .chat-drop-hint { display: block; }
+  .attachments-row {
+    margin-bottom: 10px;
+  }
+  .attached-file {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--cream-deep);
+    padding: 7px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    margin-right: 8px;
+    margin-bottom: 6px;
+  }
+  .attached-file .attach-name {
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .attached-file .attach-size {
+    color: var(--muted);
+    font-size: 11px;
+  }
+  .attached-file .remove-attach {
+    background: none;
+    border: none;
+    font-size: 15px;
+    line-height: 1;
+    cursor: pointer;
+    color: var(--muted);
+    padding: 0 2px;
+    font-family: inherit;
+  }
+  .attached-file .remove-attach:hover { color: var(--coral); }
+
   .chat-input-row {
     display: flex;
     gap: 10px;
@@ -401,6 +555,11 @@
     background: var(--muted);
     cursor: not-allowed;
   }
+  .chat-send.stopping {
+    background: var(--ink);
+    color: var(--cream);
+  }
+  .chat-send.stopping:hover { background: #000; }
 
   /* ---------- FILLABLE "MAKE IT YOURS" ---------- */
   .try {
@@ -715,18 +874,30 @@
 </style>
 </head>
 <body>
+
+<!-- BRAND BAR -->
+<div class="brand">
+  <div class="brand-mark">
+    <span class="brand-logo">pp</span>
+    <span>Purely Personal</span>
+  </div>
+  <div class="brand-right">
+    <span class="brand-privacy">Local only</span>
+    <button type="button" class="brand-btn" id="theme-toggle">Dark</button>
+    <button type="button" class="brand-btn" id="save-convo">Save chat</button>
+  </div>
+</div>
+
 <main>
 
   <!-- HERO -->
   <section class="hero">
-    <div class="kicker">A Workshop Primer</div>
-    <h1>Five Real <em>Mondays.</em><br>One private AI on your laptop.</h1>
+    <div class="kicker">Your AI. Your laptop. Your data.</div>
+    <h1>Purely <em>Personal.</em><br>Nothing ever leaves.</h1>
     <p class="lead">
-      Five small-business owners. Five specific problems a cloud AI can't solve.
-      Pick the one most like your work — you'll leave this page with the exact
-      terminal command to try it.
+      A private AI running on your own machine — not in the cloud, not behind a login, not billed by the token. Chat with it below, or try one of the real use cases designed for people who handle confidential work every day.
     </p>
-    <div class="scroll-cue">Scroll to pick your persona</div>
+    <div class="scroll-cue">Scroll, or just start typing in the chat below</div>
   </section>
 
   <!-- CHAT (real, talks to local Ollama) -->
@@ -746,8 +917,11 @@
     </div>
 
     <div class="chat-messages" id="chat-messages">
-      <div class="msg msg-system">Type a question, or try one of the real use cases below. The model runs on this laptop \u2014 nothing leaves your machine.</div>
+      <div class="msg msg-system">Type a question, try a real use case below, or <strong>drag a text file onto this window</strong> to include it as context. The model runs on this laptop \u2014 nothing leaves your machine.</div>
     </div>
+
+    <div class="chat-drop-hint">Drop it anywhere on this box \u2014 the file will be attached to your next message</div>
+    <div class="attachments-row" id="attachments-row"></div>
 
     <div class="chat-quickstart">
       <div class="quickstart-label">Try a real use case \u2014 one click, realistic output</div>
@@ -1085,6 +1259,144 @@ copyBtn.addEventListener("click", async () => {
   }, 1600);
 });
 
+/* ---------- DARK / LIGHT THEME TOGGLE ---------- */
+(function initTheme() {
+  const saved = localStorage.getItem("pp-theme");
+  if (saved === "dark") document.documentElement.setAttribute("data-theme", "dark");
+  updateThemeButtonLabel();
+})();
+
+function updateThemeButtonLabel() {
+  const btn = document.getElementById("theme-toggle");
+  if (!btn) return;
+  const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+  btn.textContent = isDark ? "Light" : "Dark";
+}
+
+document.getElementById("theme-toggle").addEventListener("click", () => {
+  const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+  if (isDark) {
+    document.documentElement.removeAttribute("data-theme");
+    localStorage.setItem("pp-theme", "light");
+  } else {
+    document.documentElement.setAttribute("data-theme", "dark");
+    localStorage.setItem("pp-theme", "dark");
+  }
+  updateThemeButtonLabel();
+});
+
+/* ---------- SAVE CONVERSATION AS MARKDOWN ---------- */
+document.getElementById("save-convo").addEventListener("click", async () => {
+  if (!convo || convo.length === 0) {
+    alert("No conversation yet \u2014 chat with the AI first, then save it.");
+    return;
+  }
+  const now  = new Date();
+  const date = now.toISOString().slice(0, 10);
+  const stamp = now.toISOString().slice(0, 19).replace(/[T:]/g, "-");
+  const model = (document.getElementById("chat-model") || {}).textContent || "local model";
+
+  let md = `# Purely Personal \u2014 Conversation\n\n`;
+  md += `**Date:** ${date}  \n**Model:** \`${model}\`  \n**Privacy:** Ran entirely on this laptop. Nothing was uploaded.\n\n---\n\n`;
+  for (const m of convo) {
+    const label = m.role === "user" ? "You" : "Local AI";
+    md += `## ${label}\n\n${m.content}\n\n`;
+  }
+
+  const defaultName = `purely-personal-${stamp}.md`;
+
+  if (window.electronAPI && window.electronAPI.saveFile) {
+    const saved = await window.electronAPI.saveFile({
+      content: md,
+      defaultName,
+      title: "Save conversation",
+    });
+    if (saved) {
+      const tip = document.getElementById("save-convo");
+      const orig = tip.textContent;
+      tip.textContent = "Saved \u2713";
+      setTimeout(() => (tip.textContent = orig), 2000);
+    }
+  } else {
+    // Browser fallback: trigger a download
+    const blob = new Blob([md], { type: "text/markdown" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = defaultName;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }
+});
+
+/* ---------- DRAG-AND-DROP FILE ATTACHMENT ---------- */
+let attachedFile = null;   // { name, size, content }
+const MAX_ATTACH_BYTES = 500 * 1024;  // 500 KB — keep prompt from blowing up
+
+function renderAttachment() {
+  const row = document.getElementById("attachments-row");
+  if (!attachedFile) { row.innerHTML = ""; return; }
+  const kb = (attachedFile.size / 1024).toFixed(1);
+  row.innerHTML = `
+    <div class="attached-file">
+      <span class="attach-name">${attachedFile.name}</span>
+      <span class="attach-size">${kb} KB</span>
+      <button type="button" class="remove-attach" aria-label="Remove">\u2715</button>
+    </div>
+  `;
+  row.querySelector(".remove-attach").addEventListener("click", () => {
+    attachedFile = null;
+    renderAttachment();
+  });
+}
+
+async function handleDroppedFile(file) {
+  // Accept text-like files only for this MVP. PDFs/DOCX are a follow-up.
+  const textyExtensions = /\.(txt|md|csv|json|js|ts|tsx|jsx|py|sh|yaml|yml|toml|log|xml|html|css|rb|go|rs|java|c|cpp|h|hpp|sql|env)$/i;
+  const nameOK = textyExtensions.test(file.name);
+  const typeOK = !file.type || file.type.startsWith("text/") || file.type === "application/json";
+  if (!nameOK && !typeOK) {
+    alert(`Sorry \u2014 "${file.name}" looks like a binary file (PDF, Word, etc.). Tonight's build only reads text-based files. PDF/DOCX support is on the roadmap.`);
+    return;
+  }
+  if (file.size > MAX_ATTACH_BYTES) {
+    alert(`"${file.name}" is ${(file.size/1024/1024).toFixed(1)} MB \u2014 too big to fit in the model's context. Please trim it to under 500 KB first.`);
+    return;
+  }
+  try {
+    const content = await file.text();
+    attachedFile = { name: file.name, size: file.size, content };
+    renderAttachment();
+  } catch (err) {
+    alert(`Could not read "${file.name}": ${err.message}`);
+  }
+}
+
+// Drag state on the chat container
+const chatBox = document.querySelector(".chat");
+let dragDepth = 0;   // track nested drag events so drag-over class doesn't flicker
+
+chatBox.addEventListener("dragenter", (e) => {
+  e.preventDefault();
+  dragDepth++;
+  chatBox.classList.add("drag-over");
+});
+chatBox.addEventListener("dragover", (e) => { e.preventDefault(); });
+chatBox.addEventListener("dragleave", (e) => {
+  dragDepth--;
+  if (dragDepth <= 0) { dragDepth = 0; chatBox.classList.remove("drag-over"); }
+});
+chatBox.addEventListener("drop", async (e) => {
+  e.preventDefault();
+  dragDepth = 0;
+  chatBox.classList.remove("drag-over");
+  const files = e.dataTransfer?.files;
+  if (!files || files.length === 0) return;
+  await handleDroppedFile(files[0]);
+});
+
 /* ---------- LIVE CHAT (streams from Ollama at localhost:11434) ---------- */
 const OLLAMA_BASE = "http://localhost:11434";
 const chatForm    = document.getElementById("chat-form");
@@ -1094,6 +1406,7 @@ const chatMsgs    = document.getElementById("chat-messages");
 const chatModel   = document.getElementById("chat-model");
 const chatHealth  = document.getElementById("chat-health");
 const convo       = [];   // {role, content}
+let currentAbortController = null;   // non-null while a chat request is streaming
 
 // Startup: check if Ollama is reachable, and report which model is loaded.
 async function checkOllama() {
@@ -1195,16 +1508,35 @@ document.querySelectorAll("#quickstart-btns button").forEach((btn) => {
 
 chatForm.addEventListener("submit", async (e) => {
   e.preventDefault();
-  const text = chatInput.value.trim();
-  if (!text) return;
+  const userText = chatInput.value.trim();
+  if (!userText && !attachedFile) return;
 
-  // UI state: user message in, input disabled, show streaming assistant
-  addChatMessage("user", text);
-  convo.push({ role: "user", content: text });
+  // Build the UI display string and the model prompt separately.
+  // UI shows the user's text + a small "[attached: name]" marker.
+  // The model sees: file contents + user's text.
+  let displayText = userText;
+  let modelPrompt = userText;
+  if (attachedFile) {
+    displayText = (userText || "(no message)") + `\n\n\ud83d\udcce attached: ${attachedFile.name}`;
+    modelPrompt = `File attached by the user: ${attachedFile.name}\n\n\`\`\`\n${attachedFile.content}\n\`\`\`\n\n` +
+                  (userText || "Summarize this file in 3\u20135 bullets and flag anything unusual.");
+  }
+
+  addChatMessage("user", displayText);
+  convo.push({ role: "user", content: modelPrompt });
   chatInput.value = "";
   chatInput.disabled = true;
-  chatSend.disabled = true;
-  chatSend.textContent = "\u2026";
+  // Swap Send into a Stop button while the request is in flight
+  chatSend.textContent = "Stop";
+  chatSend.classList.add("stopping");
+  chatSend.disabled = false;
+  chatSend.type = "button";       // so a second click doesn't re-submit the form
+  chatSend.onclick = () => {
+    if (currentAbortController) currentAbortController.abort();
+  };
+  // Clear attachment after it's been used
+  attachedFile = null;
+  renderAttachment();
 
   const assistantEl = addChatMessage("assistant", "");
   const bodyEl = assistantEl.querySelector(".msg-body");
@@ -1215,10 +1547,12 @@ chatForm.addEventListener("submit", async (e) => {
   bodyEl.appendChild(cursor);
 
   let fullText = "";
+  currentAbortController = new AbortController();
   try {
     const resp = await fetch(`${OLLAMA_BASE}/api/chat`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
+      signal: currentAbortController.signal,
       body: JSON.stringify({
         model: chatModel.textContent,
         messages: convo,
@@ -1261,15 +1595,28 @@ chatForm.addEventListener("submit", async (e) => {
     convo.push({ role: "assistant", content: fullText });
   } catch (err) {
     cursor.remove();
-    assistantEl.classList.remove("msg-assistant");
-    assistantEl.classList.add("msg-error");
-    assistantEl.querySelector(".msg-label").textContent = "ERROR";
-    bodyEl.textContent = `${err.message}. Is Ollama running? Try: brew services start ollama`;
-    convo.pop(); // remove the user msg from context so retry starts clean
+    if (err.name === "AbortError") {
+      // User clicked Stop — keep whatever streamed so far, just mark it stopped
+      if (fullText) {
+        convo.push({ role: "assistant", content: fullText + "\n\n_(generation stopped by user)_" });
+      } else {
+        assistantEl.remove();
+        convo.pop();
+      }
+    } else {
+      assistantEl.classList.remove("msg-assistant");
+      assistantEl.classList.add("msg-error");
+      assistantEl.querySelector(".msg-label").textContent = "ERROR";
+      bodyEl.textContent = `${err.message}. Is Ollama running? Try: brew services start ollama`;
+      convo.pop();
+    }
   } finally {
+    currentAbortController = null;
     chatInput.disabled = false;
-    chatSend.disabled = false;
+    chatSend.classList.remove("stopping");
     chatSend.textContent = "Send";
+    chatSend.type = "submit";
+    chatSend.onclick = null;
     chatInput.focus();
   }
 });

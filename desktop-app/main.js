@@ -31,13 +31,31 @@ ipcMain.handle("pick-folder", async (event) => {
   return result.filePaths[0];
 });
 
+// Save a string (typically markdown) to a user-chosen file path.
+ipcMain.handle("save-file", async (event, { content, defaultName, title }) => {
+  const win = BrowserWindow.fromWebContents(event.sender);
+  const result = await dialog.showSaveDialog(win, {
+    title: title || "Save conversation",
+    defaultPath: defaultName || "conversation.md",
+    filters: [
+      { name: "Markdown", extensions: ["md"] },
+      { name: "Text", extensions: ["txt"] },
+      { name: "All files", extensions: ["*"] },
+    ],
+  });
+  if (result.canceled || !result.filePath) return null;
+  const fs = require("fs").promises;
+  await fs.writeFile(result.filePath, content, "utf8");
+  return result.filePath;
+});
+
 function createWindow() {
   const win = new BrowserWindow({
     width: 1280,
     height: 900,
     minWidth: 960,
     minHeight: 640,
-    title: "Local AI Workshop",
+    title: "Purely Personal",
     backgroundColor: "#faf7f2",
     // Premium macOS look: traffic-light buttons inset, transparent toolbar.
     titleBarStyle: process.platform === "darwin" ? "hiddenInset" : "default",
