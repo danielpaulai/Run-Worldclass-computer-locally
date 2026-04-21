@@ -2,8 +2,34 @@
 // Opens a single window loading the interactive workshop HTML.
 // External links (e.g. the GitHub repo) open in the default browser.
 
-const { app, BrowserWindow, shell, Menu } = require("electron");
+const { app, BrowserWindow, shell, Menu, dialog, ipcMain } = require("electron");
 const path = require("path");
+
+// ---- Native file / folder pickers (called from the renderer via preload) ----
+
+ipcMain.handle("pick-file", async (event) => {
+  const win = BrowserWindow.fromWebContents(event.sender);
+  const result = await dialog.showOpenDialog(win, {
+    title: "Choose a file to summarize",
+    properties: ["openFile"],
+    filters: [
+      { name: "Common documents", extensions: ["pdf", "docx", "txt", "md", "rtf", "html"] },
+      { name: "All files", extensions: ["*"] },
+    ],
+  });
+  if (result.canceled || !result.filePaths.length) return null;
+  return result.filePaths[0];
+});
+
+ipcMain.handle("pick-folder", async (event) => {
+  const win = BrowserWindow.fromWebContents(event.sender);
+  const result = await dialog.showOpenDialog(win, {
+    title: "Choose a folder to index",
+    properties: ["openDirectory"],
+  });
+  if (result.canceled || !result.filePaths.length) return null;
+  return result.filePaths[0];
+});
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -16,10 +42,11 @@ function createWindow() {
     // Premium macOS look: traffic-light buttons inset, transparent toolbar.
     titleBarStyle: process.platform === "darwin" ? "hiddenInset" : "default",
     webPreferences: {
+      preload: path.join(__dirname, "preload.js"),
       nodeIntegration: false,
       contextIsolation: true,
-      // We don't need any node access in the renderer for the MVP wrapper;
-      // the workshop page is self-contained HTML/CSS/JS.
+      // Node stays sandboxed; the preload script exposes a minimal safe
+      // bridge (file picker, folder picker) to the renderer.
     },
   });
 
