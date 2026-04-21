@@ -1,0 +1,57 @@
+{
+  "name": "local-ai-workshop",
+  "version": "0.1.0",
+  "description": "Desktop wrapper for the Run-a-World-Class-AI-on-Your-Laptop workshop — opens the interactive Five Real Mondays page as a native window.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "sync-html": "cp ../workshop.html ./workshop.html",
+    "build:mac": "electron-builder --mac",
+    "build:win": "electron-builder --win",
+    "build:linux": "electron-builder --linux"
+  },
+  "keywords": [
+    "ollama",
+    "local-ai",
+    "privacy",
+    "workshop",
+    "electron"
+  ],
+  "author": "danielpaulai",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^31.0.0",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "com.danielpaulai.localai-workshop",
+    "productName": "Local AI Workshop",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "workshop.html",
+      "package.json"
+    ],
+    "mac": {
+      "category": "public.app-category.productivity",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "arm64",
+            "x64"
+          ]
+        }
+      ]
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "linux": {
+      "target": "AppImage",
+      "category": "Office"
+    }
+  }
+}
