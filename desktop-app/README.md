@@ -4,19 +4,28 @@ A minimal Electron wrapper around `workshop.html`. Opens the interactive Five-Re
 
 This is the **MVP wrapper** — it shows the existing workshop page as a desktop app. A follow-up version (streaming Ollama integration, file pickers, all 15 skills wired into the GUI) is on the roadmap after the first cohort.
 
-## Run in development
+## Easiest way to run it
 
-One-time:
+From the **repo root** (not `desktop-app`):
+
+```bash
+./launch-app.sh
+```
+
+That's the whole command. It:
+
+- `cd`s into `desktop-app/` automatically
+- Runs `npm install` the first time (~1 min)
+- Launches the app every time after
+
+No need to `cd` manually.
+
+## If you prefer the manual way
 
 ```bash
 cd desktop-app
-npm install        # ~150 MB download, ~1 min
-```
-
-Every time:
-
-```bash
-npm start          # opens the app window
+npm install        # only needed the first time (~1 min)
+npm start          # every time
 ```
 
 ## Build a distributable
