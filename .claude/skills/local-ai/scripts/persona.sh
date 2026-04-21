@@ -11,6 +11,18 @@ PERSONA_FILE="$(dirname "${BASH_SOURCE[0]}")/../prompts/personas/$ROLE.md"
 
 SYSTEM=$(cat "$PERSONA_FILE")
 USER="$*"
-[[ -z "$USER" ]] && USER="$(cat)"   # read stdin if no prompt
+
+# If stdin is piped in (not a tty), prepend it as context to the prompt.
+# Supports workflows where previous step output feeds into this one.
+if [[ ! -t 0 ]]; then
+  STDIN="$(cat)"
+  if [[ -n "$USER" ]]; then
+    USER=$'Context from previous step:\n\n'"$STDIN"$'\n\n---\n\n'"$USER"
+  else
+    USER="$STDIN"
+  fi
+fi
+
+[[ -z "$USER" ]] && die "No prompt provided and no stdin."
 
 ai_ask_system "$MODEL" "$SYSTEM" "$USER"

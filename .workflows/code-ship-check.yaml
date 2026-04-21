@@ -2,14 +2,18 @@ name: code-ship-check
 description: Review + generate tests + suggest docs for a file before you ship it
 steps:
   - name: review
-    run: ./ai local-code review $1
+    run: "./ai local-code review $1"
 
   - name: test-gen
-    run: ./ai local-code test-gen $1
+    run: "./ai local-code test-gen $1"
 
   - name: doc
-    run: ./ai local-code doc $1
+    run: "./ai local-code doc $1"
 
   - name: verdict
-    run: ./ai local-ai persona critic "Based on the review, tests, and documentation above, should this file be merged as-is? Answer in 3 sentences: verdict (ship / revise / block), the most important reason, and one concrete next step."
+    run: >
+      ./ai local-ai persona critic
+      "Based on the review, tests, and documentation above, should this file be
+      merged as-is? Answer in 3 sentences — verdict (ship / revise / block),
+      the most important reason, and one concrete next step."
     input: ${previous}

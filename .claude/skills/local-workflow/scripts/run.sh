@@ -17,9 +17,15 @@ for i, step in enumerate(wf.get("steps", []), 1):
     name = step.get("name", f"step-{i}")
     cmd = step["run"]
     use_prev = step.get("input") == "${previous}"
+    # Display the command with $1,$2,... already substituted for readability
+    display = cmd
+    for idx, a in enumerate(args, 1):
+        display = display.replace(f"${idx}", a)
     print(f"--- Step {i}: {name} ---")
-    print(f"$ {cmd}")
-    r = subprocess.run(cmd, shell=True, input=prev if use_prev else None,
+    print(f"$ {display}")
+    # Pass positional args via bash -c so $1,$2,... resolve inside the step
+    r = subprocess.run(["bash", "-c", cmd, "_"] + list(args),
+                       input=prev if use_prev else None,
                        capture_output=True, text=True)
     print(r.stdout)
     if r.stderr: print("[stderr]", r.stderr, file=sys.stderr)

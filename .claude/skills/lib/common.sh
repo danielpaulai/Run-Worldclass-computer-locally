@@ -68,30 +68,45 @@ ai_ask() {
 # Prompt with a system message.  Uses /api/chat.
 ai_ask_system() {
   local model="$1" system="$2" user="$3"
-  local body
-  body=$(cat <<JSON
-{"model":"$model","stream":false,"messages":[
-  {"role":"system","content":$(printf '%s' "$system" | _json_escape)},
-  {"role":"user","content":$(printf '%s' "$user"   | _json_escape)}]}
-JSON
+  python3 - "$model" "$system" "$user" <<'PY'
+import sys, json, urllib.request
+model, system, user = sys.argv[1], sys.argv[2], sys.argv[3]
+body = json.dumps({
+    "model": model, "stream": False,
+    "messages": [
+        {"role": "system", "content": system},
+        {"role": "user",   "content": user},
+    ],
+}).encode()
+req = urllib.request.Request(
+    "http://localhost:11434/api/chat",
+    data=body, headers={"Content-Type": "application/json"},
 )
-  curl -s http://localhost:11434/api/chat -d "$body" \
-    | sed -n 's/.*"content":"\(.*\)","role.*/\1/p' \
-    | _json_unescape
+with urllib.request.urlopen(req, timeout=600) as r:
+    data = json.loads(r.read())
+print(data.get("message", {}).get("content", ""))
+PY
 }
 
 # Prompt with temperature / top_p options.
 ai_ask_params() {
   local model="$1" temp="$2" top_p="$3" user="$4"
-  local body
-  body=$(cat <<JSON
-{"model":"$model","stream":false,"options":{"temperature":$temp,"top_p":$top_p},
- "messages":[{"role":"user","content":$(printf '%s' "$user" | _json_escape)}]}
-JSON
+  python3 - "$model" "$temp" "$top_p" "$user" <<'PY'
+import sys, json, urllib.request
+model, temp, top_p, user = sys.argv[1], float(sys.argv[2]), float(sys.argv[3]), sys.argv[4]
+body = json.dumps({
+    "model": model, "stream": False,
+    "options": {"temperature": temp, "top_p": top_p},
+    "messages": [{"role": "user", "content": user}],
+}).encode()
+req = urllib.request.Request(
+    "http://localhost:11434/api/chat",
+    data=body, headers={"Content-Type": "application/json"},
 )
-  curl -s http://localhost:11434/api/chat -d "$body" \
-    | sed -n 's/.*"content":"\(.*\)","role.*/\1/p' \
-    | _json_unescape
+with urllib.request.urlopen(req, timeout=600) as r:
+    data = json.loads(r.read())
+print(data.get("message", {}).get("content", ""))
+PY
 }
 
 # --- tiny JSON helpers (no jq required) ---

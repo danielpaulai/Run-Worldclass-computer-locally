@@ -17,6 +17,8 @@ Use this folder two ways:
 | [`04-local-tutor-feynman.md`](./04-local-tutor-feynman.md) | `local-tutor feynman "transformer"` | **OK** — friendly but fuzzy analogy |
 | [`05-local-writer-cold-email.md`](./05-local-writer-cold-email.md) | `local-writer draft` cold email | **Weak** — ignored the instruction |
 | [`06-local-ai-hallucination.md`](./06-local-ai-hallucination.md) | `local-ai ask` "What is Ollama?" | **Wrong but confident** — THE demo moment |
+| [`07-workflow-daily-brief.md`](./07-workflow-daily-brief.md) | `local-workflow run daily-brief` end-to-end | **Useful** — journal → reflection → today's priorities |
+| [`08-workflow-code-ship-check.md`](./08-workflow-code-ship-check.md) | `local-workflow run code-ship-check` end-to-end | **Strong** — review + tests + docs + verdict in one command |
 
 ## Pattern students should walk away with
 

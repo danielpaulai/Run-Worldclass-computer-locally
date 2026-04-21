@@ -2,8 +2,12 @@ name: research-brief
 description: End-to-end research on a topic, then a 1-page executive summary
 steps:
   - name: full-research
-    run: ./ai local-research full "$1"
+    run: "./ai local-research full \"$1\""
 
   - name: exec-summary
-    run: ./ai local-ai persona writer "Turn the research report above into a 1-page executive summary. Rules: lead with the decision, 3 supporting bullets, 1 risk, 1 open question. Max 250 words."
+    run: >
+      ./ai local-ai persona writer
+      "Turn the research report above into a 1-page executive summary.
+      Rules — lead with the decision, 3 supporting bullets, 1 risk,
+      1 open question. Max 250 words."
     input: ${previous}
