@@ -1,0 +1,727 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Five Real Mondays — Run a World-Class AI on Your Laptop</title>
+<style>
+  :root {
+    --cream: #faf7f2;
+    --cream-deep: #f2ede2;
+    --ink: #1a1a1a;
+    --muted: #6b655c;
+    --line: #e4dfd6;
+    --coral: #c15f3c;
+    --coral-soft: #f4d4c2;
+    --coral-deep: #8a3d21;
+    --card: #ffffff;
+    --mint: #3d8a7c;
+    --radius: 10px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Helvetica, sans-serif;
+    color: var(--ink);
+    background: var(--cream);
+    line-height: 1.55;
+    font-size: 16px;
+  }
+
+  h1, h2, h3 {
+    font-family: "Iowan Old Style", "Charter", Georgia, "Times New Roman", serif;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  main {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 80px 28px 140px;
+  }
+
+  /* ---------- HERO ---------- */
+  .hero {
+    padding: 40px 0 80px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 80px;
+  }
+  .hero .kicker {
+    color: var(--coral);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+  .hero h1 {
+    font-size: clamp(40px, 7vw, 76px);
+    line-height: 1.04;
+    margin-bottom: 28px;
+    max-width: 14ch;
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: var(--coral);
+  }
+  .hero .lead {
+    font-size: 21px;
+    color: var(--muted);
+    max-width: 60ch;
+    line-height: 1.5;
+  }
+  .hero .scroll-cue {
+    margin-top: 60px;
+    font-size: 13px;
+    color: var(--muted);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .hero .scroll-cue::after {
+    content: "↓";
+    animation: bob 1.6s ease-in-out infinite;
+  }
+  @keyframes bob {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(4px); }
+  }
+
+  /* ---------- SECTION HEAD ---------- */
+  .section-head {
+    margin-bottom: 40px;
+  }
+  .section-head .number {
+    font-family: "Iowan Old Style", Charter, Georgia, serif;
+    font-style: italic;
+    color: var(--coral);
+    font-size: 15px;
+    margin-bottom: 8px;
+  }
+  .section-head h2 {
+    font-size: clamp(28px, 4vw, 42px);
+    line-height: 1.1;
+    margin-bottom: 12px;
+  }
+  .section-head p {
+    color: var(--muted);
+    font-size: 17px;
+    max-width: 55ch;
+  }
+
+  /* ---------- PERSONAS ---------- */
+  .personas {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+    margin-bottom: 100px;
+  }
+  .persona {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 24px;
+    cursor: pointer;
+    transition: border-color .2s, transform .15s, box-shadow .2s;
+    position: relative;
+  }
+  .persona:hover {
+    border-color: var(--coral);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px -8px rgba(193, 95, 60, 0.18);
+  }
+  .persona.active {
+    border-color: var(--coral);
+    background: #fff9f4;
+  }
+  .persona .role {
+    color: var(--coral);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 10px;
+  }
+  .persona h3 {
+    font-size: 26px;
+    margin-bottom: 10px;
+  }
+  .persona .pain {
+    color: var(--muted);
+    font-size: 15px;
+    margin-bottom: 16px;
+  }
+  .persona .expand-hint {
+    font-size: 12px;
+    color: var(--coral);
+    font-weight: 600;
+  }
+
+  /* ---------- PERSONA DETAIL ---------- */
+  .detail {
+    background: var(--cream-deep);
+    border-radius: var(--radius);
+    padding: 40px;
+    margin-bottom: 100px;
+    min-height: 240px;
+    transition: opacity .2s;
+  }
+  .detail.empty {
+    text-align: center;
+    color: var(--muted);
+    padding: 60px 40px;
+    font-style: italic;
+  }
+  .detail .day {
+    font-family: "Iowan Old Style", Charter, Georgia, serif;
+    font-style: italic;
+    color: var(--coral);
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+  .detail h3 {
+    font-size: 28px;
+    margin-bottom: 20px;
+  }
+  .detail .moment {
+    font-size: 17px;
+    color: var(--ink);
+    margin-bottom: 20px;
+    line-height: 1.55;
+  }
+  .detail .commands {
+    background: #1a1a1a;
+    color: #b8f080;
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 14px;
+    padding: 16px 20px;
+    border-radius: 6px;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    line-height: 1.7;
+  }
+
+  /* ---------- FILLABLE "MAKE IT YOURS" ---------- */
+  .try {
+    background: var(--card);
+    border: 2px solid var(--coral);
+    border-radius: var(--radius);
+    padding: 48px;
+    margin-bottom: 100px;
+  }
+  .try .label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 10px;
+  }
+  .try select, .try input[type=text] {
+    width: 100%;
+    padding: 14px 16px;
+    font-size: 16px;
+    font-family: inherit;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: var(--cream);
+    color: var(--ink);
+    margin-bottom: 28px;
+    transition: border-color .15s;
+  }
+  .try select:focus, .try input[type=text]:focus {
+    outline: none;
+    border-color: var(--coral);
+  }
+  .try .output-row {
+    display: flex;
+    gap: 12px;
+    align-items: stretch;
+    margin-top: 8px;
+  }
+  .try .generated {
+    flex: 1;
+    background: #1a1a1a;
+    color: #b8f080;
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 14px;
+    padding: 16px 20px;
+    border-radius: 6px;
+    white-space: pre-wrap;
+    overflow-x: auto;
+  }
+  .try .copy-btn {
+    background: var(--coral);
+    color: white;
+    border: none;
+    padding: 0 24px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background .15s;
+    letter-spacing: 0.02em;
+  }
+  .try .copy-btn:hover { background: var(--coral-deep); }
+  .try .copy-btn.copied { background: var(--mint); }
+  .try .hint {
+    color: var(--muted);
+    font-size: 14px;
+    margin-top: 16px;
+  }
+
+  /* ---------- PRIVACY ---------- */
+  .privacy {
+    margin-bottom: 100px;
+    text-align: center;
+  }
+  .privacy .diagram {
+    background: var(--cream-deep);
+    padding: 48px 32px;
+    border-radius: var(--radius);
+    font-family: "Iowan Old Style", Charter, Georgia, serif;
+    font-size: 22px;
+    line-height: 1.8;
+    margin: 32px 0;
+    transition: background .3s;
+  }
+  .privacy .diagram.offline {
+    background: #f4f1e8;
+  }
+  .privacy .flow-line {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .privacy .node {
+    padding: 12px 20px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .privacy .arrow { color: var(--coral); font-size: 24px; }
+  .privacy .internet-node {
+    position: relative;
+  }
+  .privacy .internet-node::after {
+    content: "";
+    position: absolute;
+    left: -4px; right: -4px; top: 50%;
+    height: 2px;
+    background: var(--coral);
+    opacity: 0;
+    transform: rotate(-15deg);
+    transition: opacity .3s;
+  }
+  .privacy .diagram.offline .internet-node {
+    color: #ccc;
+    border-color: #ddd;
+    background: #f7f7f7;
+  }
+  .privacy .diagram.offline .internet-node::after { opacity: 1; }
+  .privacy .status {
+    font-size: 16px;
+    color: var(--muted);
+    margin-top: 16px;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+  .privacy button {
+    background: var(--ink);
+    color: var(--cream);
+    border: none;
+    padding: 14px 28px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 16px;
+    transition: background .15s;
+  }
+  .privacy button:hover { background: #000; }
+  .privacy button.offline { background: var(--mint); }
+
+  /* ---------- NEXT STEPS ---------- */
+  .next {
+    border-top: 1px solid var(--line);
+    padding-top: 60px;
+  }
+  .next h2 { font-size: 32px; margin-bottom: 20px; }
+  .next ol {
+    list-style: none;
+    counter-reset: step;
+  }
+  .next li {
+    counter-increment: step;
+    padding: 24px 0;
+    border-bottom: 1px solid var(--line);
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    gap: 20px;
+    align-items: start;
+  }
+  .next li:last-child { border-bottom: none; }
+  .next li::before {
+    content: counter(step);
+    font-family: "Iowan Old Style", Charter, Georgia, serif;
+    font-style: italic;
+    color: var(--coral);
+    font-size: 36px;
+    line-height: 1;
+  }
+  .next li strong { display: block; font-size: 17px; margin-bottom: 4px; }
+  .next li span { color: var(--muted); font-size: 15px; }
+  .next li code {
+    display: inline-block;
+    background: var(--cream-deep);
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 13px;
+    color: var(--coral-deep);
+    margin-top: 6px;
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer {
+    margin-top: 100px;
+    padding: 40px 0;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 13px;
+    text-align: center;
+  }
+  footer a { color: var(--coral); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  @media (max-width: 560px) {
+    main { padding: 40px 18px 80px; }
+    .try { padding: 28px; }
+    .detail { padding: 24px; }
+    .privacy .diagram { padding: 28px 16px; font-size: 16px; }
+    .privacy .node { padding: 8px 12px; font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+<main>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="kicker">A Workshop Primer</div>
+    <h1>Five Real <em>Mondays.</em><br>One private AI on your laptop.</h1>
+    <p class="lead">
+      Five small-business owners. Five specific problems a cloud AI can't solve.
+      Pick the one most like your work — you'll leave this page with the exact
+      terminal command to try it.
+    </p>
+    <div class="scroll-cue">Scroll to pick your persona</div>
+  </section>
+
+  <!-- PERSONAS -->
+  <div class="section-head">
+    <div class="number">One</div>
+    <h2>Click the one most like you.</h2>
+    <p>Each card is a real pattern from real people running real businesses. Their Mondays look different — but they all share one problem they can't send to the cloud.</p>
+  </div>
+
+  <div class="personas" id="personas">
+    <!-- Cards injected by JS -->
+  </div>
+
+  <!-- DETAIL -->
+  <div class="section-head">
+    <div class="number">Two</div>
+    <h2>A day in their life.</h2>
+  </div>
+  <div class="detail empty" id="detail">
+    Click any persona above to see their Monday morning and the exact commands they'd run.
+  </div>
+
+  <!-- TRY IT YOURSELF -->
+  <div class="section-head">
+    <div class="number">Three</div>
+    <h2>Now make it yours.</h2>
+    <p>Fill in these two things. The page generates the exact terminal command you'd paste on your machine. One click to copy.</p>
+  </div>
+
+  <div class="try">
+    <label class="label" for="persona-select">Pick the persona closest to your work</label>
+    <select id="persona-select">
+      <option value="">— choose one —</option>
+    </select>
+
+    <label class="label" for="file-path">Path to a file on your laptop you'd like summarized</label>
+    <input type="text" id="file-path" placeholder="~/Documents/your-file.pdf" autocomplete="off">
+
+    <label class="label">Your command</label>
+    <div class="output-row">
+      <div class="generated" id="generated-cmd">Fill the two fields above to generate your command.</div>
+      <button class="copy-btn" id="copy-btn" type="button">Copy</button>
+    </div>
+    <p class="hint">Paste this into Terminal (Mac) or PowerShell (Windows, swap <code>./ai</code> for <code>bash ai</code>). Nothing leaves your computer.</p>
+  </div>
+
+  <!-- PRIVACY PROOF -->
+  <div class="section-head">
+    <div class="number">Four</div>
+    <h2>Prove it's private.</h2>
+    <p>Your laptop talks to a program on itself. The internet isn't part of the conversation. Try turning it off.</p>
+  </div>
+
+  <div class="privacy">
+    <div class="diagram" id="diagram">
+      <div class="flow-line">
+        <div class="node">You</div>
+        <div class="arrow">↔</div>
+        <div class="node">localhost:11434</div>
+        <div class="arrow">↔</div>
+        <div class="node">Model on disk</div>
+      </div>
+      <div class="flow-line" style="margin-top: 18px; font-size: 14px; color: var(--muted);">
+        <div class="internet-node node">The internet (not involved)</div>
+      </div>
+      <div class="status" id="privacy-status">WiFi on. Model runs locally. The internet is bypassed.</div>
+    </div>
+    <button id="wifi-toggle" type="button">Simulate WiFi off</button>
+  </div>
+
+  <!-- NEXT STEPS -->
+  <div class="next">
+    <div class="section-head">
+      <div class="number">Five</div>
+      <h2>Three things to try this week.</h2>
+      <p>After the workshop, do one per day. By Friday you'll know whether this lives in your workflow or not.</p>
+    </div>
+    <ol>
+      <li>
+        <div>
+          <strong>Summarize a confidential doc.</strong>
+          <span>A contract, a financial report, meeting notes — something you'd never paste into ChatGPT.</span>
+          <code>./ai summarize tldr ~/path/to/file.pdf</code>
+        </div>
+      </li>
+      <li>
+        <div>
+          <strong>Index your notes and ask them questions.</strong>
+          <span>Point the tool at a folder of your own work. It becomes a queryable memory of everything you've written.</span>
+          <code>./ai local-rag ingest ~/path/to/notes</code>
+        </div>
+      </li>
+      <li>
+        <div>
+          <strong>Run the privacy audit.</strong>
+          <span>Prove to yourself (or your boss) that nothing is leaving your machine.</span>
+          <code>./ai privacy-audit check</code>
+        </div>
+      </li>
+    </ol>
+  </div>
+
+</main>
+
+<footer>
+  Run a World-Class AI on Your Laptop · <a href="https://github.com/danielpaulai/Run-Worldclass-computer-locally" target="_blank" rel="noopener">github.com/danielpaulai/Run-Worldclass-computer-locally</a>
+</footer>
+
+<script>
+/* -------------------------------------------------------
+   Persona data — keep in sync with USE-CASES.md
+   ------------------------------------------------------- */
+const personas = [
+  {
+    id: "priya",
+    name: "Priya",
+    role: "Strategy consultant",
+    pain: "Every client makes her sign an NDA. She can't upload their decks.",
+    day: "Monday, 9:12 am — Acme Corp sends a 34-page strategy deck.",
+    moment: "Priya runs one command and gets a TLDR, 8 bullet takeaways, and a list of action items. The PDF never left her laptop.",
+    task: "summarize tldr",
+    flavor: "the-consultant"
+  },
+  {
+    id: "gus",
+    name: "Gus",
+    role: "Small-practice accountant",
+    pain: "Client books are regulated. Pasting a P&L into ChatGPT would breach his ethics.",
+    day: "Tuesday, mid-morning — a client dumps a 400-row expense CSV on him.",
+    moment: "Gus gets back the categories that moved, the 3 line items that look wrong, and a suggested follow-up question. All on disk.",
+    task: "summarize bullets",
+    flavor: "the-accountant"
+  },
+  {
+    id: "siobhan",
+    name: "Siobhan",
+    role: "Executive coach",
+    pain: "Her session notes are the most sensitive docs in her practice. Cloud AI is off the table.",
+    day: "Wednesday evening, after a 1:1 with Mark.",
+    moment: "Siobhan extracts the commitments Mark made, the questions he deferred, and the pattern worth surfacing next time. Never uploaded.",
+    task: "summarize actions",
+    flavor: "the-coach"
+  },
+  {
+    id: "tomas",
+    name: "Tomás",
+    role: "Solo SaaS founder",
+    pain: "His codebase is his IP. Customer feedback contains other people's confidential notes.",
+    day: "Thursday, 2 am — Tomás is reviewing his payment webhook before shipping.",
+    moment: "One command runs a full code review on the most sensitive file in his repo — without it ever leaving his machine.",
+    task: "local-code review",
+    flavor: "the-founder"
+  },
+  {
+    id: "ottilie",
+    name: "Ottilie",
+    role: "Solo attorney",
+    pain: "Everything crossing her desk is privileged. She'd lose her license if she uploaded the wrong file.",
+    day: "Friday, 11 am — a 40-page NDA draft from opposing counsel.",
+    moment: "Ottilie gets the issues, edge cases, and risks surfaced in under a minute. Privileged, private, hers.",
+    task: "local-code review",
+    flavor: "the-lawyer"
+  },
+];
+
+/* ---------- RENDER PERSONA CARDS ---------- */
+const personasEl = document.getElementById("personas");
+const detailEl   = document.getElementById("detail");
+const selectEl   = document.getElementById("persona-select");
+
+personas.forEach(p => {
+  // Card
+  const card = document.createElement("div");
+  card.className = "persona";
+  card.dataset.id = p.id;
+  card.innerHTML = `
+    <div class="role">${p.role}</div>
+    <h3>${p.name}</h3>
+    <p class="pain">${p.pain}</p>
+    <div class="expand-hint">Click to see their Monday →</div>
+  `;
+  card.addEventListener("click", () => selectPersona(p.id, true));
+  personasEl.appendChild(card);
+
+  // Dropdown option
+  const opt = document.createElement("option");
+  opt.value = p.id;
+  opt.textContent = `${p.name} — ${p.role}`;
+  selectEl.appendChild(opt);
+});
+
+/* ---------- PERSONA SELECTION ---------- */
+function selectPersona(id, scroll) {
+  const p = personas.find(x => x.id === id);
+  if (!p) return;
+
+  // Card active state
+  document.querySelectorAll(".persona").forEach(c => {
+    c.classList.toggle("active", c.dataset.id === id);
+  });
+
+  // Detail panel
+  detailEl.classList.remove("empty");
+  detailEl.innerHTML = `
+    <div class="day">${p.day}</div>
+    <h3>${p.name} — ${p.role}</h3>
+    <p class="moment">${p.moment}</p>
+    <div class="commands">$ ./ai ${p.task} &lt;your-file&gt;</div>
+  `;
+
+  // Sync dropdown
+  selectEl.value = id;
+
+  // Regenerate command
+  updateCommand();
+
+  if (scroll) {
+    detailEl.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+}
+
+/* ---------- COMMAND GENERATION ---------- */
+const fileInput = document.getElementById("file-path");
+const genEl     = document.getElementById("generated-cmd");
+const copyBtn   = document.getElementById("copy-btn");
+
+function updateCommand() {
+  const id   = selectEl.value;
+  const path = fileInput.value.trim();
+  const p    = personas.find(x => x.id === id);
+
+  if (!p && !path) {
+    genEl.textContent = "Fill the two fields above to generate your command.";
+    return;
+  }
+  if (!p) {
+    genEl.textContent = "Pick a persona above.";
+    return;
+  }
+  if (!path) {
+    genEl.textContent = `./ai ${p.task} <your file path here>`;
+    return;
+  }
+
+  genEl.textContent = `./ai ${p.task} "${path}"`;
+}
+
+selectEl.addEventListener("change",  updateCommand);
+fileInput.addEventListener("input",  updateCommand);
+
+selectEl.addEventListener("change", () => {
+  if (selectEl.value) selectPersona(selectEl.value, false);
+});
+
+/* ---------- COPY TO CLIPBOARD ---------- */
+copyBtn.addEventListener("click", async () => {
+  const text = genEl.textContent;
+  if (!text || text.startsWith("Fill") || text.startsWith("Pick")) return;
+
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch {
+    // Fallback
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand("copy");
+    ta.remove();
+  }
+
+  const original = copyBtn.textContent;
+  copyBtn.textContent = "Copied ✓";
+  copyBtn.classList.add("copied");
+  setTimeout(() => {
+    copyBtn.textContent = original;
+    copyBtn.classList.remove("copied");
+  }, 1600);
+});
+
+/* ---------- PRIVACY TOGGLE ---------- */
+const wifiBtn     = document.getElementById("wifi-toggle");
+const diagramEl   = document.getElementById("diagram");
+const statusEl    = document.getElementById("privacy-status");
+
+let offline = false;
+wifiBtn.addEventListener("click", () => {
+  offline = !offline;
+  diagramEl.classList.toggle("offline", offline);
+  wifiBtn.classList.toggle("offline", offline);
+  if (offline) {
+    wifiBtn.textContent = "WiFi is off. Turn it back on.";
+    statusEl.textContent = "WiFi off. The model still works — because it was never using the internet.";
+  } else {
+    wifiBtn.textContent = "Simulate WiFi off";
+    statusEl.textContent = "WiFi on. Model runs locally. The internet is bypassed.";
+  }
+});
+</script>
+</body>
+</html>
