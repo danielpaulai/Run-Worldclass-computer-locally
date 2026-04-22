@@ -1,0 +1,553 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Why this session · Purely Personal</title>
+<meta name="description" content="What this workshop is, why it matters, what's in it for you, and how a laptop AI works without the internet.">
+<style>
+  :root {
+    --cream: #faf7f2;
+    --cream-deep: #f2ede2;
+    --ink: #1a1a1a;
+    --muted: #6b655c;
+    --line: #e4dfd6;
+    --coral: #c15f3c;
+    --coral-soft: #f4d4c2;
+    --coral-deep: #8a3d21;
+    --mint: #3d8a7c;
+    --red: #c24b3e;
+    --card: #ffffff;
+    --max: 820px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Helvetica, sans-serif;
+    color: var(--ink);
+    background: var(--cream);
+    line-height: 1.6;
+    font-size: 17px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3 {
+    font-family: "Iowan Old Style", "Charter", Georgia, "Times New Roman", serif;
+    font-weight: 700;
+    letter-spacing: -0.012em;
+    line-height: 1.14;
+  }
+  h1 { font-size: 38px; margin-bottom: 14px; }
+  h2 { font-size: 28px; margin: 48px 0 12px; }
+  h3 { font-size: 21px; margin: 28px 0 8px; }
+  p { margin-bottom: 14px; }
+  em { font-style: italic; color: var(--coral); }
+  a { color: var(--coral-deep); }
+  a:hover { color: var(--coral); }
+
+  header {
+    background: var(--cream-deep);
+    border-bottom: 1px solid var(--line);
+    padding: 56px 28px 48px;
+  }
+  .head-inner {
+    max-width: var(--max);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .logo-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .logo {
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    background: var(--coral);
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Iowan Old Style", Charter, Georgia, serif;
+    font-style: italic;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -1.5px;
+  }
+  .logo-row span {
+    font-family: "Iowan Old Style", Charter, Georgia, serif;
+    font-size: 19px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .kicker {
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 2px;
+  }
+  .lede {
+    font-size: 20px;
+    color: var(--muted);
+    line-height: 1.5;
+    max-width: 640px;
+    margin-top: 4px;
+  }
+
+  main {
+    max-width: var(--max);
+    margin: 0 auto;
+    padding: 48px 28px 100px;
+  }
+
+  /* ---------- PULL QUOTE ---------- */
+  .pull {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--coral);
+    border-radius: 10px;
+    padding: 22px 26px;
+    margin: 28px 0;
+    font-family: "Iowan Old Style", Charter, Georgia, serif;
+    font-size: 21px;
+    line-height: 1.4;
+    color: var(--ink);
+  }
+  .pull strong { color: var(--coral-deep); font-weight: 700; }
+
+  /* ---------- COMPARISON TABLE ---------- */
+  .compare {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0 32px;
+    background: var(--card);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+    font-size: 15.5px;
+  }
+  .compare th, .compare td {
+    padding: 14px 18px;
+    text-align: left;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+  }
+  .compare th {
+    background: var(--cream-deep);
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--ink);
+  }
+  .compare tr:last-child td { border-bottom: none; }
+  .compare td:first-child { font-weight: 600; color: var(--muted); font-size: 14.5px; }
+  .yes { color: var(--mint); font-weight: 600; }
+  .no { color: var(--red); font-weight: 600; }
+
+  /* ---------- OFFLINE CARD ---------- */
+  .offline-card {
+    background: linear-gradient(135deg, #1a2620 0%, #0f1916 100%);
+    color: #e6f0ea;
+    border-radius: 14px;
+    padding: 32px;
+    margin: 32px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .offline-card::before {
+    content: "";
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(61,138,124,0.3) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .offline-card h3 {
+    color: #aee8d8;
+    font-size: 22px;
+    margin: 0 0 10px;
+    position: relative;
+    z-index: 1;
+  }
+  .offline-card p {
+    color: #c8dbd2;
+    margin: 0 0 10px;
+    font-size: 15.5px;
+    position: relative;
+    z-index: 1;
+  }
+  .offline-card .diagram {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 0 12px;
+    padding: 14px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 8px;
+    font-family: "SF Mono", Consolas, monospace;
+    font-size: 13px;
+  }
+  .offline-card .node {
+    background: rgba(61,138,124,0.15);
+    padding: 8px 14px;
+    border-radius: 6px;
+    color: #aee8d8;
+    border: 1px solid rgba(61,138,124,0.3);
+  }
+  .offline-card .arrow {
+    color: #6b8a80;
+  }
+  .offline-card .blocked {
+    background: rgba(194, 75, 62, 0.12);
+    padding: 8px 14px;
+    border-radius: 6px;
+    color: #f4a89e;
+    border: 1px solid rgba(194, 75, 62, 0.3);
+    text-decoration: line-through;
+  }
+
+  /* ---------- WHAT YOU GET ---------- */
+  .get-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 22px 0 30px;
+  }
+  .get-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 18px 20px;
+  }
+  .get-card h4 {
+    font-family: "Iowan Old Style", Charter, Georgia, serif;
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: var(--coral-deep);
+  }
+  .get-card p {
+    font-size: 14.5px;
+    color: var(--muted);
+    margin: 0;
+    line-height: 1.5;
+  }
+  @media (max-width: 620px) {
+    .get-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ---------- CTA ---------- */
+  .cta {
+    background: var(--ink);
+    color: var(--cream);
+    border-radius: 14px;
+    padding: 36px 32px;
+    margin: 50px 0 30px;
+    text-align: center;
+  }
+  .cta h2 {
+    color: var(--cream);
+    margin: 0 0 10px;
+    font-size: 26px;
+  }
+  .cta p {
+    color: #c8bfad;
+    margin: 0 0 24px;
+    font-size: 16px;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .cta-row {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .btn {
+    display: inline-block;
+    padding: 13px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 15.5px;
+    transition: transform .12s, background .15s;
+  }
+  .btn:hover { transform: translateY(-1px); }
+  .btn-primary {
+    background: var(--coral);
+    color: #fff;
+  }
+  .btn-primary:hover { background: var(--coral-deep); color: #fff; }
+  .btn-secondary {
+    background: transparent;
+    color: var(--cream);
+    border: 1px solid #3d3427;
+  }
+  .btn-secondary:hover { background: #2a231b; color: var(--cream); }
+
+  /* ---------- FAQ-style sections ---------- */
+  details {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 10px;
+  }
+  details[open] {
+    border-color: var(--coral-soft);
+    background: #fffaf6;
+  }
+  summary {
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 16px;
+    list-style: none;
+    position: relative;
+    padding-right: 28px;
+  }
+  summary::after {
+    content: "+";
+    position: absolute;
+    right: 2px;
+    top: -2px;
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--muted);
+  }
+  details[open] summary::after { content: "−"; color: var(--coral); }
+  details > *:not(summary) { margin-top: 12px; }
+  details p { color: var(--muted); font-size: 15.5px; margin: 0 0 8px; }
+
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 28px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 14px;
+    background: var(--cream-deep);
+    margin-top: 40px;
+  }
+  footer a { color: var(--coral-deep); }
+
+</style>
+</head>
+<body>
+
+<header>
+  <div class="head-inner">
+    <div class="logo-row">
+      <div class="logo"><em>pp</em></div>
+      <span>Purely Personal</span>
+    </div>
+    <div class="kicker">Why this session</div>
+    <h1>You're about to put a real AI on your laptop. Here's why that's bigger than it sounds.</h1>
+    <p class="lede">Read this tonight. It'll take 4 minutes. Tomorrow makes more sense after you do.</p>
+  </div>
+</header>
+
+<main>
+
+  <h2>What this session actually is</h2>
+
+  <p>It's one hour, hands-on, installing and using a free AI that runs entirely on your own laptop. No cloud. No account. No subscription. You close your laptop, the AI closes with it. You open it on a plane, the AI opens with you.</p>
+
+  <p>By the end, you'll have:</p>
+
+  <ul style="margin: 10px 0 14px 24px; color: var(--ink);">
+    <li style="margin-bottom: 6px;">A working, private AI on your machine</li>
+    <li style="margin-bottom: 6px;">Eight one-click workflows you've already tried</li>
+    <li style="margin-bottom: 6px;">A clear mental model for when this AI is better than ChatGPT and when it isn't</li>
+    <li style="margin-bottom: 6px;">The ability to use AI on documents you'd never paste into a cloud tool</li>
+  </ul>
+
+  <div class="pull">
+    You've stopped using AI for half of your real work. The confidential half. This session is about <strong>getting that half back</strong>.
+  </div>
+
+  <h2>Why this matters</h2>
+
+  <p>Every knowledge worker I know uses ChatGPT for the easy stuff. The blog outline. The generic email. The brainstorm.</p>
+
+  <p>But when the document has a client's name in it? A salary figure? A legal detail? An NDA? They close the tab. They go back to doing it by hand. Or worse, they do it <em>in</em> the cloud anyway and hope nobody notices.</p>
+
+  <p>That's a huge loss, measured in hours. And it's totally solvable. A laptop AI runs locally. Nothing you type goes over the network. The model can read your whole folder and never send a byte.</p>
+
+  <p>Tomorrow, you stop having to choose between "use AI" and "protect your data."</p>
+
+  <h2>What's in it for you, specifically</h2>
+
+  <div class="get-grid">
+    <div class="get-card">
+      <h4>Work through confidential docs</h4>
+      <p>Contracts, client briefs, session notes, tax papers. Summarize, extract, question them. None of it uploads anywhere.</p>
+    </div>
+    <div class="get-card">
+      <h4>Draft emails you don't want AI to see</h4>
+      <p>Performance reviews, pushbacks to your boss, hard conversations. Get a second draft without a record on anyone else's server.</p>
+    </div>
+    <div class="get-card">
+      <h4>Code review your own repo</h4>
+      <p>Paste a sensitive function, get a review. Never leaves the laptop.</p>
+    </div>
+    <div class="get-card">
+      <h4>Search your whole folder by asking</h4>
+      <p>Index a folder of notes, ask questions across it. Like "what did I decide about pricing last quarter?"</p>
+    </div>
+    <div class="get-card">
+      <h4>Zero dollars, forever</h4>
+      <p>No ChatGPT Plus. No Claude Pro. The model is free. The runtime is free. The app is free. Run it as much as you want.</p>
+    </div>
+    <div class="get-card">
+      <h4>Works on a plane, in a coffee shop, in a SCIF</h4>
+      <p>Once the model is on your disk, internet is optional. Same output online or offline.</p>
+    </div>
+  </div>
+
+  <h2>Yes, it really works without the internet</h2>
+
+  <p>The most common question. Here's the actual architecture, simplified:</p>
+
+  <div class="offline-card">
+    <h3>How a laptop AI works offline</h3>
+    <p>The AI model is a 4.7 GB file on your disk. Runtime (Ollama) runs the model on your CPU or GPU. The app talks to the runtime locally. Nothing leaves the laptop.</p>
+    <div class="diagram">
+      <div class="node">You</div>
+      <div class="arrow">→</div>
+      <div class="node">App</div>
+      <div class="arrow">→</div>
+      <div class="node">localhost:11434</div>
+      <div class="arrow">→</div>
+      <div class="node">Model on disk</div>
+    </div>
+    <p style="margin-top: 14px;">Want proof? Turn off WiFi. Ask the model anything. It answers. I'll show this live in class.</p>
+    <div class="diagram" style="margin-top: 14px;">
+      <div class="blocked">Cloud API</div>
+      <div class="arrow">✕</div>
+      <div class="blocked">OpenAI servers</div>
+      <div class="arrow">✕</div>
+      <div class="blocked">Internet</div>
+    </div>
+  </div>
+
+  <h2>How this is different from ChatGPT, Claude, and Gemini</h2>
+
+  <table class="compare">
+    <thead>
+      <tr>
+        <th style="width: 26%;"></th>
+        <th>Purely Personal (local AI)</th>
+        <th>ChatGPT / Claude / Gemini</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Where it runs</td>
+        <td class="yes">Your laptop</td>
+        <td class="no">A data center you don't control</td>
+      </tr>
+      <tr>
+        <td>What leaves your machine</td>
+        <td class="yes">Nothing</td>
+        <td class="no">Every prompt, every file you paste</td>
+      </tr>
+      <tr>
+        <td>Works offline</td>
+        <td class="yes">Yes, after the one-time model download</td>
+        <td class="no">No, dies without internet</td>
+      </tr>
+      <tr>
+        <td>Cost</td>
+        <td class="yes">Free, forever</td>
+        <td class="no">$20/month, typical</td>
+      </tr>
+      <tr>
+        <td>Training on your inputs</td>
+        <td class="yes">Never. There's no "your inputs" leaving.</td>
+        <td class="no">Depends on settings. Opt-out exists, trust is implied.</td>
+      </tr>
+      <tr>
+        <td>Raw capability</td>
+        <td>Strong on summarization, code review, second drafts. Weaker on nuance and long chains of reasoning.</td>
+        <td>Stronger overall, especially on hard reasoning and long contexts.</td>
+      </tr>
+      <tr>
+        <td>Best use</td>
+        <td>Confidential documents, offline, routine tasks, learning</td>
+        <td>Hard reasoning, latest info, non-sensitive writing</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>This isn't "replace your cloud AI." It's "add the missing half." You'll leave tomorrow knowing exactly when to reach for each.</p>
+
+  <h2>Common objections (answered)</h2>
+
+  <details>
+    <summary>My laptop isn't a supercomputer. Can it really run AI?</summary>
+    <p>Yes. The model we use, <strong>qwen2.5:7b</strong>, needs about 5 GB of RAM. It's the best model in its class as of early 2026. On a 2023+ MacBook it feels as fast as ChatGPT. On an 8 GB machine it's slower on the first message but still usable.</p>
+    <p>We pick the model to match your laptop. You won't be sitting watching a progress bar.</p>
+  </details>
+
+  <details>
+    <summary>Is this worse than ChatGPT?</summary>
+    <p>For the things it's good at, it's comparable. For summarization, second drafts, explaining concepts, quick brainstorming, and code review on files under 5,000 lines, you won't notice the difference in quality for most tasks. For hard reasoning problems, cutting-edge knowledge, or very long documents, ChatGPT and Claude are meaningfully better.</p>
+    <p>The session teaches you the line between the two.</p>
+  </details>
+
+  <details>
+    <summary>Is "local" actually local? How do I know?</summary>
+    <p>Three ways: (1) The whole system is open source, you can read every line. (2) You can turn off your WiFi during the session and the AI keeps working. (3) Your OS shows you what's connecting where, we'll look at it live.</p>
+    <p>This isn't a marketing claim. It's observable.</p>
+  </details>
+
+  <details>
+    <summary>What's the catch?</summary>
+    <p>Three honest ones:</p>
+    <p><strong>1. Capability ceiling.</strong> A 7B model on a laptop won't beat a 400B model in the cloud on hard problems. You'll know when you hit the ceiling, and that's fine, you still have ChatGPT for those.</p>
+    <p><strong>2. Setup is one-time friction.</strong> 15 minutes tonight. After that, it's normal.</p>
+    <p><strong>3. The model doesn't know the last few months.</strong> It's trained on data up to a date. If you need last-week's news, you need a search tool or a cloud AI.</p>
+  </details>
+
+  <details>
+    <summary>Why free? Who pays for this?</summary>
+    <p>Nobody. Ollama is open source (Apache 2). Qwen 2.5 is open-weights (Alibaba released it). Purely Personal (this app) is MIT-licensed. I built it on my own time because I think everyone should have private AI.</p>
+    <p>No subscription is coming. No "pro tier." The whole thing stays free.</p>
+  </details>
+
+  <details>
+    <summary>I already use ChatGPT. Why do I need this?</summary>
+    <p>For the documents you currently <em>don't</em> paste into ChatGPT. Think about the last time you hesitated. That hesitation is the wedge this session is for.</p>
+    <p>Also, once you own the stack, you're not paying a rent for AI. You're running it.</p>
+  </details>
+
+  <div class="cta">
+    <h2>One step tonight. That's all.</h2>
+    <p>Open the pre-class activity, follow the 15-minute install, and show up tomorrow with the AI ready to go.</p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="./pre-class.html">Start pre-class setup →</a>
+      <a class="btn btn-secondary" href="./index.html">See what you're building</a>
+    </div>
+  </div>
+
+  <p style="color: var(--muted); font-size: 14.5px; text-align: center; margin-top: 32px;">
+    Everything here is free, open-source, and stays on your laptop.<br>
+    <a href="https://github.com/danielpaulai/Run-Worldclass-computer-locally" target="_blank" rel="noopener">Read the source</a>
+  </p>
+
+</main>
+
+<footer>
+  Purely Personal is a private AI that runs on your own laptop. Free. Open source. Nothing leaves your machine.<br>
+  <a href="./index.html">Home</a> · <a href="./pre-class.html">Pre-class setup</a> · <a href="./deep-dive.html">How it works (deep dive)</a>
+</footer>
+
+</body>
+</html>

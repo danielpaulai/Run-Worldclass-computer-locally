@@ -1,0 +1,1266 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Design system · Purely Personal</title>
+<meta name="description" content="The Purely Personal design system. Colors, typography, components, voice, and the principles behind every surface.">
+<meta property="og:title" content="Purely Personal · Design system">
+<style>
+  :root {
+    --cream: #faf7f2;
+    --cream-deep: #f2ede2;
+    --ink: #1a1a1a;
+    --ink-soft: #2a2520;
+    --muted: #6b655c;
+    --line: #e4dfd6;
+    --coral: #c15f3c;
+    --coral-soft: #f4d4c2;
+    --coral-deep: #8a3d21;
+    --mint: #3d8a7c;
+    --mint-deep: #2a6358;
+    --red: #c24b3e;
+    --amber: #d19a2c;
+    --card: #ffffff;
+    --night: #14110d;
+    --night-card: #1e1914;
+    --max: 1160px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Helvetica, sans-serif;
+    color: var(--ink);
+    background: var(--cream);
+    line-height: 1.6;
+    font-size: 17px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: "Iowan Old Style", "Charter", Georgia, "Times New Roman", serif;
+    font-weight: 700;
+    letter-spacing: -0.014em;
+    line-height: 1.15;
+    color: var(--ink);
+  }
+  h1 { font-size: 56px; }
+  h2 { font-size: 32px; margin-bottom: 12px; }
+  h3 { font-size: 22px; margin-bottom: 10px; }
+  h4 { font-size: 18px; margin-bottom: 6px; }
+  p { margin-bottom: 14px; }
+  em { font-style: italic; color: var(--coral); }
+  a { color: var(--coral-deep); text-decoration: none; }
+  a:hover { color: var(--coral); text-decoration: underline; }
+
+  @media (max-width: 720px) {
+    h1 { font-size: 40px; }
+    h2 { font-size: 26px; }
+  }
+
+  /* ---------- NAV ---------- */
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: color-mix(in srgb, var(--cream) 92%, transparent);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-inner {
+    max-width: var(--max);
+    margin: 0 auto;
+    padding: 14px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .nav-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: var(--ink);
+  }
+  .nav-brand:hover { text-decoration: none; }
+  .logo {
+    width: 34px; height: 34px;
+    border-radius: 8px;
+    background: var(--coral);
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Iowan Old Style", Charter, Georgia, serif;
+    font-style: italic;
+    font-size: 19px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -1px;
+    flex-shrink: 0;
+  }
+  .nav-brand b {
+    font-family: "Iowan Old Style", Charter, Georgia, serif;
+    font-weight: 700;
+    font-size: 17px;
+  }
+  .nav-links { display: flex; gap: 22px; }
+  .nav-links a {
+    color: var(--muted);
+    font-size: 14.5px;
+    font-weight: 500;
+  }
+  .nav-links a:hover { color: var(--ink); text-decoration: none; }
+  @media (max-width: 720px) {
+    .nav-links { display: none; }
+  }
+
+  /* ---------- HERO ---------- */
+  .hero {
+    padding: 80px 28px 60px;
+    background: radial-gradient(ellipse at top, #f8e9dd 0%, var(--cream) 60%);
+  }
+  .hero-inner {
+    max-width: 820px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .hero .kicker {
+    display: inline-block;
+    background: var(--coral-soft);
+    color: var(--coral-deep);
+    padding: 6px 14px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 22px;
+  }
+  .hero p.sub {
+    font-size: 19px;
+    color: var(--muted);
+    max-width: 620px;
+    margin: 20px auto 0;
+    line-height: 1.5;
+  }
+
+  /* ---------- SECTION ---------- */
+  section {
+    padding: 70px 28px;
+  }
+  .section-inner {
+    max-width: var(--max);
+    margin: 0 auto;
+  }
+  section.alt { background: var(--cream-deep); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  section.dark { background: var(--night); color: #dcd4c4; }
+  section.dark h2, section.dark h3, section.dark h4 { color: #fff; }
+  section.dark p { color: #a89f8e; }
+
+  .section-kicker {
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+  section.dark .section-kicker { color: #6b655c; }
+
+  .section-intro {
+    max-width: 680px;
+    margin-bottom: 36px;
+    font-size: 17px;
+    color: var(--muted);
+  }
+
+  /* ---------- COLOR SWATCHES ---------- */
+  .swatches {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 14px;
+  }
+  .swatch {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .swatch-color {
+    height: 120px;
+    position: relative;
+  }
+  .swatch-color .ratio {
+    position: absolute;
+    bottom: 8px;
+    right: 10px;
+    background: rgba(0,0,0,0.45);
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 100px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    font-family: "SF Mono", Consolas, monospace;
+  }
+  .swatch-info {
+    padding: 14px 16px;
+  }
+  .swatch-info .name {
+    font-family: "Iowan Old Style", Charter, serif;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--ink);
+    margin-bottom: 2px;
+  }
+  .swatch-info .hex {
+    font-family: "SF Mono", Consolas, monospace;
+    font-size: 12.5px;
+    color: var(--muted);
+  }
+  .swatch-info .role {
+    font-size: 12.5px;
+    color: var(--muted);
+    margin-top: 6px;
+    line-height: 1.4;
+  }
+
+  /* ---------- TYPE SCALE ---------- */
+  .type-stack {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 30px 32px;
+    margin-top: 18px;
+  }
+  .type-row {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 24px;
+    padding: 14px 0;
+    border-bottom: 1px dashed var(--line);
+    align-items: baseline;
+  }
+  .type-row:last-child { border-bottom: none; }
+  .type-label {
+    font-family: "SF Mono", Consolas, monospace;
+    font-size: 11.5px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding-top: 6px;
+  }
+  .type-label span {
+    display: block;
+    font-size: 10.5px;
+    color: var(--muted);
+    text-transform: none;
+    margin-top: 2px;
+  }
+  .type-ex {
+    color: var(--ink);
+    font-family: "Iowan Old Style", Charter, Georgia, serif;
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.014em;
+  }
+  .type-ex.h1 { font-size: 48px; }
+  .type-ex.h2 { font-size: 32px; }
+  .type-ex.h3 { font-size: 22px; }
+  .type-ex.h4 { font-size: 17px; }
+  .type-ex.body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Helvetica, sans-serif;
+    font-weight: 400;
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--ink);
+    letter-spacing: 0;
+  }
+  .type-ex.small {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Helvetica, sans-serif;
+    font-weight: 400;
+    font-size: 14.5px;
+    color: var(--muted);
+    letter-spacing: 0;
+  }
+  .type-ex.mono {
+    font-family: "SF Mono", Consolas, monospace;
+    font-weight: 400;
+    font-size: 14px;
+    background: var(--cream-deep);
+    padding: 8px 12px;
+    border-radius: 6px;
+    color: var(--coral-deep);
+    letter-spacing: 0;
+    display: inline-block;
+  }
+  .type-ex em { color: var(--coral); }
+  @media (max-width: 620px) {
+    .type-row { grid-template-columns: 1fr; gap: 4px; }
+  }
+
+  /* ---------- LOGO SYSTEM ---------- */
+  .logo-showcase {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+  }
+  .logo-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 30px;
+    text-align: center;
+  }
+  .logo-card.dark {
+    background: var(--night);
+    border-color: #2a231b;
+  }
+  .logo-card .display {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 110px;
+    margin-bottom: 18px;
+  }
+  .logo-card .name {
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    margin-bottom: 4px;
+  }
+  .logo-card.dark .name { color: #8a8373; }
+  .logo-card .meta {
+    font-family: "SF Mono", Consolas, monospace;
+    font-size: 11.5px;
+    color: var(--muted);
+  }
+  .logo-card.dark .meta { color: #6b655c; }
+
+  .logo-xl {
+    width: 84px; height: 84px;
+    border-radius: 18px;
+    background: var(--coral);
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Iowan Old Style", Charter, Georgia, serif;
+    font-style: italic;
+    font-size: 46px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -3px;
+  }
+  .logo-lg {
+    width: 56px; height: 56px;
+    border-radius: 13px;
+    background: var(--coral);
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Iowan Old Style", Charter, Georgia, serif;
+    font-style: italic;
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -2px;
+  }
+  .logo-md {
+    width: 40px; height: 40px;
+    border-radius: 9px;
+    background: var(--coral);
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Iowan Old Style", Charter, Georgia, serif;
+    font-style: italic;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -1.2px;
+  }
+  .logo-sm {
+    width: 28px; height: 28px;
+    border-radius: 6px;
+    background: var(--coral);
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Iowan Old Style", Charter, Georgia, serif;
+    font-style: italic;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.8px;
+  }
+  .logo-outline {
+    width: 56px; height: 56px;
+    border-radius: 13px;
+    background: transparent;
+    border: 2px solid var(--coral);
+    color: var(--coral);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Iowan Old Style", Charter, Georgia, serif;
+    font-style: italic;
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -2px;
+  }
+
+  /* ---------- COMPONENT SHOWCASE ---------- */
+  .component-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 26px;
+    margin-bottom: 22px;
+  }
+  .component-card .title {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 18px;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .component-card h3 {
+    font-size: 19px;
+    margin: 0;
+  }
+  .component-card .use {
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .component-demo {
+    padding: 20px;
+    background: var(--cream-deep);
+    border: 1px dashed var(--line);
+    border-radius: 10px;
+    margin-bottom: 10px;
+  }
+
+  /* buttons */
+  .btn {
+    display: inline-block;
+    padding: 11px 22px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 15px;
+    transition: transform .12s, background .15s;
+    cursor: pointer;
+    border: none;
+    font-family: inherit;
+  }
+  .btn:hover { transform: translateY(-1px); text-decoration: none; }
+  .btn-primary { background: var(--coral); color: #fff; }
+  .btn-primary:hover { background: var(--coral-deep); color: #fff; }
+  .btn-dark { background: var(--ink); color: var(--cream); }
+  .btn-dark:hover { background: #000; color: var(--cream); }
+  .btn-ghost {
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid var(--line);
+  }
+  .btn-ghost:hover { background: var(--cream-deep); }
+  .btn-text {
+    background: transparent;
+    color: var(--coral-deep);
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .btn-text:hover { color: var(--coral); text-decoration: underline; }
+
+  .demo-stack > * + * { margin-left: 8px; }
+
+  /* tags */
+  .tag {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .tag-coral { background: var(--coral-soft); color: var(--coral-deep); }
+  .tag-mint { background: rgba(61,138,124,0.12); color: var(--mint-deep); }
+  .tag-red { background: rgba(194,75,62,0.1); color: var(--red); }
+  .tag-ink { background: var(--ink-soft); color: var(--cream); }
+
+  /* input */
+  .field-demo input, .field-demo textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1.5px solid var(--line);
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 15px;
+    background: #fff;
+    transition: border-color .15s;
+  }
+  .field-demo input:focus, .field-demo textarea:focus {
+    outline: none;
+    border-color: var(--coral);
+  }
+  .field-demo label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: var(--ink);
+  }
+
+  /* callout */
+  .callout {
+    padding: 14px 18px;
+    border-radius: 8px;
+    border-left: 4px solid var(--coral);
+    background: #fff;
+    color: var(--ink);
+    font-size: 15px;
+  }
+  .callout.security {
+    background: #fff8e6;
+    border-color: var(--amber);
+    color: #5c4a10;
+  }
+  .callout.success {
+    background: #e6f4ef;
+    border-color: var(--mint);
+    color: var(--mint-deep);
+  }
+  .callout.warn {
+    background: #fcecea;
+    border-color: var(--red);
+    color: #5c2a25;
+  }
+  .callout strong { color: inherit; font-weight: 700; }
+
+  /* card */
+  .showcase-card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 22px;
+  }
+  .showcase-card h4 { font-size: 17px; margin: 0 0 6px; }
+  .showcase-card p { font-size: 14.5px; color: var(--muted); margin: 0; }
+
+  /* stat */
+  .stat {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+  }
+  .stat .num {
+    font-family: "Iowan Old Style", Charter, serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--coral);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .stat .label {
+    font-size: 12.5px;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+
+  /* code */
+  .code {
+    background: var(--night);
+    color: #f4e9d6;
+    padding: 14px 16px;
+    border-radius: 8px;
+    font-family: "SF Mono", Consolas, monospace;
+    font-size: 13.5px;
+    overflow-x: auto;
+  }
+
+  /* ---------- ICON STRIP ---------- */
+  .icon-strip {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: 14px;
+  }
+  .icon-cell {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 18px 10px;
+    text-align: center;
+  }
+  .icon-cell .emoji {
+    font-size: 30px;
+    margin-bottom: 8px;
+    line-height: 1;
+    display: block;
+  }
+  .icon-cell .label {
+    font-size: 11.5px;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+
+  /* ---------- VOICE BLOCKS ---------- */
+  .voice-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  @media (max-width: 720px) {
+    .voice-grid { grid-template-columns: 1fr; }
+  }
+  .voice-card {
+    border-radius: 12px;
+    padding: 22px 24px;
+    font-family: "Iowan Old Style", Charter, serif;
+    font-size: 17px;
+    line-height: 1.5;
+  }
+  .voice-card .tag { margin-bottom: 10px; }
+  .voice-card.do {
+    background: #e6f4ef;
+    border: 1px solid rgba(61,138,124,0.25);
+    color: var(--mint-deep);
+  }
+  .voice-card.dont {
+    background: #fcecea;
+    border: 1px solid rgba(194,75,62,0.25);
+    color: #5c2a25;
+  }
+  .voice-card em { font-style: italic; color: inherit; }
+
+  /* ---------- PRINCIPLES ---------- */
+  .principles {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+    margin-top: 24px;
+  }
+  .principle {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--coral);
+    border-radius: 10px;
+    padding: 22px 24px;
+  }
+  .principle .num {
+    font-family: "Iowan Old Style", Charter, serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--coral);
+    line-height: 1;
+    margin-bottom: 10px;
+  }
+  .principle h4 {
+    font-size: 17px;
+    margin-bottom: 6px;
+  }
+  .principle p {
+    font-size: 14.5px;
+    color: var(--muted);
+    margin: 0;
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer {
+    background: var(--night);
+    color: #a89f8e;
+    padding: 44px 28px 32px;
+    font-size: 14.5px;
+  }
+  .foot-inner {
+    max-width: var(--max);
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 18px;
+  }
+  footer a { color: #f1896b; }
+  footer .foot-links { display: flex; gap: 22px; flex-wrap: wrap; }
+
+  /* ---------- FADE-IN ---------- */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity .7s cubic-bezier(.2,.7,.3,1), transform .7s cubic-bezier(.2,.7,.3,1);
+  }
+  .fade-in.in { opacity: 1; transform: none; }
+
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nav-brand" href="./index.html">
+      <div class="logo"><em>pp</em></div>
+      <b>Purely Personal</b>
+    </a>
+    <div class="nav-links">
+      <a href="./why.html">Why</a>
+      <a href="./deep-dive.html">How it works</a>
+      <a href="./pre-class.html">Pre-class</a>
+      <a href="https://github.com/danielpaulai/Run-Worldclass-computer-locally" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="kicker">Design system</div>
+    <h1>The Purely Personal<br>design system.</h1>
+    <p class="sub">How the brand looks, sounds, and feels. The colors, the type, the components, the voice. Built for surfaces that need to feel quiet, calm, and trustworthy.</p>
+  </div>
+</section>
+
+<!-- PRINCIPLES -->
+<section>
+  <div class="section-inner">
+    <div class="section-kicker">Principles</div>
+    <h2>Six rules, applied everywhere</h2>
+    <p class="section-intro">The brand ships products that live on people's laptops with their most sensitive files. So the design language has to feel like a quiet tool, not a loud app. These are the six rules we hold every surface to.</p>
+
+    <div class="principles">
+      <div class="principle">
+        <div class="num">1</div>
+        <h4>Quiet confidence</h4>
+        <p>No exclamation marks in body copy. No "revolutionary." No "unlock." Say the thing. Let it speak for itself.</p>
+      </div>
+      <div class="principle">
+        <div class="num">2</div>
+        <h4>Warm, not white</h4>
+        <p>The base is cream, not pure white. Every surface feels paper-like. Reassuring. Low-blue. Easy on tired eyes.</p>
+      </div>
+      <div class="principle">
+        <div class="num">3</div>
+        <h4>Serif for human moments</h4>
+        <p>Iowan Old Style for headings, quotes, the logo. San serif for everything functional. The serif reads like someone wrote it.</p>
+      </div>
+      <div class="principle">
+        <div class="num">4</div>
+        <h4>Coral as the only accent</h4>
+        <p>One color does all the heavy lifting. No rainbow palettes. Coral means "attention here." Everything else is neutral.</p>
+      </div>
+      <div class="principle">
+        <div class="num">5</div>
+        <h4>Proof over claim</h4>
+        <p>When we say "private," we show the WiFi-off demo. When we say "local," we cite the network monitor. Visuals back every promise.</p>
+      </div>
+      <div class="principle">
+        <div class="num">6</div>
+        <h4>No em dashes</h4>
+        <p>Em dashes are the AI tell. A real person writes in commas or full stops. Every piece of copy runs through a de-em-dash pass.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COLORS -->
+<section class="alt">
+  <div class="section-inner">
+    <div class="section-kicker">Color</div>
+    <h2>Cream, ink, and a single coral</h2>
+    <p class="section-intro">Three primaries plus three supporting colors. Every surface uses a subset. Never all of them. Coral is the only brand color — everything else is neutral weight.</p>
+
+    <h3 style="margin-top: 26px;">Primary</h3>
+    <div class="swatches" style="margin-top: 16px;">
+      <div class="swatch">
+        <div class="swatch-color" style="background: #faf7f2;"><span class="ratio" style="color: #1a1a1a;">7.2:1</span></div>
+        <div class="swatch-info">
+          <div class="name">Cream</div>
+          <div class="hex">#faf7f2</div>
+          <div class="role">Page background. Every surface starts here.</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background: #f2ede2;"><span class="ratio" style="color: #1a1a1a;">6.8:1</span></div>
+        <div class="swatch-info">
+          <div class="name">Cream-deep</div>
+          <div class="hex">#f2ede2</div>
+          <div class="role">Alternating sections, nav bars, card hover states.</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background: #1a1a1a;"><span class="ratio">14.1:1</span></div>
+        <div class="swatch-info">
+          <div class="name">Ink</div>
+          <div class="hex">#1a1a1a</div>
+          <div class="role">Body text. Headings. Never pure black.</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background: #c15f3c;"><span class="ratio">4.7:1</span></div>
+        <div class="swatch-info">
+          <div class="name">Coral</div>
+          <div class="hex">#c15f3c</div>
+          <div class="role">The brand color. Logo, primary buttons, the single accent.</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background: #8a3d21;"><span class="ratio">7.9:1</span></div>
+        <div class="swatch-info">
+          <div class="name">Coral-deep</div>
+          <div class="hex">#8a3d21</div>
+          <div class="role">Links. Button hover. Coral for dense text.</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background: #f4d4c2;"><span class="ratio" style="color: #1a1a1a;">1.5:1</span></div>
+        <div class="swatch-info">
+          <div class="name">Coral-soft</div>
+          <div class="hex">#f4d4c2</div>
+          <div class="role">Badge background. Hero accent wash. Never on text.</div>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="margin-top: 44px;">Supporting</h3>
+    <div class="swatches" style="margin-top: 16px;">
+      <div class="swatch">
+        <div class="swatch-color" style="background: #6b655c;"><span class="ratio">5.3:1</span></div>
+        <div class="swatch-info">
+          <div class="name">Muted</div>
+          <div class="hex">#6b655c</div>
+          <div class="role">Secondary text, captions, meta.</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background: #e4dfd6;"><span class="ratio" style="color: #1a1a1a;">1.2:1</span></div>
+        <div class="swatch-info">
+          <div class="name">Line</div>
+          <div class="hex">#e4dfd6</div>
+          <div class="role">Dividers, borders, card edges.</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background: #3d8a7c;"><span class="ratio">4.6:1</span></div>
+        <div class="swatch-info">
+          <div class="name">Mint</div>
+          <div class="hex">#3d8a7c</div>
+          <div class="role">Success. Verified. "Yes, this works."</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background: #c24b3e;"><span class="ratio">5.1:1</span></div>
+        <div class="swatch-info">
+          <div class="name">Red</div>
+          <div class="hex">#c24b3e</div>
+          <div class="role">Warnings. Errors. "Broken." Use sparingly.</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background: #d19a2c;"><span class="ratio">3.6:1</span></div>
+        <div class="swatch-info">
+          <div class="name">Amber</div>
+          <div class="hex">#d19a2c</div>
+          <div class="role">Security notes. Process-in-progress states.</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background: #14110d;"><span class="ratio">15.2:1</span></div>
+        <div class="swatch-info">
+          <div class="name">Night</div>
+          <div class="hex">#14110d</div>
+          <div class="role">Dark-mode background. Code blocks. Footer.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TYPOGRAPHY -->
+<section>
+  <div class="section-inner">
+    <div class="section-kicker">Typography</div>
+    <h2>Serif for feeling. Sans for function.</h2>
+    <p class="section-intro">A two-family stack. Iowan Old Style anchors every heading, the logo, and quotes. The body uses the OS system font so it always feels native. Nothing loaded from a CDN.</p>
+
+    <div class="type-stack">
+      <div class="type-row">
+        <div class="type-label">H1<span>48–58px · Iowan Old Style · 700</span></div>
+        <div class="type-ex h1">The future of AI is on your laptop.</div>
+      </div>
+      <div class="type-row">
+        <div class="type-label">H2<span>30–40px · Iowan Old Style · 700</span></div>
+        <div class="type-ex h2">A private AI that lives on your machine.</div>
+      </div>
+      <div class="type-row">
+        <div class="type-label">H3<span>21–26px · Iowan Old Style · 700</span></div>
+        <div class="type-ex h3">Why nothing ever leaves your laptop</div>
+      </div>
+      <div class="type-row">
+        <div class="type-label">H4<span>17–20px · Iowan Old Style · 700</span></div>
+        <div class="type-ex h4">How a chat actually works</div>
+      </div>
+      <div class="type-row">
+        <div class="type-label">Body<span>17px · System · 400 · 1.6</span></div>
+        <div class="type-ex body">Every professional has a folder of documents they'd never paste into ChatGPT. Client contracts. Session notes. Financial docs. This is for that.</div>
+      </div>
+      <div class="type-row">
+        <div class="type-label">Small<span>14.5px · System · 400</span></div>
+        <div class="type-ex small">Caption · meta · footer · supporting text. Use <em>muted</em> color.</div>
+      </div>
+      <div class="type-row">
+        <div class="type-label">Mono<span>13–14px · SF Mono / Consolas</span></div>
+        <div class="type-ex mono">ollama pull qwen2.5:7b</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LOGO -->
+<section class="alt">
+  <div class="section-inner">
+    <div class="section-kicker">Logo</div>
+    <h2>One mark, five sizes</h2>
+    <p class="section-intro">The logo is a rounded coral square with a lowercase italic "pp" in Iowan Old Style. Read it as "purely personal." Never use the mark without the italic. Never use a different typeface. Never change the corner radius ratio.</p>
+
+    <div class="logo-showcase">
+      <div class="logo-card">
+        <div class="display"><div class="logo-xl"><em>pp</em></div></div>
+        <div class="name">App icon</div>
+        <div class="meta">84×84 · radius 18</div>
+      </div>
+      <div class="logo-card">
+        <div class="display"><div class="logo-lg"><em>pp</em></div></div>
+        <div class="name">Hero mark</div>
+        <div class="meta">56×56 · radius 13</div>
+      </div>
+      <div class="logo-card">
+        <div class="display"><div class="logo-md"><em>pp</em></div></div>
+        <div class="name">Nav mark</div>
+        <div class="meta">40×40 · radius 9</div>
+      </div>
+      <div class="logo-card">
+        <div class="display"><div class="logo-sm"><em>pp</em></div></div>
+        <div class="name">Favicon</div>
+        <div class="meta">28×28 · radius 6</div>
+      </div>
+      <div class="logo-card">
+        <div class="display"><div class="logo-outline"><em>pp</em></div></div>
+        <div class="name">Outline variant</div>
+        <div class="meta">On coral-soft backgrounds only</div>
+      </div>
+      <div class="logo-card dark">
+        <div class="display"><div class="logo-lg"><em>pp</em></div></div>
+        <div class="name">On dark</div>
+        <div class="meta">Same mark, no change</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPONENTS -->
+<section>
+  <div class="section-inner">
+    <div class="section-kicker">Components</div>
+    <h2>The pieces that make every page</h2>
+    <p class="section-intro">Every surface is built from the same small set of components. Buttons, tags, cards, callouts, fields, stats, code blocks. No per-page styling.</p>
+
+    <!-- Buttons -->
+    <div class="component-card">
+      <div class="title">
+        <h3>Buttons</h3>
+        <div class="use">Primary action first. Never more than one primary on a screen.</div>
+      </div>
+      <div class="component-demo demo-stack">
+        <button class="btn btn-primary">Download for your OS</button>
+        <button class="btn btn-dark">See how it works</button>
+        <button class="btn btn-ghost">Secondary</button>
+        <button class="btn btn-text">Read the source →</button>
+      </div>
+    </div>
+
+    <!-- Tags -->
+    <div class="component-card">
+      <div class="title">
+        <h3>Tags</h3>
+        <div class="use">Uppercase, 11px, letter-spaced. For category / status only.</div>
+      </div>
+      <div class="component-demo demo-stack">
+        <span class="tag tag-coral">New</span>
+        <span class="tag tag-mint">Available</span>
+        <span class="tag tag-red">Cloud only</span>
+        <span class="tag tag-ink">v0.1.0</span>
+      </div>
+    </div>
+
+    <!-- Callouts -->
+    <div class="component-card">
+      <div class="title">
+        <h3>Callouts</h3>
+        <div class="use">Left-border accent + soft background. Four moods.</div>
+      </div>
+      <div class="component-demo" style="display: grid; gap: 10px;">
+        <div class="callout"><strong>Coral.</strong> Everything runs locally. Nothing ever leaves your laptop.</div>
+        <div class="callout security"><strong>🔒 Security note.</strong> The app isn't code-signed yet. Right-click → Open on first launch.</div>
+        <div class="callout success"><strong>✓ Success.</strong> Ollama is running. Model is loaded. You're ready.</div>
+        <div class="callout warn"><strong>⚠ Warning.</strong> This file is 8 MB. Trim it to under 500 KB or the model will truncate.</div>
+      </div>
+    </div>
+
+    <!-- Fields -->
+    <div class="component-card">
+      <div class="title">
+        <h3>Form fields</h3>
+        <div class="use">1.5px border. 8px radius. Focus = coral border. No drop shadow.</div>
+      </div>
+      <div class="component-demo field-demo">
+        <label>Your prompt</label>
+        <input type="text" placeholder="Write a follow-up email to a client who hasn't replied">
+        <div style="height: 10px;"></div>
+        <label>Notes</label>
+        <textarea rows="3" placeholder="Anything else the AI should know"></textarea>
+      </div>
+    </div>
+
+    <!-- Cards -->
+    <div class="component-card">
+      <div class="title">
+        <h3>Content cards</h3>
+        <div class="use">Soft border, 10px radius, 20px pad. Use for use-cases, principles, features.</div>
+      </div>
+      <div class="component-demo" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px;">
+        <div class="showcase-card">
+          <h4>Summarize</h4>
+          <p>Paste anything, get the gist. Works on text-based files up to 500 KB.</p>
+        </div>
+        <div class="showcase-card">
+          <h4>Reply</h4>
+          <p>Draft a response to a hard email. Keeps your voice, stays on your laptop.</p>
+        </div>
+        <div class="showcase-card">
+          <h4>Decide</h4>
+          <p>Paste options, get a structured pros/cons, plus the question you should ask yourself.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="component-card">
+      <div class="title">
+        <h3>Stats</h3>
+        <div class="use">Serif number in coral, mono-feeling label in muted. Use for proof points.</div>
+      </div>
+      <div class="component-demo" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px;">
+        <div class="stat"><div class="num">$0</div><div class="label">Forever cost</div></div>
+        <div class="stat"><div class="num">4.7 GB</div><div class="label">Model size</div></div>
+        <div class="stat"><div class="num">0</div><div class="label">Outbound requests</div></div>
+        <div class="stat"><div class="num">15 min</div><div class="label">Setup</div></div>
+      </div>
+    </div>
+
+    <!-- Code -->
+    <div class="component-card">
+      <div class="title">
+        <h3>Code blocks</h3>
+        <div class="use">Night background, cream text, no syntax highlighting. Keep it calm.</div>
+      </div>
+      <div class="component-demo">
+        <div class="code">brew install ollama
+brew services start ollama
+ollama pull qwen2.5:7b</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ICONOGRAPHY -->
+<section class="alt">
+  <div class="section-inner">
+    <div class="section-kicker">Iconography</div>
+    <h2>Emoji, by design</h2>
+    <p class="section-intro">We use native OS emoji for icons. No custom icon font. No SVG sets. Rationale: emoji ships with every device, renders consistently enough, and feels human. The icon stays the same whether you're on Mac, Windows, or Linux.</p>
+
+    <div class="icon-strip">
+      <div class="icon-cell"><span class="emoji">🍎</span><div class="label">macOS</div></div>
+      <div class="icon-cell"><span class="emoji">🪟</span><div class="label">Windows</div></div>
+      <div class="icon-cell"><span class="emoji">🐧</span><div class="label">Linux</div></div>
+      <div class="icon-cell"><span class="emoji">🔒</span><div class="label">Security</div></div>
+      <div class="icon-cell"><span class="emoji">⚡</span><div class="label">Speed</div></div>
+      <div class="icon-cell"><span class="emoji">🧠</span><div class="label">The model</div></div>
+      <div class="icon-cell"><span class="emoji">⚙️</span><div class="label">Runtime</div></div>
+      <div class="icon-cell"><span class="emoji">🖼️</span><div class="label">Interface</div></div>
+      <div class="icon-cell"><span class="emoji">📋</span><div class="label">Setup</div></div>
+      <div class="icon-cell"><span class="emoji">🎯</span><div class="label">In-class</div></div>
+      <div class="icon-cell"><span class="emoji">🌱</span><div class="label">Post-class</div></div>
+      <div class="icon-cell"><span class="emoji">✅</span><div class="label">Done</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- VOICE -->
+<section>
+  <div class="section-inner">
+    <div class="section-kicker">Voice</div>
+    <h2>How it sounds</h2>
+    <p class="section-intro">Short sentences. Direct. No hype. The reader should feel like a calm, smart friend is telling them what's actually going on, not a pitch deck.</p>
+
+    <h3 style="margin-top: 26px;">Do this, not that</h3>
+    <div class="voice-grid" style="margin-top: 14px;">
+      <div class="voice-card do">
+        <span class="tag tag-mint">Do</span>
+        <p>Every professional has a folder of documents they'd never paste into ChatGPT. This is for those.</p>
+      </div>
+      <div class="voice-card dont">
+        <span class="tag tag-red">Don't</span>
+        <p>Unlock next-gen productivity by leveraging revolutionary on-device AI — transforming the way you work forever!</p>
+      </div>
+
+      <div class="voice-card do">
+        <span class="tag tag-mint">Do</span>
+        <p>It's a 4.7 GB file on your disk. Nothing magic about it. Open source, read the code.</p>
+      </div>
+      <div class="voice-card dont">
+        <span class="tag tag-red">Don't</span>
+        <p>Our cutting-edge proprietary neural architecture empowers you to achieve results previously impossible.</p>
+      </div>
+
+      <div class="voice-card do">
+        <span class="tag tag-mint">Do</span>
+        <p>Turn off WiFi. Ask a question. It still works. That's the proof.</p>
+      </div>
+      <div class="voice-card dont">
+        <span class="tag tag-red">Don't</span>
+        <p>Experience unparalleled data sovereignty with our end-to-end privacy-first paradigm shift.</p>
+      </div>
+    </div>
+
+    <h3 style="margin-top: 44px;">Words we use</h3>
+    <div class="showcase-card" style="margin-top: 14px;">
+      <p><strong>On your laptop.</strong> Private. Local. Free. Open source. Offline. Yours. Straightforward. Real. Honest. Works. Fixes. Solves.</p>
+    </div>
+
+    <h3 style="margin-top: 28px;">Words we never use</h3>
+    <div class="showcase-card" style="margin-top: 14px;">
+      <p><strong>Never.</strong> Leverage. Unlock. Synergy. Revolutionary. Paradigm. Supercharge. Empower. Transform. Cutting-edge. Seamless. Magical. Disruptive. Bespoke. Curated.</p>
+    </div>
+
+    <h3 style="margin-top: 28px;">Punctuation rules</h3>
+    <div class="showcase-card" style="margin-top: 14px;">
+      <ul style="margin: 0 0 0 22px; color: var(--ink-soft); font-size: 15px;">
+        <li style="margin-bottom: 6px;"><strong>No em dashes.</strong> Use a comma or a period. Em dashes are the AI tell.</li>
+        <li style="margin-bottom: 6px;"><strong>No exclamation marks</strong> in body copy. Save them for demos.</li>
+        <li style="margin-bottom: 6px;"><strong>Oxford comma: on.</strong></li>
+        <li style="margin-bottom: 6px;"><strong>Sentence case</strong> in UI. Title Case in marketing heads only.</li>
+        <li><strong>Short paragraphs.</strong> Two to three sentences per block, max.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- SPACING -->
+<section class="alt">
+  <div class="section-inner">
+    <div class="section-kicker">Spacing</div>
+    <h2>The rhythm scale</h2>
+    <p class="section-intro">A 4px base unit. Every gap is a multiple. Sections breathe at 70–80px. Cards cluster at 14–22px. Nothing is arbitrary.</p>
+
+    <div style="background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 30px 32px; margin-top: 14px;">
+      <div style="display: grid; grid-template-columns: 160px 1fr; gap: 20px; align-items: center; padding: 10px 0; border-bottom: 1px dashed var(--line);">
+        <code style="font-family: 'SF Mono', Consolas, monospace; font-size: 13px; color: var(--muted);">4px · xs</code>
+        <div style="background: var(--coral-soft); height: 8px; width: 4px;"></div>
+      </div>
+      <div style="display: grid; grid-template-columns: 160px 1fr; gap: 20px; align-items: center; padding: 10px 0; border-bottom: 1px dashed var(--line);">
+        <code style="font-family: 'SF Mono', Consolas, monospace; font-size: 13px; color: var(--muted);">8px · sm</code>
+        <div style="background: var(--coral-soft); height: 10px; width: 8px;"></div>
+      </div>
+      <div style="display: grid; grid-template-columns: 160px 1fr; gap: 20px; align-items: center; padding: 10px 0; border-bottom: 1px dashed var(--line);">
+        <code style="font-family: 'SF Mono', Consolas, monospace; font-size: 13px; color: var(--muted);">14px · md</code>
+        <div style="background: var(--coral-soft); height: 12px; width: 14px;"></div>
+      </div>
+      <div style="display: grid; grid-template-columns: 160px 1fr; gap: 20px; align-items: center; padding: 10px 0; border-bottom: 1px dashed var(--line);">
+        <code style="font-family: 'SF Mono', Consolas, monospace; font-size: 13px; color: var(--muted);">22px · lg</code>
+        <div style="background: var(--coral-soft); height: 16px; width: 22px;"></div>
+      </div>
+      <div style="display: grid; grid-template-columns: 160px 1fr; gap: 20px; align-items: center; padding: 10px 0; border-bottom: 1px dashed var(--line);">
+        <code style="font-family: 'SF Mono', Consolas, monospace; font-size: 13px; color: var(--muted);">40px · xl</code>
+        <div style="background: var(--coral-soft); height: 20px; width: 40px;"></div>
+      </div>
+      <div style="display: grid; grid-template-columns: 160px 1fr; gap: 20px; align-items: center; padding: 10px 0;">
+        <code style="font-family: 'SF Mono', Consolas, monospace; font-size: 13px; color: var(--muted);">72px · 2xl</code>
+        <div style="background: var(--coral-soft); height: 28px; width: 72px;"></div>
+      </div>
+    </div>
+
+    <h3 style="margin-top: 40px;">Radius scale</h3>
+    <div style="display: flex; gap: 18px; margin-top: 14px; flex-wrap: wrap;">
+      <div style="text-align: center;">
+        <div style="width: 70px; height: 70px; background: var(--coral); border-radius: 4px; margin-bottom: 8px;"></div>
+        <code style="font-family: 'SF Mono', Consolas, monospace; font-size: 12px; color: var(--muted);">4px · inputs</code>
+      </div>
+      <div style="text-align: center;">
+        <div style="width: 70px; height: 70px; background: var(--coral); border-radius: 8px; margin-bottom: 8px;"></div>
+        <code style="font-family: 'SF Mono', Consolas, monospace; font-size: 12px; color: var(--muted);">8px · buttons</code>
+      </div>
+      <div style="text-align: center;">
+        <div style="width: 70px; height: 70px; background: var(--coral); border-radius: 10px; margin-bottom: 8px;"></div>
+        <code style="font-family: 'SF Mono', Consolas, monospace; font-size: 12px; color: var(--muted);">10px · cards</code>
+      </div>
+      <div style="text-align: center;">
+        <div style="width: 70px; height: 70px; background: var(--coral); border-radius: 14px; margin-bottom: 8px;"></div>
+        <code style="font-family: 'SF Mono', Consolas, monospace; font-size: 12px; color: var(--muted);">14px · panels</code>
+      </div>
+      <div style="text-align: center;">
+        <div style="width: 70px; height: 70px; background: var(--coral); border-radius: 100px; margin-bottom: 8px;"></div>
+        <code style="font-family: 'SF Mono', Consolas, monospace; font-size: 12px; color: var(--muted);">full · tags</code>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CLOSE -->
+<section class="dark">
+  <div class="section-inner" style="text-align: center; max-width: 640px;">
+    <div class="section-kicker">Use it</div>
+    <h2>This is the whole system.</h2>
+    <p style="font-size: 17px; color: #a89f8e; margin-bottom: 28px;">Every page on this site, every screen in the app, every email in the marketing kit was built with nothing more than what's on this page. If it can't be made with these pieces, it probably shouldn't exist yet.</p>
+    <a class="btn btn-primary" href="https://github.com/danielpaulai/Run-Worldclass-computer-locally" target="_blank" rel="noopener">Fork the repo</a>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-inner">
+    <div>Purely Personal — MIT licensed, free forever, runs on your laptop.</div>
+    <div class="foot-links">
+      <a href="./index.html">Home</a>
+      <a href="./why.html">Why</a>
+      <a href="./pre-class.html">Pre-class</a>
+      <a href="./deep-dive.html">How it works</a>
+      <a href="https://github.com/danielpaulai/Run-Worldclass-computer-locally" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const els = document.querySelectorAll("h2, h3, .swatch, .principle, .component-card, .icon-cell, .voice-card, .showcase-card, .stat, .type-row");
+  els.forEach(el => el.classList.add("fade-in"));
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.1, rootMargin: "0px 0px -40px 0px" });
+  els.forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>

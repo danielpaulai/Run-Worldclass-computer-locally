@@ -1,0 +1,27 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "redirects": [
+    { "source": "/setup", "destination": "/pre-class", "permanent": false },
+    { "source": "/install", "destination": "/pre-class", "permanent": false },
+    { "source": "/how", "destination": "/deep-dive", "permanent": false },
+    { "source": "/github", "destination": "https://github.com/danielpaulai/Run-Worldclass-computer-locally", "permanent": false },
+    { "source": "/download", "destination": "https://github.com/danielpaulai/Run-Worldclass-computer-locally/releases/tag/v0.1.0", "permanent": false }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=()" }
+      ]
+    },
+    {
+      "source": "/(.*)\\.html",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
+      ]
+    }
+  ]
+}

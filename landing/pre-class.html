@@ -1,0 +1,724 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pre-Class Setup · Purely Personal</title>
+<meta name="description" content="Install your private, local AI before class. 15 minutes, one time, nothing ever leaves your laptop.">
+<style>
+  :root {
+    --cream: #faf7f2;
+    --cream-deep: #f2ede2;
+    --ink: #1a1a1a;
+    --muted: #6b655c;
+    --line: #e4dfd6;
+    --coral: #c15f3c;
+    --coral-soft: #f4d4c2;
+    --coral-deep: #8a3d21;
+    --mint: #3d8a7c;
+    --card: #ffffff;
+    --max: 880px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Helvetica, sans-serif;
+    color: var(--ink);
+    background: var(--cream);
+    line-height: 1.55;
+    font-size: 17px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3 {
+    font-family: "Iowan Old Style", "Charter", Georgia, "Times New Roman", serif;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.12;
+  }
+
+  a { color: var(--coral-deep); }
+  a:hover { color: var(--coral); }
+  em { font-style: italic; color: var(--coral); }
+
+  /* ---------- HEADER ---------- */
+  header {
+    background: var(--cream-deep);
+    border-bottom: 1px solid var(--line);
+    padding: 40px 28px 32px;
+  }
+  .head-inner {
+    max-width: var(--max);
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+  .logo {
+    width: 56px; height: 56px;
+    border-radius: 13px;
+    background: var(--coral);
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Iowan Old Style", Charter, Georgia, serif;
+    font-style: italic;
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -2px;
+    flex-shrink: 0;
+  }
+  .head-text .kicker {
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .head-text h1 {
+    font-size: 30px;
+  }
+
+  /* ---------- MAIN ---------- */
+  main {
+    max-width: var(--max);
+    margin: 0 auto;
+    padding: 40px 28px 80px;
+  }
+
+  .lede {
+    font-size: 20px;
+    color: var(--ink);
+    line-height: 1.45;
+    margin-bottom: 10px;
+  }
+  .lede-sub {
+    font-size: 17px;
+    color: var(--muted);
+    margin-bottom: 36px;
+  }
+
+  /* ---------- WHY BOX ---------- */
+  .why-box {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--coral);
+    border-radius: 10px;
+    padding: 22px 24px;
+    margin-bottom: 44px;
+  }
+  .why-box h3 {
+    font-size: 18px;
+    margin-bottom: 8px;
+  }
+  .why-box p {
+    color: var(--muted);
+    font-size: 15.5px;
+  }
+
+  /* ---------- OS TABS ---------- */
+  .os-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+    border-bottom: 1px solid var(--line);
+  }
+  .os-tab {
+    background: transparent;
+    border: none;
+    padding: 12px 20px;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--muted);
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    font-family: inherit;
+    transition: color .15s, border-color .15s;
+  }
+  .os-tab:hover { color: var(--ink); }
+  .os-tab.active {
+    color: var(--coral-deep);
+    border-bottom-color: var(--coral);
+  }
+
+  .os-panel { display: none; }
+  .os-panel.active { display: block; }
+
+  /* ---------- STEPS ---------- */
+  .step {
+    position: relative;
+    padding: 24px 0 28px 56px;
+    border-bottom: 1px solid var(--line);
+    counter-increment: step;
+  }
+  .step:last-child { border-bottom: none; }
+  .step::before {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 26px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--coral);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Iowan Old Style", Charter, Georgia, serif;
+    font-weight: 700;
+    font-size: 17px;
+  }
+  .steps { counter-reset: step; }
+  .step h3 {
+    font-size: 19px;
+    margin-bottom: 10px;
+  }
+  .step p {
+    color: var(--ink);
+    margin-bottom: 12px;
+  }
+  .step .hint {
+    color: var(--muted);
+    font-size: 14.5px;
+  }
+
+  /* ---------- CODE BOX ---------- */
+  .code-row {
+    display: flex;
+    align-items: stretch;
+    background: #1a1510;
+    color: #f4e9d6;
+    border-radius: 8px;
+    margin: 10px 0 6px;
+    overflow: hidden;
+    font-family: "SF Mono", Consolas, "Liberation Mono", monospace;
+    font-size: 14px;
+  }
+  .code-row code {
+    flex: 1;
+    padding: 14px 16px;
+    white-space: pre-wrap;
+    word-break: break-word;
+    background: transparent;
+  }
+  .copy-btn {
+    background: #2a231b;
+    color: #f4e9d6;
+    border: none;
+    padding: 0 18px;
+    font-family: inherit;
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 0.04em;
+    border-left: 1px solid #3d3427;
+    transition: background .15s;
+  }
+  .copy-btn:hover { background: #3d3427; }
+  .copy-btn.copied { background: var(--mint); color: #fff; }
+
+  /* ---------- SECURITY CALLOUT ---------- */
+  .security {
+    background: #fff8e6;
+    border: 1px solid #f0d98a;
+    border-left: 4px solid #c89010;
+    border-radius: 8px;
+    padding: 14px 18px;
+    font-size: 14.5px;
+    color: #5c4a10;
+    margin: 14px 0 6px;
+  }
+  .security strong { color: #3d2f05; }
+
+  /* ---------- DOWNLOAD BUTTONS ---------- */
+  .downloads {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 12px 0;
+  }
+  .dl-btn {
+    background: var(--cream-deep);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 12px 16px;
+    text-decoration: none;
+    color: var(--ink);
+    font-size: 14.5px;
+    font-weight: 600;
+    display: block;
+    transition: background .15s, border-color .15s;
+  }
+  .dl-btn:hover {
+    background: #fff;
+    border-color: var(--coral);
+    color: var(--coral-deep);
+  }
+  .dl-btn .arch {
+    display: block;
+    font-size: 12.5px;
+    font-weight: 400;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+  @media (max-width: 560px) {
+    .downloads { grid-template-columns: 1fr; }
+  }
+
+  /* ---------- CHECKLIST ---------- */
+  .checklist {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 26px 28px;
+    margin-top: 48px;
+  }
+  .checklist h2 {
+    font-size: 22px;
+    margin-bottom: 14px;
+  }
+  .checklist ul {
+    list-style: none;
+    padding: 0;
+  }
+  .checklist li {
+    padding: 8px 0 8px 32px;
+    position: relative;
+    color: var(--ink);
+  }
+  .checklist li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 11px;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--muted);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all .15s;
+  }
+  .checklist li.done::before {
+    background: var(--mint);
+    border-color: var(--mint);
+  }
+  .checklist li.done::after {
+    content: "";
+    position: absolute;
+    left: 5px;
+    top: 13px;
+    width: 10px;
+    height: 6px;
+    border-left: 2px solid #fff;
+    border-bottom: 2px solid #fff;
+    transform: rotate(-45deg);
+  }
+  .checklist li.done {
+    color: var(--muted);
+    text-decoration: line-through;
+  }
+
+  /* ---------- TROUBLE ---------- */
+  .trouble {
+    margin-top: 44px;
+  }
+  .trouble h2 {
+    font-size: 22px;
+    margin-bottom: 14px;
+  }
+  .trouble details {
+    border-bottom: 1px solid var(--line);
+    padding: 14px 0;
+  }
+  .trouble summary {
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 16px;
+    list-style: none;
+    position: relative;
+    padding-right: 24px;
+  }
+  .trouble summary::after {
+    content: "+";
+    position: absolute;
+    right: 0;
+    top: 0;
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--muted);
+    line-height: 1;
+  }
+  .trouble details[open] summary::after { content: "−"; }
+  .trouble details p, .trouble details pre {
+    margin-top: 10px;
+    color: var(--muted);
+    font-size: 15px;
+  }
+  .trouble details pre {
+    background: #1a1510;
+    color: #f4e9d6;
+    padding: 12px 14px;
+    border-radius: 6px;
+    font-size: 13.5px;
+    overflow-x: auto;
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 28px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 14px;
+    background: var(--cream-deep);
+    margin-top: 60px;
+  }
+  footer a { color: var(--coral-deep); }
+
+  /* ---------- PROGRESS BAR ---------- */
+  .progress-wrap {
+    margin: 30px 0 0;
+  }
+  .progress-track {
+    background: var(--cream-deep);
+    height: 8px;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--mint);
+    width: 0%;
+    transition: width .4s ease;
+  }
+  .progress-label {
+    font-size: 13.5px;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+
+</style>
+</head>
+<body>
+
+<header>
+  <div class="head-inner">
+    <div class="logo"><em>pp</em></div>
+    <div class="head-text">
+      <div class="kicker">Pre-Class Activity · 15 minutes</div>
+      <h1>Install your private AI before class.</h1>
+    </div>
+  </div>
+</header>
+
+<main>
+  <p class="lede">Do this once, tonight. Tomorrow in class we'll use what you've installed.</p>
+  <p class="lede-sub">Nothing ever leaves your laptop. No account. No subscription. No cloud.</p>
+
+  <div class="why-box">
+    <h3>Why we're doing this first</h3>
+    <p>Tomorrow's class is hands-on. We don't want to watch 100 people install software while the clock ticks. If you hit setup tonight, you get 5 minutes of trouble that never touches the class, and tomorrow you spend the hour actually <em>using</em> what you built.</p>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+    <div class="progress-label" id="progress-label">0 of 4 steps complete</div>
+  </div>
+
+  <div class="os-tabs" role="tablist">
+    <button class="os-tab active" data-os="mac" role="tab">macOS</button>
+    <button class="os-tab" data-os="win" role="tab">Windows</button>
+    <button class="os-tab" data-os="linux" role="tab">Linux</button>
+  </div>
+
+  <!-- ===================== macOS ===================== -->
+  <div class="os-panel active" id="os-mac">
+    <div class="steps">
+
+      <div class="step" data-key="mac-1">
+        <h3>1. Install Ollama</h3>
+        <p>Ollama is the runtime that runs the AI model on your laptop. Free, open source.</p>
+        <div class="code-row">
+          <code>brew install ollama</code>
+          <button class="copy-btn" data-copy="brew install ollama">COPY</button>
+        </div>
+        <p class="hint">No Homebrew? Download the installer from <a href="https://ollama.com" target="_blank" rel="noopener">ollama.com</a> instead.</p>
+      </div>
+
+      <div class="step" data-key="mac-2">
+        <h3>2. Start Ollama</h3>
+        <p>Run Ollama in the background. You only do this once, it runs every time you log in.</p>
+        <div class="code-row">
+          <code>brew services start ollama</code>
+          <button class="copy-btn" data-copy="brew services start ollama">COPY</button>
+        </div>
+        <p class="hint">Verify it's running: <code>curl http://localhost:11434/api/version</code> should print a version number.</p>
+      </div>
+
+      <div class="step" data-key="mac-3">
+        <h3>3. Pull the model</h3>
+        <p>This downloads a 4.7 GB file. Do it on WiFi, not cellular.</p>
+        <div class="code-row">
+          <code>ollama pull qwen2.5:7b</code>
+          <button class="copy-btn" data-copy="ollama pull qwen2.5:7b">COPY</button>
+        </div>
+        <p class="hint">Takes 2 to 10 minutes depending on your internet speed.</p>
+      </div>
+
+      <div class="step" data-key="mac-4">
+        <h3>4. Download Purely Personal</h3>
+        <p>The desktop app that wraps it all in a friendly interface.</p>
+        <div class="downloads">
+          <a class="dl-btn" href="https://github.com/danielpaulai/Run-Worldclass-computer-locally/releases/download/v0.1.0/Purely.Personal-0.1.0-arm64.dmg">
+            Apple Silicon
+            <span class="arch">M1 · M2 · M3 · M4</span>
+          </a>
+          <a class="dl-btn" href="https://github.com/danielpaulai/Run-Worldclass-computer-locally/releases/download/v0.1.0/Purely.Personal-0.1.0.dmg">
+            Intel Mac
+            <span class="arch">2015 to 2020 MacBooks</span>
+          </a>
+        </div>
+        <div class="security">
+          <strong>Security note:</strong> On first launch macOS will say "unidentified developer." We haven't paid Apple $99 for a code-signing certificate yet. To open it: <em>right-click the app → Open → Open</em>. You only do this once. (Why the warning? We're open source. You can read every line at the GitHub link below.)
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===================== Windows ===================== -->
+  <div class="os-panel" id="os-win">
+    <div class="steps">
+
+      <div class="step" data-key="win-1">
+        <h3>1. Install Ollama</h3>
+        <p>Download the Windows installer from <a href="https://ollama.com/download/windows" target="_blank" rel="noopener">ollama.com/download/windows</a>, then run it. Ollama starts automatically after install.</p>
+        <p class="hint">Verify: open PowerShell and run <code>curl http://localhost:11434/api/version</code>. You should get a version number.</p>
+      </div>
+
+      <div class="step" data-key="win-2">
+        <h3>2. Pull the model</h3>
+        <p>In PowerShell (or Git Bash), run:</p>
+        <div class="code-row">
+          <code>ollama pull qwen2.5:7b</code>
+          <button class="copy-btn" data-copy="ollama pull qwen2.5:7b">COPY</button>
+        </div>
+        <p class="hint">4.7 GB download. Takes 2 to 10 minutes on WiFi.</p>
+      </div>
+
+      <div class="step" data-key="win-3">
+        <h3>3. Download Purely Personal</h3>
+        <div class="downloads" style="grid-template-columns: 1fr;">
+          <a class="dl-btn" href="https://github.com/danielpaulai/Run-Worldclass-computer-locally/releases/download/v0.1.0/Purely.Personal.Setup.0.1.0.exe">
+            Windows installer (x64 and ARM)
+            <span class="arch">Setup 0.1.0 · 152 MB</span>
+          </a>
+        </div>
+        <div class="security">
+          <strong>Security note:</strong> Windows SmartScreen will pop up with "Windows protected your PC." That's because we haven't paid for a code-signing cert. To install: click <em>More info → Run anyway</em>. You only do this once. (Same reason as Mac: open source, not yet signed. <a href="https://github.com/danielpaulai/Run-Worldclass-computer-locally" target="_blank" rel="noopener">Inspect the code here.</a>)
+        </div>
+      </div>
+
+      <div class="step" data-key="win-4">
+        <h3>4. Open the app and say hi</h3>
+        <p>Launch Purely Personal from the Start menu. Type "hello" in the chat box, press Enter. You should see a reply within 5 seconds.</p>
+        <p class="hint">If it hangs: Ollama may not be running. Restart it from the Windows system tray icon, or run <code>ollama serve</code> in PowerShell.</p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===================== Linux ===================== -->
+  <div class="os-panel" id="os-linux">
+    <div class="steps">
+
+      <div class="step" data-key="linux-1">
+        <h3>1. Install Ollama</h3>
+        <p>One-line installer for most distros (Ubuntu, Debian, Fedora, Arch):</p>
+        <div class="code-row">
+          <code>curl -fsSL https://ollama.com/install.sh | sh</code>
+          <button class="copy-btn" data-copy="curl -fsSL https://ollama.com/install.sh | sh">COPY</button>
+        </div>
+        <p class="hint">The installer sets up a systemd service on most distros. On others, run <code>ollama serve &amp;</code> to start it.</p>
+      </div>
+
+      <div class="step" data-key="linux-2">
+        <h3>2. Start and enable the service</h3>
+        <p>On systemd-based distros:</p>
+        <div class="code-row">
+          <code>sudo systemctl enable --now ollama</code>
+          <button class="copy-btn" data-copy="sudo systemctl enable --now ollama">COPY</button>
+        </div>
+        <p class="hint">Verify: <code>curl http://localhost:11434/api/version</code></p>
+      </div>
+
+      <div class="step" data-key="linux-3">
+        <h3>3. Pull the model</h3>
+        <div class="code-row">
+          <code>ollama pull qwen2.5:7b</code>
+          <button class="copy-btn" data-copy="ollama pull qwen2.5:7b">COPY</button>
+        </div>
+        <p class="hint">4.7 GB download.</p>
+      </div>
+
+      <div class="step" data-key="linux-4">
+        <h3>4. Run the scripts (no desktop app yet on Linux)</h3>
+        <p>The Electron desktop app ships on Mac and Windows for now. On Linux, clone the repo and use the included scripts directly. Everything works, it's just a terminal instead of a window.</p>
+        <div class="code-row">
+          <code>git clone https://github.com/danielpaulai/Run-Worldclass-computer-locally.git
+cd Run-Worldclass-computer-locally
+./setup.sh
+./chat.sh</code>
+          <button class="copy-btn" data-copy="git clone https://github.com/danielpaulai/Run-Worldclass-computer-locally.git
+cd Run-Worldclass-computer-locally
+./setup.sh
+./chat.sh">COPY</button>
+        </div>
+        <div class="security">
+          <strong>Security note:</strong> You're running scripts from the internet. That's fine because you can read every single line before you run it, and because everything happens locally. No outbound network calls once Ollama has the model. We'll walk through the scripts together in class.
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========== CHECKLIST ========== -->
+  <section class="checklist">
+    <h2>Ready for class?</h2>
+    <p style="color: var(--muted); margin-bottom: 14px; font-size: 15px;">Click each box to check it off. Your progress saves automatically.</p>
+    <ul id="check-list">
+      <li data-key="c1">Ollama is installed and running on my laptop</li>
+      <li data-key="c2"><code>ollama list</code> shows at least one model (<code>qwen2.5:7b</code>)</li>
+      <li data-key="c3">I've installed Purely Personal (Mac or Windows) or cloned the repo (Linux)</li>
+      <li data-key="c4">I can type "hello" and get a reply in under 10 seconds</li>
+      <li data-key="c5">I know the class time and the link to join</li>
+    </ul>
+  </section>
+
+  <!-- ========== TROUBLE ========== -->
+  <section class="trouble">
+    <h2>If something breaks</h2>
+
+    <details>
+      <summary>"Ollama not reachable" in the app</summary>
+      <p>Ollama isn't running. Start it:</p>
+      <p><strong>Mac:</strong></p>
+      <pre>brew services restart ollama</pre>
+      <p><strong>Linux:</strong></p>
+      <pre>sudo systemctl restart ollama</pre>
+      <p><strong>Windows:</strong> quit Ollama from the system tray, then relaunch from Start menu. Or run <code>ollama serve</code> in PowerShell.</p>
+    </details>
+
+    <details>
+      <summary>"No models installed" in the app</summary>
+      <p>The model didn't download. Run the pull again:</p>
+      <pre>ollama pull qwen2.5:7b</pre>
+      <p>If it fails partway, just run it again. It resumes automatically.</p>
+    </details>
+
+    <details>
+      <summary>Mac: "Purely Personal can't be opened because it is from an unidentified developer"</summary>
+      <p>Right-click the app in Applications, choose <strong>Open</strong>, then <strong>Open</strong> again in the dialog. One time only.</p>
+      <p>If the right-click menu doesn't show Open: go to <strong>System Settings → Privacy &amp; Security</strong>, scroll down, click <strong>Open Anyway</strong> next to the Purely Personal line.</p>
+    </details>
+
+    <details>
+      <summary>Windows: "Windows protected your PC"</summary>
+      <p>Click <strong>More info</strong>, then <strong>Run anyway</strong>.</p>
+    </details>
+
+    <details>
+      <summary>My laptop has 8 GB RAM. Will it work?</summary>
+      <p>Yes. qwen2.5:7b needs about 5 GB. It'll be slower than on a 16 GB machine but it will work. If it feels too slow, you can switch to a smaller model during class: <code>ollama pull qwen2.5:3b</code>.</p>
+    </details>
+
+    <details>
+      <summary>Still stuck? Email me.</summary>
+      <p>Reply to the class email. Include: your OS, the exact error, and a screenshot if you have one. I'll reply within a few hours. Don't show up to class not working, it's not worth the stress.</p>
+    </details>
+
+  </section>
+
+</main>
+
+<footer>
+  Purely Personal is open source. <a href="https://github.com/danielpaulai/Run-Worldclass-computer-locally" target="_blank" rel="noopener">Read the code</a>. Nothing ever leaves your laptop.
+</footer>
+
+<script>
+  // ----- OS tabs -----
+  const tabs = document.querySelectorAll(".os-tab");
+  const panels = document.querySelectorAll(".os-panel");
+  // Auto-select based on navigator.userAgent
+  const ua = navigator.userAgent || "";
+  let defaultOS = "mac";
+  if (/Windows/i.test(ua)) defaultOS = "win";
+  else if (/Linux/i.test(ua) && !/Android/i.test(ua)) defaultOS = "linux";
+  function selectOS(os) {
+    tabs.forEach(t => t.classList.toggle("active", t.dataset.os === os));
+    panels.forEach(p => p.classList.toggle("active", p.id === "os-" + os));
+    localStorage.setItem("pp-preclass-os", os);
+  }
+  const savedOS = localStorage.getItem("pp-preclass-os");
+  selectOS(savedOS || defaultOS);
+  tabs.forEach(t => t.addEventListener("click", () => selectOS(t.dataset.os)));
+
+  // ----- Copy buttons -----
+  document.querySelectorAll(".copy-btn").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const text = btn.dataset.copy;
+      try { await navigator.clipboard.writeText(text); }
+      catch {
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        ta.remove();
+      }
+      const orig = btn.textContent;
+      btn.textContent = "COPIED";
+      btn.classList.add("copied");
+      setTimeout(() => {
+        btn.textContent = orig;
+        btn.classList.remove("copied");
+      }, 1400);
+    });
+  });
+
+  // ----- Checklist persistence -----
+  const LS_KEY = "pp-preclass-check";
+  const saved = JSON.parse(localStorage.getItem(LS_KEY) || "{}");
+  const items = document.querySelectorAll("#check-list li");
+  const fill = document.getElementById("progress-fill");
+  const label = document.getElementById("progress-label");
+  function updateProgress() {
+    const total = items.length;
+    const done = Array.from(items).filter(li => li.classList.contains("done")).length;
+    fill.style.width = (done / total * 100) + "%";
+    label.textContent = `${done} of ${total} steps complete`;
+    if (done === total) {
+      label.textContent = `All ${total} steps done. See you in class.`;
+      label.style.color = "var(--mint)";
+      label.style.fontWeight = "600";
+    }
+  }
+  items.forEach(li => {
+    const key = li.dataset.key;
+    if (saved[key]) li.classList.add("done");
+    li.addEventListener("click", () => {
+      li.classList.toggle("done");
+      saved[key] = li.classList.contains("done");
+      localStorage.setItem(LS_KEY, JSON.stringify(saved));
+      updateProgress();
+    });
+  });
+  updateProgress();
+</script>
+
+</body>
+</html>

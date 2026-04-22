@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Purely Personal — Your AI on your laptop</title>
+<title>Purely Personal, Your AI on your laptop</title>
 <style>
   :root {
     --cream: #faf7f2;
@@ -1247,7 +1247,7 @@
   <div class="popover" id="docs-popover" role="dialog" aria-labelledby="docs-title">
     <div class="popover-head">
       <h3 id="docs-title">Your indexed folders</h3>
-      <button type="button" class="popover-close" data-close="docs">\u2715</button>
+      <button type="button" class="popover-close" data-close="docs">✕</button>
     </div>
     <div class="popover-body" id="docs-list"></div>
     <div class="popover-foot">
@@ -1262,7 +1262,7 @@
   <div class="popover" id="history-popover" role="dialog" aria-labelledby="history-title">
     <div class="popover-head">
       <h3 id="history-title">Past conversations</h3>
-      <button type="button" class="popover-close" data-close="history">\u2715</button>
+      <button type="button" class="popover-close" data-close="history">✕</button>
     </div>
     <div class="popover-body" id="history-list"></div>
     <div class="popover-foot">
@@ -1276,7 +1276,7 @@
   <div class="popover" id="prompts-popover" role="dialog" aria-labelledby="prompts-title">
     <div class="popover-head">
       <h3 id="prompts-title">Your prompts</h3>
-      <button type="button" class="popover-close" data-close="prompts">\u2715</button>
+      <button type="button" class="popover-close" data-close="prompts">✕</button>
     </div>
     <div class="popover-body" id="prompts-list"></div>
     <div class="popover-foot">
@@ -1292,7 +1292,7 @@
   <div class="popover" id="kit-popover" role="dialog" aria-labelledby="kit-title">
     <div class="popover-head">
       <h3 id="kit-title">Templates</h3>
-      <button type="button" class="popover-close" data-close="kit">\u2715</button>
+      <button type="button" class="popover-close" data-close="kit">✕</button>
     </div>
     <div class="kit-tabs" id="kit-tabs"></div>
     <div class="popover-body" id="kit-list"></div>
@@ -1325,10 +1325,10 @@
         <div class="model-line">
           <span class="privacy-dot"></span>
           <div class="model-switcher">
-            <select id="chat-model-select" aria-label="Model"><option value="">\u2026</option></select>
+            <select id="chat-model-select" aria-label="Model"><option value="">…</option></select>
           </div>
         </div>
-        <div id="chat-health">checking\u2026</div>
+        <div id="chat-health">checking…</div>
       </div>
       <!-- Hidden element kept in sync with the selected model for any code that
            still reads chatModel.textContent -->
@@ -1344,7 +1344,7 @@
       <div class="msg msg-system">Type a question. Click a starter below. Or <strong>drag any file onto this window</strong> to work on it. Everything stays on your laptop.</div>
     </div>
 
-    <div class="chat-drop-hint">Drop it anywhere on this box \u2014 the file will be attached to your next message</div>
+    <div class="chat-drop-hint">Drop it anywhere on this box, the file will be attached to your next message</div>
     <div class="attachments-row" id="attachments-row"></div>
 
     <div class="attach-presets" id="attach-presets">
@@ -1471,7 +1471,7 @@ const personas = [
     name: "Priya",
     role: "Strategy consultant",
     pain: "Every client makes her sign an NDA. She can't upload their decks.",
-    day: "Monday, 9:12 am — Acme Corp sends a 34-page strategy deck.",
+    day: "Monday, 9:12 am. Acme Corp sends a 34-page strategy deck.",
     moment: "Priya runs one command and gets a TLDR, 8 bullet takeaways, and a list of action items. The PDF never left her laptop.",
     task: "summarize tldr",
     flavor: "the-consultant"
@@ -1481,7 +1481,7 @@ const personas = [
     name: "Gus",
     role: "Small-practice accountant",
     pain: "Client books are regulated. Pasting a P&L into ChatGPT would breach his ethics.",
-    day: "Tuesday, mid-morning — a client dumps a 400-row expense CSV on him.",
+    day: "Tuesday, mid-morning. A client dumps a 400-row expense CSV on him.",
     moment: "Gus gets back the categories that moved, the 3 line items that look wrong, and a suggested follow-up question. All on disk.",
     task: "summarize bullets",
     flavor: "the-accountant"
@@ -1501,8 +1501,8 @@ const personas = [
     name: "Tomás",
     role: "Solo SaaS founder",
     pain: "His codebase is his IP. Customer feedback contains other people's confidential notes.",
-    day: "Thursday, 2 am — Tomás is reviewing his payment webhook before shipping.",
-    moment: "One command runs a full code review on the most sensitive file in his repo — without it ever leaving his machine.",
+    day: "Thursday, 2 am. Tomás is reviewing his payment webhook before shipping.",
+    moment: "One command runs a full code review on the most sensitive file in his repo, without it ever leaving his machine.",
     task: "local-code review",
     flavor: "the-founder"
   },
@@ -1511,7 +1511,7 @@ const personas = [
     name: "Ottilie",
     role: "Solo attorney",
     pain: "Everything crossing her desk is privileged. She'd lose her license if she uploaded the wrong file.",
-    day: "Friday, 11 am — a 40-page NDA draft from opposing counsel.",
+    day: "Friday, 11 am. A 40-page NDA draft from opposing counsel.",
     moment: "Ottilie gets the issues, edge cases, and risks surfaced in under a minute. Privileged, private, hers.",
     task: "local-code review",
     flavor: "the-lawyer"
@@ -1759,7 +1759,7 @@ async function indexFolder() {
     try {
       saveRag(folders);
     } catch (e) {
-      alert("Could not save the index \u2014 the folder may be too large for local storage. Try a smaller folder (target under ~500 chunks).");
+      alert("Could not save the index. The folder may be too large for local storage. Try a smaller folder (target under ~500 chunks).");
       renderDocsList();
       return;
     }
@@ -2104,7 +2104,7 @@ document.getElementById("save-prompt-btn").addEventListener("click", () => {
   const content = chatInput.value.trim();
 
   if (!content) {
-    alert("Type something into the chat box first \u2014 then click Save.");
+    alert("Type something into the chat box first, then click Save.");
     return;
   }
   if (!name) {
@@ -2684,7 +2684,7 @@ document.getElementById("theme-toggle").addEventListener("click", () => {
 /* ---------- SAVE CONVERSATION AS MARKDOWN ---------- */
 document.getElementById("save-convo").addEventListener("click", async () => {
   if (!convo || convo.length === 0) {
-    alert("No conversation yet \u2014 chat with the AI first, then save it.");
+    alert("No conversation yet. Chat with the AI first, then save it.");
     return;
   }
   const now  = new Date();
@@ -2692,7 +2692,7 @@ document.getElementById("save-convo").addEventListener("click", async () => {
   const stamp = now.toISOString().slice(0, 19).replace(/[T:]/g, "-");
   const model = (document.getElementById("chat-model") || {}).textContent || "local model";
 
-  let md = `# Purely Personal \u2014 Conversation\n\n`;
+  let md = `# Purely Personal, Conversation\n\n`;
   md += `**Date:** ${date}  \n**Model:** \`${model}\`  \n**Privacy:** Ran entirely on this laptop. Nothing was uploaded.\n\n---\n\n`;
   for (const m of convo) {
     const label = m.role === "user" ? "You" : "Local AI";
@@ -2781,11 +2781,11 @@ async function handleDroppedFile(file) {
   const nameOK = textyExtensions.test(file.name);
   const typeOK = !file.type || file.type.startsWith("text/") || file.type === "application/json";
   if (!nameOK && !typeOK) {
-    alert(`Sorry \u2014 "${file.name}" looks like a binary file (PDF, Word, etc.). Tonight's build only reads text-based files. PDF/DOCX support is on the roadmap.`);
+    alert(`Sorry, "${file.name}" looks like a binary file (PDF, Word, etc.). Tonight's build only reads text-based files. PDF/DOCX support is on the roadmap.`);
     return;
   }
   if (file.size > MAX_ATTACH_BYTES) {
-    alert(`"${file.name}" is ${(file.size/1024/1024).toFixed(1)} MB \u2014 too big to fit in the model's context. Please trim it to under 500 KB first.`);
+    alert(`"${file.name}" is ${(file.size/1024/1024).toFixed(1)} MB, too big to fit in the model's context. Please trim it to under 500 KB first.`);
     return;
   }
   try {
@@ -2841,7 +2841,7 @@ async function checkOllama() {
     const data = await r.json();
     const models = (data.models || []).map(m => m.name);
     if (models.length === 0) {
-      chatHealth.textContent = "no models yet \u2014 run setup.sh";
+      chatHealth.textContent = "no models yet. Run setup.sh";
       chatHealth.style.color = "var(--coral)";
       chatModelSel.innerHTML = `<option value="">(no models)</option>`;
       return;
@@ -2867,7 +2867,7 @@ async function checkOllama() {
   } catch (e) {
     chatHealth.textContent = "Ollama not reachable";
     chatHealth.style.color = "var(--coral)";
-    addChatMessage("error", "Couldn't reach Ollama at localhost:11434. Open Terminal and run:  brew services start ollama  \u2014 then reload this window.");
+    addChatMessage("error", "Couldn't reach Ollama at localhost:11434. Open Terminal and run:  brew services start ollama  then reload this window.");
   }
 }
 
@@ -3248,7 +3248,7 @@ wifiBtn.addEventListener("click", () => {
   wifiBtn.classList.toggle("offline", offline);
   if (offline) {
     wifiBtn.textContent = "WiFi is off. Turn it back on.";
-    statusEl.textContent = "WiFi off. The model still works — because it was never using the internet.";
+    statusEl.textContent = "WiFi off. The model still works, because it was never using the internet.";
   } else {
     wifiBtn.textContent = "Simulate WiFi off";
     statusEl.textContent = "WiFi on. Model runs locally. The internet is bypassed.";

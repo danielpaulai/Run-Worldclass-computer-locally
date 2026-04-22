@@ -1,0 +1,1401 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How it works · Purely Personal deep dive</title>
+<meta name="description" content="The full story of how a world-class AI runs on a laptop. Ollama, Qwen 2.5, RAG, Electron, and the whole architecture, explained visually.">
+<meta property="og:title" content="How Purely Personal works — the deep dive">
+<meta property="og:description" content="The full story of how a world-class AI runs on a laptop. Ollama, Qwen 2.5, RAG, Electron, explained visually.">
+<meta name="theme-color" content="#c15f3c">
+<style>
+  :root {
+    --cream: #faf7f2;
+    --cream-deep: #f2ede2;
+    --ink: #1a1a1a;
+    --ink-soft: #2a2520;
+    --muted: #6b655c;
+    --line: #e4dfd6;
+    --coral: #c15f3c;
+    --coral-soft: #f4d4c2;
+    --coral-deep: #8a3d21;
+    --mint: #3d8a7c;
+    --mint-deep: #2a6358;
+    --red: #c24b3e;
+    --amber: #d19a2c;
+    --card: #ffffff;
+    --night: #14110d;
+    --night-card: #1e1914;
+    --max: 1180px;
+    --narrow: 820px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Helvetica, sans-serif;
+    color: var(--ink);
+    background: var(--cream);
+    line-height: 1.6;
+    font-size: 17px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: "Iowan Old Style", "Charter", Georgia, "Times New Roman", serif;
+    font-weight: 700;
+    letter-spacing: -0.014em;
+    line-height: 1.12;
+    color: var(--ink);
+  }
+  h1 { font-size: 58px; }
+  h2 { font-size: 40px; margin-bottom: 16px; }
+  h3 { font-size: 26px; margin-bottom: 12px; }
+  h4 { font-size: 20px; margin-bottom: 8px; }
+  p { margin-bottom: 14px; }
+  em { font-style: italic; color: var(--coral); }
+  a { color: var(--coral-deep); text-decoration: none; }
+  a:hover { color: var(--coral); text-decoration: underline; }
+
+  @media (max-width: 720px) {
+    h1 { font-size: 40px; }
+    h2 { font-size: 30px; }
+    h3 { font-size: 22px; }
+  }
+
+  /* ================ NAV ================ */
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: color-mix(in srgb, var(--cream) 92%, transparent);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-inner {
+    max-width: var(--max);
+    margin: 0 auto;
+    padding: 14px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .nav-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: var(--ink);
+  }
+  .nav-brand:hover { text-decoration: none; }
+  .logo {
+    width: 34px; height: 34px;
+    border-radius: 8px;
+    background: var(--coral);
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Iowan Old Style", Charter, Georgia, serif;
+    font-style: italic;
+    font-size: 19px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -1px;
+    flex-shrink: 0;
+  }
+  .nav-brand b {
+    font-family: "Iowan Old Style", Charter, Georgia, serif;
+    font-weight: 700;
+    font-size: 17px;
+  }
+  .nav-links {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+  }
+  .nav-links a {
+    color: var(--muted);
+    font-size: 14.5px;
+    font-weight: 500;
+  }
+  .nav-links a:hover { color: var(--ink); text-decoration: none; }
+  .nav-cta {
+    background: var(--ink);
+    color: var(--cream);
+    padding: 8px 16px;
+    border-radius: 7px;
+    font-size: 13.5px;
+    font-weight: 600;
+  }
+  .nav-cta:hover { background: var(--coral); color: #fff; text-decoration: none; }
+  @media (max-width: 720px) {
+    .nav-links a:not(.nav-cta) { display: none; }
+  }
+
+  /* ================ HERO ================ */
+  .hero {
+    padding: 84px 28px 64px;
+    background: radial-gradient(ellipse at top, #f8e9dd 0%, var(--cream) 58%);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-inner {
+    max-width: var(--narrow);
+    margin: 0 auto;
+    text-align: center;
+    position: relative;
+  }
+  .hero .kicker {
+    display: inline-block;
+    background: var(--coral-soft);
+    color: var(--coral-deep);
+    padding: 6px 14px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 22px;
+  }
+  .hero p.sub {
+    font-size: 20px;
+    color: var(--muted);
+    max-width: 640px;
+    margin: 22px auto 0;
+    line-height: 1.5;
+  }
+
+  /* animated dots bg */
+  .hero-bg-dots {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.3;
+    background-image: radial-gradient(circle, var(--line) 1px, transparent 1.5px);
+    background-size: 28px 28px;
+    mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+    -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+  }
+
+  /* ================ SECTION ================ */
+  section {
+    padding: 80px 28px;
+  }
+  .section-inner {
+    max-width: var(--narrow);
+    margin: 0 auto;
+  }
+  .section-wide {
+    max-width: var(--max);
+    margin: 0 auto;
+  }
+  section.alt { background: var(--cream-deep); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  section.dark { background: var(--night); color: #dcd4c4; border: none; }
+  section.dark h2, section.dark h3, section.dark h4 { color: #fff; }
+  section.dark p { color: #a89f8e; }
+  section.dark em { color: #f1896b; }
+  section.dark a { color: #f1896b; }
+
+  .section-kicker {
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+  section.dark .section-kicker { color: #6b655c; }
+
+  /* ================ STAGE 1: THE PROBLEM ================ */
+  .split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+    align-items: center;
+  }
+  @media (max-width: 820px) {
+    .split { grid-template-columns: 1fr; gap: 30px; }
+  }
+  .side-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 26px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+  }
+  .side-card.bad { border-left: 4px solid var(--red); }
+  .side-card.good { border-left: 4px solid var(--mint); }
+  .side-card h4 { color: var(--ink); margin-bottom: 8px; }
+  .side-card .tag {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .side-card.bad .tag { background: rgba(194,75,62,0.1); color: var(--red); }
+  .side-card.good .tag { background: rgba(61,138,124,0.12); color: var(--mint-deep); }
+
+  /* ================ ARCHITECTURE DIAGRAM ================ */
+  .arch-stage {
+    position: relative;
+    background: var(--night-card);
+    border-radius: 18px;
+    padding: 52px 40px;
+    margin: 30px auto 10px;
+    max-width: 900px;
+    color: #dcd4c4;
+    box-shadow: 0 30px 60px -20px rgba(0,0,0,0.4), 0 0 0 1px #2a231b;
+  }
+  .arch-laptop {
+    border: 2px solid #3d3427;
+    border-radius: 12px;
+    padding: 28px 26px;
+    position: relative;
+    background: rgba(0,0,0,0.2);
+  }
+  .arch-laptop::before {
+    content: "Your laptop";
+    position: absolute;
+    top: -11px;
+    left: 20px;
+    background: var(--night-card);
+    padding: 0 10px;
+    font-size: 11px;
+    color: #a89f8e;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .arch-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+  }
+  .arch-row:last-child { margin-bottom: 0; }
+  .arch-node {
+    background: rgba(61,138,124,0.1);
+    border: 1px solid rgba(61,138,124,0.3);
+    color: #aee8d8;
+    padding: 14px 18px;
+    border-radius: 9px;
+    flex: 1;
+    text-align: center;
+    min-width: 130px;
+    position: relative;
+  }
+  .arch-node strong {
+    display: block;
+    font-family: "Iowan Old Style", Charter, serif;
+    font-weight: 700;
+    font-size: 16px;
+    margin-bottom: 2px;
+    color: #fff;
+  }
+  .arch-node small {
+    display: block;
+    font-size: 12px;
+    color: #8fb8ac;
+    font-family: "SF Mono", Consolas, monospace;
+  }
+  .arch-arrow {
+    color: #5a6d65;
+    font-size: 24px;
+    font-weight: 200;
+    flex-shrink: 0;
+  }
+  @media (max-width: 700px) {
+    .arch-row { flex-direction: column; }
+    .arch-arrow { transform: rotate(90deg); }
+  }
+  .arch-internet {
+    margin-top: 22px;
+    padding: 18px 20px;
+    background: rgba(194,75,62,0.08);
+    border: 1px dashed rgba(194,75,62,0.3);
+    border-radius: 10px;
+    text-align: center;
+    color: #f4a89e;
+    position: relative;
+  }
+  .arch-internet::before {
+    content: "";
+    position: absolute;
+    top: -28px;
+    left: 50%;
+    width: 2px;
+    height: 28px;
+    background: repeating-linear-gradient(to bottom, rgba(194,75,62,0.4) 0 4px, transparent 4px 8px);
+  }
+  .arch-internet strong { color: #f4a89e; font-weight: 700; }
+  .arch-internet.blocked {
+    text-decoration: line-through;
+    text-decoration-color: rgba(194,75,62,0.7);
+  }
+  .arch-caption {
+    text-align: center;
+    color: #a89f8e;
+    font-size: 14.5px;
+    margin: 22px auto 0;
+    max-width: 600px;
+  }
+
+  /* ================ PULSE ANIMATION ================ */
+  @keyframes pulse-node {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(61,138,124,0.4); }
+    50% { box-shadow: 0 0 0 12px rgba(61,138,124,0); }
+  }
+  .arch-node.pulse { animation: pulse-node 2.2s ease-in-out infinite; }
+
+  @keyframes flow {
+    0% { transform: translateX(0); opacity: 0; }
+    20% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { transform: translateX(24px); opacity: 0; }
+  }
+  .arch-arrow.flow::before {
+    content: "→";
+    display: inline-block;
+    animation: flow 1.6s ease-in-out infinite;
+  }
+
+  /* ================ STACK CARDS ================ */
+  .stack {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin-top: 36px;
+  }
+  @media (max-width: 820px) {
+    .stack { grid-template-columns: 1fr; }
+  }
+  .stack-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 24px 22px;
+    transition: transform .15s, border-color .15s;
+  }
+  .stack-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--coral-soft);
+  }
+  .stack-card .icon {
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 14px;
+    font-size: 22px;
+  }
+  .stack-card .icon.blue { background: #e3edf7; color: #2d5a82; }
+  .stack-card .icon.orange { background: var(--coral-soft); color: var(--coral-deep); }
+  .stack-card .icon.green { background: #d8ece4; color: var(--mint-deep); }
+  .stack-card h4 {
+    font-family: "Iowan Old Style", Charter, serif;
+    font-size: 19px;
+    margin-bottom: 4px;
+  }
+  .stack-card .role {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+  .stack-card p {
+    font-size: 14.5px;
+    color: var(--muted);
+    margin: 0;
+  }
+  .stack-card code {
+    background: var(--cream-deep);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 13px;
+    color: var(--coral-deep);
+  }
+
+  /* ================ DETAILS (drop-downs) ================ */
+  details.deep {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 0;
+    margin-bottom: 12px;
+    overflow: hidden;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  details.deep[open] {
+    border-color: var(--coral-soft);
+    box-shadow: 0 6px 20px -10px rgba(193,95,60,0.3);
+  }
+  details.deep summary {
+    cursor: pointer;
+    list-style: none;
+    padding: 20px 24px;
+    font-weight: 700;
+    font-size: 18px;
+    font-family: "Iowan Old Style", Charter, serif;
+    position: relative;
+    padding-right: 52px;
+    color: var(--ink);
+    user-select: none;
+  }
+  details.deep summary::-webkit-details-marker { display: none; }
+  details.deep summary::after {
+    content: "+";
+    position: absolute;
+    right: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 26px;
+    font-weight: 300;
+    color: var(--coral);
+    line-height: 1;
+    transition: transform .2s;
+  }
+  details.deep[open] summary::after {
+    content: "−";
+    transform: translateY(-50%) rotate(0);
+  }
+  details.deep .body {
+    padding: 0 24px 22px;
+    color: var(--ink);
+    font-size: 15.5px;
+  }
+  details.deep .body p {
+    margin-bottom: 12px;
+    color: var(--ink-soft);
+  }
+  details.deep .body code {
+    background: var(--cream-deep);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 13.5px;
+    color: var(--coral-deep);
+  }
+  details.deep .body pre {
+    background: var(--night);
+    color: #f4e9d6;
+    padding: 14px 16px;
+    border-radius: 8px;
+    font-family: "SF Mono", Consolas, monospace;
+    font-size: 13.5px;
+    overflow-x: auto;
+    margin: 12px 0;
+  }
+  details.deep .body ul {
+    margin: 4px 0 12px 22px;
+    color: var(--ink-soft);
+  }
+  details.deep .body ul li { margin-bottom: 6px; }
+
+  /* ================ FLOW DIAGRAM (stream) ================ */
+  .flow-stream {
+    margin: 40px auto;
+    max-width: 880px;
+    padding: 0 4px;
+  }
+  .flow-step {
+    position: relative;
+    padding: 18px 22px 18px 64px;
+    border-left: 2px solid var(--line);
+    margin-left: 22px;
+  }
+  .flow-step::before {
+    content: attr(data-n);
+    position: absolute;
+    left: -22px;
+    top: 18px;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--coral);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Iowan Old Style", Charter, serif;
+    font-weight: 700;
+    font-size: 17px;
+    box-shadow: 0 0 0 5px var(--cream);
+  }
+  section.dark .flow-step::before { box-shadow: 0 0 0 5px var(--night); }
+  .flow-step:last-child { border-left-color: transparent; }
+  .flow-step h4 {
+    font-family: "Iowan Old Style", Charter, serif;
+    font-size: 18px;
+    margin-bottom: 4px;
+    color: inherit;
+  }
+  .flow-step p {
+    color: var(--muted);
+    font-size: 14.5px;
+    margin: 0;
+  }
+  section.dark .flow-step { border-left-color: #2a231b; }
+  section.dark .flow-step p { color: #8a8373; }
+
+  /* ================ BUILD STORY ================ */
+  .build-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 14px;
+    margin-top: 30px;
+  }
+  .build-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid #2a231b;
+    border-radius: 10px;
+    padding: 22px;
+  }
+  .build-card .when {
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--coral);
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .build-card h4 {
+    font-size: 17px;
+    color: #fff;
+    margin-bottom: 6px;
+  }
+  .build-card p {
+    font-size: 14px;
+    color: #a89f8e;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  /* ================ STATS ================ */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin: 36px 0;
+  }
+  @media (max-width: 720px) {
+    .stats { grid-template-columns: repeat(2, 1fr); }
+  }
+  .stat {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 22px;
+    text-align: center;
+  }
+  .stat .num {
+    font-family: "Iowan Old Style", Charter, serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--coral);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .stat .label {
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+
+  /* ================ CTA ================ */
+  .big-cta {
+    background: linear-gradient(135deg, var(--coral) 0%, var(--coral-deep) 100%);
+    color: #fff;
+    padding: 64px 32px;
+    border-radius: 20px;
+    margin: 40px 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .big-cta::before {
+    content: "";
+    position: absolute;
+    top: -40%; left: -10%;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .big-cta h2 { color: #fff; margin-bottom: 10px; position: relative; }
+  .big-cta p {
+    color: rgba(255,255,255,0.9);
+    font-size: 18px;
+    margin: 0 auto 24px;
+    max-width: 540px;
+    position: relative;
+  }
+  .cta-row {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    position: relative;
+  }
+  .btn {
+    display: inline-block;
+    padding: 14px 26px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 15.5px;
+    transition: transform .12s, background .15s;
+  }
+  .btn:hover { transform: translateY(-2px); text-decoration: none; }
+  .btn-primary {
+    background: #fff;
+    color: var(--coral-deep);
+  }
+  .btn-primary:hover { background: var(--cream); color: var(--coral-deep); }
+  .btn-ghost {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.3);
+  }
+  .btn-ghost:hover { background: rgba(255,255,255,0.2); color: #fff; }
+
+  /* ================ FOOTER ================ */
+  footer {
+    background: var(--night);
+    color: #a89f8e;
+    padding: 48px 28px 36px;
+    font-size: 14.5px;
+  }
+  .foot-inner {
+    max-width: var(--max);
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 18px;
+  }
+  footer a { color: #f1896b; }
+  footer .foot-links { display: flex; gap: 22px; flex-wrap: wrap; }
+
+  /* ================ TOC / quick jumps ================ */
+  .toc {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin: 26px 0 40px;
+    font-size: 15px;
+  }
+  .toc-title {
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .toc ol {
+    margin: 0;
+    padding-left: 22px;
+    columns: 2;
+    column-gap: 28px;
+  }
+  @media (max-width: 620px) {
+    .toc ol { columns: 1; }
+  }
+  .toc li {
+    margin-bottom: 6px;
+    break-inside: avoid;
+  }
+  .toc a {
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .toc a:hover { color: var(--coral); text-decoration: underline; }
+
+  /* ================ FADE-IN ON SCROLL ================ */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity .7s cubic-bezier(.2,.7,.3,1), transform .7s cubic-bezier(.2,.7,.3,1);
+  }
+  .fade-in.in { opacity: 1; transform: none; }
+
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nav-brand" href="./index.html">
+      <div class="logo"><em>pp</em></div>
+      <b>Purely Personal</b>
+    </a>
+    <div class="nav-links">
+      <a href="#stack">Stack</a>
+      <a href="#how">How it works</a>
+      <a href="#qwen">Qwen 2.5</a>
+      <a href="#build">Build story</a>
+      <a class="nav-cta" href="https://github.com/danielpaulai/Run-Worldclass-computer-locally/releases/tag/v0.1.0" target="_blank" rel="noopener">Download</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ================ HERO ================ -->
+<section class="hero">
+  <div class="hero-bg-dots"></div>
+  <div class="hero-inner">
+    <div class="kicker">The deep dive</div>
+    <h1>How a world-class AI<br>runs on a laptop.</h1>
+    <p class="sub">The full story. Ollama, Qwen 2.5, embeddings, Electron, RAG, the build. Written so it makes sense without a CS degree, thorough enough for the engineers.</p>
+  </div>
+</section>
+
+<!-- ================ TOC ================ -->
+<section style="padding: 0 28px;">
+  <div class="section-inner">
+    <div class="toc">
+      <div class="toc-title">On this page</div>
+      <ol>
+        <li><a href="#problem">The problem this solves</a></li>
+        <li><a href="#stack">The 3-piece stack</a></li>
+        <li><a href="#how">How a chat actually works</a></li>
+        <li><a href="#qwen">What is Qwen 2.5?</a></li>
+        <li><a href="#ollama">What is Ollama?</a></li>
+        <li><a href="#rag">How RAG works (search your own folder)</a></li>
+        <li><a href="#offline">Why it actually works offline</a></li>
+        <li><a href="#privacy">The privacy math</a></li>
+        <li><a href="#build">How this was built</a></li>
+        <li><a href="#limits">What it can't do (yet)</a></li>
+        <li><a href="#stats">Stats and cost</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ================ PROBLEM ================ -->
+<section id="problem">
+  <div class="section-inner">
+    <div class="section-kicker">The problem</div>
+    <h2>Why we built this</h2>
+    <p>Every knowledge worker I know uses ChatGPT for the easy things. The blog outline. The generic email. The brainstorm. But when the document has a client's name, a salary, a legal detail, an NDA — they close the tab. They go back to doing it by hand. Or worse, they paste it anyway and hope nobody notices.</p>
+    <p>That's huge. It's the <em>half</em> of their work that actually pays them, and they can't use AI for it.</p>
+
+    <div class="split" style="margin-top: 32px;">
+      <div class="side-card bad">
+        <span class="tag">The problem</span>
+        <h4>Cloud AI needs your data</h4>
+        <p>Every prompt, every uploaded file, every piece of context you add — all of it leaves your machine. It goes to a data center you don't control. The vendor's privacy policy may say "we won't train on your data," but you're trusting, not verifying. And the NDA you signed says "don't share this with third parties."</p>
+      </div>
+      <div class="side-card good">
+        <span class="tag">The fix</span>
+        <h4>Run the AI on your laptop</h4>
+        <p>The model is a file on your disk. The runtime runs it on your CPU/GPU. Nothing touches the network. Turn off WiFi and it still works. Your data isn't "private by policy", it's private by physics.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================ STACK ================ -->
+<section id="stack" class="alt">
+  <div class="section-inner">
+    <div class="section-kicker">The stack</div>
+    <h2>Three pieces. That's it.</h2>
+    <p>Despite how advanced it looks, this system is three independent tools layered together. Each one is open source, well-tested, and does one thing.</p>
+
+    <div class="stack">
+
+      <div class="stack-card">
+        <div class="icon blue">🧠</div>
+        <div class="role">The brain</div>
+        <h4>Qwen 2.5 (7B)</h4>
+        <p>The AI model. 7 billion parameters trained by Alibaba. 4.7 GB on disk. Released with open weights (free to run, modify, redistribute). Competitive with GPT-3.5 on most tasks, GPT-4-class on code and summarization.</p>
+      </div>
+
+      <div class="stack-card">
+        <div class="icon orange">⚙️</div>
+        <div class="role">The runtime</div>
+        <h4>Ollama</h4>
+        <p>The engine that loads the model into memory and runs it when you ask. Exposes a local HTTP API at <code>localhost:11434</code>. Open source (MIT). Handles everything: model downloads, memory management, streaming, GPU acceleration.</p>
+      </div>
+
+      <div class="stack-card">
+        <div class="icon green">🖼️</div>
+        <div class="role">The interface</div>
+        <h4>Purely Personal</h4>
+        <p>The desktop app. Built with Electron. Talks to Ollama over the local loopback. Adds chat, drag-and-drop, saved prompts, conversation history, templates, folder indexing (RAG), and dark mode. This is what you use.</p>
+      </div>
+
+    </div>
+
+    <p style="margin-top: 30px; color: var(--muted); font-size: 15.5px;">These three pieces have nothing to do with each other. If Ollama disappears tomorrow, qwen2.5 still runs on any other runtime. If Qwen is replaced next month by something better, Ollama pulls it instantly. If Purely Personal breaks, any other local-AI frontend (Open WebUI, LM Studio, even <code>curl</code>) still works.</p>
+  </div>
+</section>
+
+<!-- ================ HOW ================ -->
+<section id="how">
+  <div class="section-inner">
+    <div class="section-kicker">Architecture</div>
+    <h2>What happens when you press Enter</h2>
+    <p>This is the architecture diagram people remember. Nothing goes to the internet, even though it <em>could</em>. Your laptop is sealed.</p>
+
+    <div class="arch-stage">
+      <div class="arch-laptop">
+        <div class="arch-row">
+          <div class="arch-node pulse"><strong>You</strong><small>keyboard</small></div>
+          <div class="arch-arrow flow"></div>
+          <div class="arch-node"><strong>Purely Personal</strong><small>Electron app</small></div>
+          <div class="arch-arrow flow"></div>
+          <div class="arch-node"><strong>Ollama</strong><small>localhost:11434</small></div>
+          <div class="arch-arrow flow"></div>
+          <div class="arch-node"><strong>Qwen 2.5</strong><small>4.7 GB on disk</small></div>
+        </div>
+      </div>
+      <div class="arch-internet blocked">
+        <strong>The internet</strong> — never touched
+      </div>
+      <p class="arch-caption">Every box runs in a different process on the same laptop. The longest network path is the virtual loopback interface, which never leaves the machine.</p>
+    </div>
+
+    <h3 style="margin-top: 56px;">The streaming flow, step by step</h3>
+    <div class="flow-stream">
+      <div class="flow-step" data-n="1">
+        <h4>You type a prompt and hit Enter</h4>
+        <p>The Electron app captures your message, builds a JSON payload with the conversation history, model name, and streaming flag.</p>
+      </div>
+      <div class="flow-step" data-n="2">
+        <h4>The app POSTs to http://localhost:11434/api/chat</h4>
+        <p>A plain HTTP request over the loopback interface. No DNS lookup. No TLS handshake with a remote server. It never leaves the machine.</p>
+      </div>
+      <div class="flow-step" data-n="3">
+        <h4>Ollama loads the model into RAM (first time only)</h4>
+        <p>On the first message after launch, Ollama loads 4.7 GB of weights into memory. 15–30 seconds. After that, it stays in RAM and responds in milliseconds.</p>
+      </div>
+      <div class="flow-step" data-n="4">
+        <h4>Qwen 2.5 predicts the next token</h4>
+        <p>The model takes your context, runs a forward pass, and returns the next likely token. Then the next. Then the next. Hundreds of times a second on Apple Silicon.</p>
+      </div>
+      <div class="flow-step" data-n="5">
+        <h4>Tokens stream back as Server-Sent Events</h4>
+        <p>The response comes back as a chunked JSON stream. The app reads each chunk as it arrives and appends to the chat bubble in real time.</p>
+      </div>
+      <div class="flow-step" data-n="6">
+        <h4>Stream ends. Markdown is rendered. Done.</h4>
+        <p>When the stream completes, the app runs a markdown pass on the full reply (headings, code blocks, bold, lists), strips any em dashes (AI-tell), and stores the conversation to localStorage.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ================ QWEN ================ -->
+<section id="qwen" class="alt">
+  <div class="section-inner">
+    <div class="section-kicker">The brain</div>
+    <h2>What is Qwen 2.5?</h2>
+    <p>The model that does the thinking. Released by Alibaba's Qwen team in September 2024. Completely open-weights, meaning you can download it, run it, modify it, ship it in your product, without asking anyone.</p>
+
+    <details class="deep">
+      <summary>Why Qwen 2.5 specifically?</summary>
+      <div class="body">
+        <p>Three reasons:</p>
+        <ul>
+          <li><strong>Ceiling.</strong> It's the best open-weights model in its size class as of early 2026. Beats Llama 3.1, Mistral 7B, and Phi 3 on most benchmarks. Especially strong on code, math, and summarization.</li>
+          <li><strong>Size fit.</strong> 7B parameters quantized to 4-bit = 4.7 GB on disk, ~5 GB in RAM. Fits on an 8 GB laptop. A bigger model (14B, 70B) would need more RAM than most students have.</li>
+          <li><strong>License.</strong> Released under Qwen's own permissive license. You can use it commercially, modify it, redistribute it, as long as you don't use it to harm people or launder data.</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="deep">
+      <summary>What are "7 billion parameters"?</summary>
+      <div class="body">
+        <p>The model is a neural network. Every connection between two neurons has a "weight", a number that says "how much does this input matter." Qwen 2.5 (7B) has ~7,000,000,000 of those numbers.</p>
+        <p>During training, the weights are adjusted by reading trillions of words of text and nudging them so the model predicts the next word better. After training, you freeze the weights and ship them as a file.</p>
+        <p>When you chat with it, you're running math against those frozen weights. The laptop does billions of multiplications per token. Your M-series chip has specialized matrix hardware (the Neural Engine + AMX) that makes this fast.</p>
+      </div>
+    </details>
+
+    <details class="deep">
+      <summary>What's inside the 4.7 GB file on your disk?</summary>
+      <div class="body">
+        <p>Pure numbers. The model file (<code>.gguf</code> format) is:</p>
+        <ul>
+          <li>Quantized weights (~4.3 GB)</li>
+          <li>Model metadata (architecture, tokenizer, hyperparameters)</li>
+          <li>A vocabulary table (~150k tokens)</li>
+        </ul>
+        <p>No executable code. No telemetry. No callbacks. If you hex-dump the file you'll see matrices of tiny 4-bit integers. That's the whole "brain."</p>
+      </div>
+    </details>
+
+    <details class="deep">
+      <summary>What is "quantization" and why 4-bit?</summary>
+      <div class="body">
+        <p>The original Qwen 2.5 weights are 16-bit floating-point numbers. At 7 billion weights × 2 bytes each, that's 14 GB. Too big for a laptop.</p>
+        <p>Quantization compresses each weight to fewer bits. 4-bit quantization shrinks the file to ~4.7 GB at a ~1% quality loss. You get 3× less disk, 3× less RAM, 3× faster inference, for a barely-noticeable drop in output quality.</p>
+        <p>The trick is in <em>how</em> you compress: naive rounding wrecks the model. Ollama uses formats like <code>Q4_K_M</code> that preserve the important weight ranges while dropping the less important ones.</p>
+      </div>
+    </details>
+
+    <details class="deep">
+      <summary>How does it compare to ChatGPT and Claude?</summary>
+      <div class="body">
+        <p>Honest answer:</p>
+        <ul>
+          <li><strong>Summarization, rewriting, explaining:</strong> Comparable. You won't notice the difference on most tasks.</li>
+          <li><strong>Code review (under 5k lines):</strong> Comparable to GPT-4 Turbo on real-world bugs.</li>
+          <li><strong>Hard reasoning (multi-step math, logic puzzles):</strong> Meaningfully behind. ChatGPT and Claude are ~2 model generations ahead.</li>
+          <li><strong>Long context (100k+ tokens):</strong> Falls off. Qwen 2.5 (7B) has a 32k context. Claude has 200k.</li>
+          <li><strong>Latest news / recent events:</strong> Training cutoff was mid-2024. Anything after that, it doesn't know.</li>
+        </ul>
+        <p>Rule of thumb: use this for routine knowledge work on confidential data. Use the cloud for hard reasoning, long docs, and current events.</p>
+      </div>
+    </details>
+
+    <details class="deep">
+      <summary>Can I swap to a different model?</summary>
+      <div class="body">
+        <p>Yes. Any model Ollama supports, you can pull and use:</p>
+        <pre>ollama pull llama3.1:8b
+ollama pull mistral:7b
+ollama pull phi3:medium
+ollama pull gemma2:9b
+ollama pull codellama:13b</pre>
+        <p>Once pulled, it shows up in the model dropdown in the top-right of the app. Switch any time. The app doesn't care which model you use; it talks to whatever Ollama has loaded.</p>
+      </div>
+    </details>
+
+  </div>
+</section>
+
+<!-- ================ OLLAMA ================ -->
+<section id="ollama">
+  <div class="section-inner">
+    <div class="section-kicker">The runtime</div>
+    <h2>What is Ollama?</h2>
+    <p>The engine. Think of it as a local-AI Docker: a single binary that pulls models, loads them into memory, runs inference, and exposes a clean HTTP API. Ollama is what turns "a 4.7 GB file" into "a thing you can chat with."</p>
+
+    <details class="deep">
+      <summary>What does Ollama actually do?</summary>
+      <div class="body">
+        <p>Five things:</p>
+        <ul>
+          <li><strong>Pull.</strong> <code>ollama pull qwen2.5:7b</code> downloads the model from a registry.</li>
+          <li><strong>Load.</strong> On first use, loads weights into RAM (or VRAM if you have a GPU).</li>
+          <li><strong>Serve.</strong> Exposes HTTP endpoints at <code>localhost:11434</code>: <code>/api/chat</code>, <code>/api/embeddings</code>, <code>/api/tags</code>, etc.</li>
+          <li><strong>Stream.</strong> Returns tokens as they're generated, not all at once at the end.</li>
+          <li><strong>Accelerate.</strong> On Apple Silicon, uses Metal. On Nvidia/AMD GPUs, uses CUDA/ROCm. On CPU, falls back to AVX/NEON.</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="deep">
+      <summary>Why HTTP on a local port?</summary>
+      <div class="body">
+        <p>Because it makes everything composable. Any app, any language, any framework can talk to Ollama by sending an HTTP POST. No SDK required. No bindings to compile. You can test it with <code>curl</code>:</p>
+        <pre>curl http://localhost:11434/api/chat -d '{
+  "model": "qwen2.5:7b",
+  "messages": [{"role": "user", "content": "Hi"}],
+  "stream": false
+}'</pre>
+        <p>It also means the UI (Electron) and the runtime (Ollama) are totally decoupled. You can use Purely Personal with one model today and a different one tomorrow, with no code changes.</p>
+      </div>
+    </details>
+
+    <details class="deep">
+      <summary>Does Ollama phone home?</summary>
+      <div class="body">
+        <p>Only once, ever: the first time you <code>ollama pull &lt;model&gt;</code>, it contacts the Ollama registry to fetch the weights. After that, zero outbound connections. No telemetry. No usage pings. No update checks unless you run <code>ollama pull</code> again.</p>
+        <p>Verify it yourself: on Mac, <code>lsof -i -n -P | grep ollama</code>. On Windows, Resource Monitor → Network tab. On Linux, <code>ss -tupn | grep ollama</code>. You'll see no outbound connections while you're chatting.</p>
+      </div>
+    </details>
+
+    <details class="deep">
+      <summary>How fast is it?</summary>
+      <div class="body">
+        <p>Depends on your laptop. Rough numbers for Qwen 2.5 (7B) streaming:</p>
+        <ul>
+          <li><strong>M1 / M2 / M3 / M4 Mac (8+ GB):</strong> 40–80 tokens/sec. Feels as fast as ChatGPT.</li>
+          <li><strong>Windows with modern Nvidia GPU:</strong> 60–120 tokens/sec on a 3060+. Faster than ChatGPT.</li>
+          <li><strong>Windows CPU-only:</strong> 8–20 tokens/sec. Still usable for short answers.</li>
+          <li><strong>Linux with Nvidia/AMD GPU:</strong> Same as Windows GPU numbers.</li>
+        </ul>
+        <p>First-message latency is 15–30 sec while the model loads. After that, warm responses are instant.</p>
+      </div>
+    </details>
+
+  </div>
+</section>
+
+<!-- ================ RAG ================ -->
+<section id="rag" class="alt">
+  <div class="section-inner">
+    <div class="section-kicker">Folder indexing</div>
+    <h2>How RAG works, plainly</h2>
+    <p>The "Index a folder" feature is RAG: <em>retrieval-augmented generation</em>. Fancy word for: chop your notes into chunks, find the relevant ones, hand them to the model. Here's how it actually works under the hood.</p>
+
+    <div class="flow-stream">
+      <div class="flow-step" data-n="1">
+        <h4>You pick a folder</h4>
+        <p>The Electron app opens a native folder picker. The main process walks every text-readable file under it (up to 250 files, 4 MB total, 300 KB per file). Binaries are skipped.</p>
+      </div>
+      <div class="flow-step" data-n="2">
+        <h4>Each file is chunked</h4>
+        <p>The app breaks each file into ~900-character chunks on paragraph boundaries. Big paragraphs are split on sentence boundaries. Each chunk keeps its source file path for later citation.</p>
+      </div>
+      <div class="flow-step" data-n="3">
+        <h4>Every chunk is embedded</h4>
+        <p>The app calls <code>ollama pull nomic-embed-text</code> (274 MB, one-time). Then for every chunk, it POSTs to <code>/api/embeddings</code> and gets back a 768-number vector. This vector is a mathematical fingerprint of what the chunk is "about."</p>
+      </div>
+      <div class="flow-step" data-n="4">
+        <h4>Everything saves to localStorage</h4>
+        <p>The chunks + vectors + filenames go into <code>localStorage</code> under <code>pp-rag</code>. Not a database, just a JSON blob. Small enough to fit for up to ~500 chunks per folder.</p>
+      </div>
+      <div class="flow-step" data-n="5">
+        <h4>You ask a question</h4>
+        <p>When you click "Ask this", your question gets embedded the same way. The app computes cosine similarity between your question's vector and every chunk's vector. The top 5 winners are the most relevant chunks.</p>
+      </div>
+      <div class="flow-step" data-n="6">
+        <h4>The model sees only those 5 chunks</h4>
+        <p>The app prepends the 5 chunks to your question as "context." Qwen 2.5 reads the context, answers your question, and the app shows the answer + citations ("from notes/q3-plan.md").</p>
+      </div>
+      <div class="flow-step" data-n="7">
+        <h4>Nothing indexed leaves your laptop</h4>
+        <p>The chunks, the vectors, the queries, the answers — all of it is local. The embedding model runs in Ollama. The search runs in your browser. No cloud vector DB. No Pinecone. No OpenAI embeddings API. Nothing.</p>
+      </div>
+    </div>
+
+    <details class="deep" style="margin-top: 30px;">
+      <summary>What's an embedding, really?</summary>
+      <div class="body">
+        <p>A list of numbers that represents "what a piece of text means." In Purely Personal, each chunk becomes a list of 768 numbers (a 768-dimensional vector).</p>
+        <p>The magic: pieces of text with similar meaning end up with similar vectors. "My quarterly plan" and "Q3 strategy doc" land near each other in vector space. "Cat food" lands far away.</p>
+        <p>To find the "most relevant" chunk for your question, you embed the question and then ask: which stored chunk-vector is the most similar? That's cosine similarity: a single number from -1 (opposite) to 1 (identical).</p>
+      </div>
+    </details>
+
+    <details class="deep">
+      <summary>Why nomic-embed-text and not OpenAI's embeddings?</summary>
+      <div class="body">
+        <p>Because OpenAI's embeddings require an API call. You'd be sending every chunk of your folder to a cloud service. That breaks the whole privacy story.</p>
+        <p>Nomic-embed-text is a small embedding model (274 MB) that runs locally through Ollama. Same idea, all on your laptop. It's not quite as good as OpenAI's model, but it's good enough that you won't notice the difference on real-world queries.</p>
+      </div>
+    </details>
+
+  </div>
+</section>
+
+<!-- ================ OFFLINE ================ -->
+<section id="offline">
+  <div class="section-inner">
+    <div class="section-kicker">The offline truth</div>
+    <h2>Why it actually works without internet</h2>
+    <p>A lot of "local" AI tools actually phone home. Let's be specific about how Purely Personal doesn't.</p>
+
+    <div class="split" style="margin-top: 30px;">
+      <div class="side-card good">
+        <span class="tag">Happens locally</span>
+        <h4>Everything that matters</h4>
+        <p>Model inference, embeddings, your chats, your indexed folders, your saved prompts, conversation history, markdown rendering, drag-and-drop file reading. All of it. No network call at any point.</p>
+      </div>
+      <div class="side-card bad">
+        <span class="tag">Needs internet</span>
+        <h4>Two one-time things</h4>
+        <p>The initial model download (<code>ollama pull qwen2.5:7b</code>) and app download. That's it. Once those are on your disk, unplug the ethernet, turn off WiFi, fly to Mars. Everything still works.</p>
+      </div>
+    </div>
+
+    <h3 style="margin-top: 40px;">Prove it yourself</h3>
+    <p>Three ways to verify, in increasing rigor:</p>
+    <ul style="margin: 10px 0 0 22px; color: var(--ink);">
+      <li style="margin-bottom: 8px;"><strong>Easy:</strong> Turn off your WiFi. Ask the AI a question. It answers.</li>
+      <li style="margin-bottom: 8px;"><strong>Stronger:</strong> Open Activity Monitor (Mac) / Resource Monitor (Win). Filter by Purely Personal. Chat with it for 10 minutes. Bytes sent/received to external IPs: zero.</li>
+      <li style="margin-bottom: 8px;"><strong>Paranoid:</strong> Run <code>sudo lsof -i -n -P | grep -E "ollama|Purely"</code> during a chat. You'll see loopback (127.0.0.1) connections only.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ================ PRIVACY ================ -->
+<section id="privacy" class="dark">
+  <div class="section-inner">
+    <div class="section-kicker">The privacy math</div>
+    <h2>"Local" means something exact</h2>
+    <p>Every cloud-AI company says they "don't train on your data." That's a policy. Policies change. Employees change. Incidents happen. With a local model, the claim isn't "we promise." The claim is "physically impossible, verify it yourself."</p>
+
+    <div class="flow-stream">
+      <div class="flow-step" data-n="A">
+        <h4>No prompts leave your laptop</h4>
+        <p>Every byte you type stays in local memory and local disk. Never transmitted anywhere.</p>
+      </div>
+      <div class="flow-step" data-n="B">
+        <h4>No files leave your laptop</h4>
+        <p>Drag a contract in? It's read by the app, handed to local inference, displayed to you. Zero uploads.</p>
+      </div>
+      <div class="flow-step" data-n="C">
+        <h4>No model updates without your consent</h4>
+        <p>The app doesn't auto-update weights. The model you pulled in March 2026 is the same model in June 2026 unless you manually <code>ollama pull</code> a new version.</p>
+      </div>
+      <div class="flow-step" data-n="D">
+        <h4>No telemetry</h4>
+        <p>The app doesn't phone home. No crash reports. No usage pings. No anonymous "analytics." Open the source, search for "fetch(" or "http", you'll find only localhost:11434.</p>
+      </div>
+      <div class="flow-step" data-n="E">
+        <h4>No vendor lock-in</h4>
+        <p>Your chats are saved as plain markdown files. Your RAG index is a JSON blob in localStorage. If the app disappears tomorrow, you own all your data in open formats.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================ BUILD ================ -->
+<section id="build">
+  <div class="section-inner">
+    <div class="section-kicker">Behind the scenes</div>
+    <h2>How this was built</h2>
+    <p>I built all of this with Claude Code (Anthropic's CLI coding agent) and a handful of open-source pieces. Here's the real timeline.</p>
+
+    <div class="stack" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+      <div class="stack-card">
+        <div class="icon orange">💭</div>
+        <div class="role">Phase 1 · The prompt</div>
+        <h4>The user-facing question</h4>
+        <p>"Can knowledge workers run a real AI on their own laptop, with no cloud, no cost, and actually use it for their hard docs?" That's the whole brief. Everything else was working backward from that.</p>
+      </div>
+
+      <div class="stack-card">
+        <div class="icon blue">🛠️</div>
+        <div class="role">Phase 2 · The stack</div>
+        <h4>Pick the smallest viable pieces</h4>
+        <p>Ollama for the runtime (because HTTP + open + no drama). Qwen 2.5 for the model (because best-in-class at 7B). Electron for the UI (because cross-platform and I already knew it).</p>
+      </div>
+
+      <div class="stack-card">
+        <div class="icon green">📦</div>
+        <div class="role">Phase 3 · The scripts</div>
+        <h4>Install + 15 skills in bash</h4>
+        <p>Before the app, a repo of bash scripts: setup, chat, summarize, RAG, code review, model-manager. All runnable without Electron. The app is a friendly wrapper, not the only way to use this.</p>
+      </div>
+
+      <div class="stack-card">
+        <div class="icon orange">🎨</div>
+        <div class="role">Phase 4 · The Electron app</div>
+        <h4>Purely Personal v0.1.0</h4>
+        <p>Wrap the scripts in a clean UI. Chat with streaming. Drag-drop files. Saved prompts. Conversation history. Dark mode. Templates. RAG over folders. All in one HTML file + a tiny Electron shell.</p>
+      </div>
+
+      <div class="stack-card">
+        <div class="icon blue">📣</div>
+        <div class="role">Phase 5 · The website</div>
+        <h4>This site + marketing kit</h4>
+        <p>Landing page, pre-class activity, design system, deep-dive (this page). Plus a 7-file marketing kit: launch posts, email sequence, FAQ, press release, positioning doc. All open-sourced.</p>
+      </div>
+
+      <div class="stack-card">
+        <div class="icon green">🚀</div>
+        <div class="role">Phase 6 · Ship it</div>
+        <h4>Workshop + GitHub release</h4>
+        <p>Signed DMG + EXE installers. Live workshop. Public GitHub repo. One-tap install for everyone. Ongoing v0.2 roadmap: code signing, PDF/DOCX, team features.</p>
+      </div>
+    </div>
+
+    <p style="margin-top: 36px; color: var(--muted); font-size: 15.5px;">Every piece is open source. If you want to build something similar, fork the repo. The whole thing is under 8,000 lines of code.</p>
+  </div>
+</section>
+
+<!-- ================ LIMITS ================ -->
+<section id="limits" class="alt">
+  <div class="section-inner">
+    <div class="section-kicker">The honest list</div>
+    <h2>What it can't do (yet)</h2>
+    <p>No snake oil. Here's where the 7B laptop AI falls short, so you know when to reach for the cloud.</p>
+
+    <details class="deep">
+      <summary>Hard multi-step reasoning</summary>
+      <div class="body">
+        <p>If you need the AI to chain 10 logical steps without losing the thread (complex math, multi-hop inference, deep code debugging across files), a 7B model will drift. GPT-4 and Claude 4 are meaningfully better here.</p>
+      </div>
+    </details>
+
+    <details class="deep">
+      <summary>Current events</summary>
+      <div class="body">
+        <p>Training cutoff was mid-2024. It doesn't know what happened last month. For current events, use a cloud model with search grounding.</p>
+      </div>
+    </details>
+
+    <details class="deep">
+      <summary>Very long documents</summary>
+      <div class="body">
+        <p>Qwen 2.5 (7B) has a 32k-token context window. That's about 120 pages. Beyond that, it starts forgetting the beginning. Claude can handle 200k. For 200-page contracts, chunk it or use cloud.</p>
+      </div>
+    </details>
+
+    <details class="deep">
+      <summary>PDFs and Word docs natively</summary>
+      <div class="body">
+        <p>The app only reads plain-text files (.txt, .md, .csv, .json, code files). PDF and DOCX are on the v0.2 roadmap. For now: export to text first, or copy-paste.</p>
+      </div>
+    </details>
+
+    <details class="deep">
+      <summary>Images, audio, video</summary>
+      <div class="body">
+        <p>Text-only model. Vision (llava, qwen-vl), audio (whisper), and video understanding are separate models. They exist for local, just not bundled in this app yet.</p>
+      </div>
+    </details>
+
+    <details class="deep">
+      <summary>Running on ancient hardware</summary>
+      <div class="body">
+        <p>Needs 8+ GB of RAM. A 2014 MacBook with 4 GB is not going to work. For the super-low-spec case, there's Qwen 2.5 (3B) at 1.9 GB, but even that needs 4+ GB free RAM.</p>
+      </div>
+    </details>
+
+  </div>
+</section>
+
+<!-- ================ STATS ================ -->
+<section id="stats">
+  <div class="section-inner">
+    <div class="section-kicker">By the numbers</div>
+    <h2>Stats and cost</h2>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="num">$0</div>
+        <div class="label">Forever cost</div>
+      </div>
+      <div class="stat">
+        <div class="num">4.7 GB</div>
+        <div class="label">Model on disk</div>
+      </div>
+      <div class="stat">
+        <div class="num">~60 t/s</div>
+        <div class="label">Tokens per second, typical</div>
+      </div>
+      <div class="stat">
+        <div class="num">0</div>
+        <div class="label">Outbound requests while chatting</div>
+      </div>
+      <div class="stat">
+        <div class="num">15 min</div>
+        <div class="label">One-time setup</div>
+      </div>
+      <div class="stat">
+        <div class="num">8 GB+</div>
+        <div class="label">RAM needed</div>
+      </div>
+      <div class="stat">
+        <div class="num">3</div>
+        <div class="label">Operating systems supported</div>
+      </div>
+      <div class="stat">
+        <div class="num">MIT</div>
+        <div class="label">License</div>
+      </div>
+    </div>
+
+    <p style="color: var(--muted); text-align: center; font-size: 15px; margin-top: 14px;">For comparison: ChatGPT Plus is $20/month = $240/year. At 5 years of use, you save $1,200 by running locally. And none of your data leaves.</p>
+  </div>
+</section>
+
+<!-- ================ FAQ ================ -->
+<section id="faq" class="alt">
+  <div class="section-inner">
+    <div class="section-kicker">FAQ</div>
+    <h2>The questions everyone asks</h2>
+
+    <details class="deep">
+      <summary>Is this legal to use at work?</summary>
+      <div class="body">
+        <p>Yes, for almost every company. The app, runtime, and model all ship with commercial-use licenses. No data leaves your machine, so there's no "sending company data to a third party" problem. That said, always check your IT policy; some regulated industries ban any AI tool until their lawyers approve it.</p>
+      </div>
+    </details>
+
+    <details class="deep">
+      <summary>What happens if my laptop breaks or I reinstall?</summary>
+      <div class="body">
+        <p>Re-install Ollama, re-pull the model (15 min). Your chats are saved in localStorage (lost on reinstall) unless you used "Save chat" to export them as markdown. RAG indexes also live in localStorage.</p>
+        <p>Backup strategy: save important chats as markdown regularly. Those are plain files you can archive anywhere.</p>
+      </div>
+    </details>
+
+    <details class="deep">
+      <summary>Can I share my indexed folder with a teammate?</summary>
+      <div class="body">
+        <p>Not out of the box. The index is tied to your laptop. On the v0.3 roadmap: shared team indexes over a local network.</p>
+      </div>
+    </details>
+
+    <details class="deep">
+      <summary>Can I use this on a phone or tablet?</summary>
+      <div class="body">
+        <p>Not yet. Ollama runs on Mac/Windows/Linux. Mobile is possible (MLX on iPhone, mlc-llm on Android) but out of scope for this project.</p>
+      </div>
+    </details>
+
+    <details class="deep">
+      <summary>How do I contribute or report a bug?</summary>
+      <div class="body">
+        <p>Open an issue or PR on GitHub: <a href="https://github.com/danielpaulai/Run-Worldclass-computer-locally" target="_blank" rel="noopener">danielpaulai/Run-Worldclass-computer-locally</a>. The codebase is small (~8k lines) and well-commented.</p>
+      </div>
+    </details>
+
+  </div>
+</section>
+
+<!-- ================ CTA ================ -->
+<section>
+  <div class="section-inner">
+    <div class="big-cta">
+      <h2>Install it. See it for yourself.</h2>
+      <p>15 minutes. Free. On your laptop. No account. You're three clicks away.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="https://github.com/danielpaulai/Run-Worldclass-computer-locally/releases/tag/v0.1.0" target="_blank" rel="noopener">Download for your OS</a>
+        <a class="btn btn-ghost" href="./pre-class.html">Step-by-step setup</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-inner">
+    <div>Purely Personal is MIT-licensed, free forever, and runs on your own laptop.</div>
+    <div class="foot-links">
+      <a href="./index.html">Home</a>
+      <a href="./why.html">Why</a>
+      <a href="./pre-class.html">Pre-class</a>
+      <a href="./design-system.html">Design system</a>
+      <a href="https://github.com/danielpaulai/Run-Worldclass-computer-locally" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Fade-in on scroll
+  const els = document.querySelectorAll("h2, h3, .stack-card, .side-card, .flow-step, .stat, .arch-stage, details.deep");
+  els.forEach(el => el.classList.add("fade-in"));
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add("in");
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: "0px 0px -40px 0px" });
+  els.forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>
