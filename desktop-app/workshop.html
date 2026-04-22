@@ -3201,65 +3201,20 @@ async function pickFilePath(kind) {
   });
 }
 
-// Main "Make it yours" picker
-document.getElementById("pick-main-file").addEventListener("click", async () => {
-  const p = await pickFilePath("file");
-  if (p) {
-    document.getElementById("file-path").value = p;
-    document.getElementById("file-path").dispatchEvent(new Event("input"));
-  }
-});
+// (Picker buttons / copy buttons for the old "Make it yours" and "Three things"
+// sections were removed when those sections were simplified. No handlers needed
+// here any more — the new chat + drag-drop flow handles everything.)
 
-// Picker buttons inside the "Three things" cards (data-pick="file|folder", data-target=inputId)
-document.querySelectorAll("[data-pick]").forEach((btn) => {
-  btn.addEventListener("click", async () => {
-    const kind   = btn.getAttribute("data-pick");
-    const target = btn.getAttribute("data-target");
-    const p = await pickFilePath(kind);
-    if (!p) return;
-    const input = document.getElementById(target);
-    input.value = p;
-    btn.classList.add("picked");
-    btn.textContent = "Change\u2026";
-    updateTaskCommand(target);
-  });
-});
-
-// Update a task card's generated command when its input changes
-function updateTaskCommand(inputId) {
-  const input = document.getElementById(inputId);
-  const path  = (input.value || "").trim();
-  // map inputId to command template
-  const templates = {
-    "task1-path": (p) => `./ai summarize tldr "${p}"`,
-    "task2-path": (p) => `./ai local-rag ingest "${p}"`,
-  };
-  const cmdId = inputId.replace("-path", "-cmd");
-  const cmdEl = document.getElementById(cmdId);
-  if (!cmdEl) return;
-  if (!path) {
-    cmdEl.textContent = inputId === "task2-path"
-      ? "./ai local-rag ingest <your folder>"
-      : "./ai summarize tldr <your file>";
-  } else {
-    cmdEl.textContent = templates[inputId](path);
-  }
-}
-
-// Re-generate task cards when their input changes (typing)
-["task1-path", "task2-path"].forEach((id) => {
-  const el = document.getElementById(id);
-  if (el) el.addEventListener("input", () => updateTaskCommand(id));
-});
-
-// Copy buttons for the "Three things" cards
+// Harmless no-op: keeps any stray data-copy button in a future iteration working.
 document.querySelectorAll("[data-copy], [data-copy-literal]").forEach((btn) => {
   btn.addEventListener("click", async () => {
     let text;
     if (btn.hasAttribute("data-copy-literal")) {
       text = btn.getAttribute("data-copy-literal");
     } else {
-      text = document.getElementById(btn.getAttribute("data-copy")).textContent;
+      const el = document.getElementById(btn.getAttribute("data-copy"));
+      if (!el) return;
+      text = el.textContent;
     }
     try {
       await navigator.clipboard.writeText(text);
