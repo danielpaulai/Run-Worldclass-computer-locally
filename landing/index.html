@@ -968,14 +968,21 @@
       <div class="steps">
         <div class="step">
           <h4>Install Ollama</h4>
-          <p>Open Terminal (⌘+Space → "Terminal" → Enter), paste:</p>
+          <p><strong>Easiest path, works on every Mac:</strong></p>
+          <div class="downloads" style="grid-template-columns: 1fr; max-width: 420px; margin-top: 10px;">
+            <a class="dl-btn" href="https://ollama.com/download/mac" target="_blank" rel="noopener">
+              Download Ollama for Mac
+              <span class="arch">Drag to Applications, launch once. No Homebrew needed.</span>
+            </a>
+          </div>
+          <p style="margin-top: 18px; font-size: 14.5px; color: var(--muted);"><em>Already have Homebrew?</em> You can use Terminal instead:</p>
           <div class="code-row">
             <pre>brew install ollama
 brew services start ollama</pre>
             <button class="copy-btn" data-copy="brew install ollama
 brew services start ollama">COPY</button>
           </div>
-          <p class="hint">Verify: <code>curl http://localhost:11434/api/version</code> → JSON with a version = live. No Homebrew? Use <a href="https://ollama.com/download/mac" target="_blank" rel="noopener">ollama.com/download/mac</a>.</p>
+          <p class="hint">Either way, verify it works: <code>curl http://localhost:11434/api/version</code> should return JSON with a version number. If you see "command not found: brew", that means Homebrew isn't installed. Use the download button above instead.</p>
         </div>
 
         <div class="step">

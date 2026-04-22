@@ -441,22 +441,30 @@
 
       <div class="step" data-key="mac-1">
         <h3>1. Install Ollama</h3>
-        <p>Ollama is the runtime that runs the AI model on your laptop. Free, open source.</p>
+        <p>Ollama is the runtime that runs the AI model on your laptop. Free, open source. <strong>Easiest way, works on every Mac:</strong></p>
+        <div class="downloads" style="grid-template-columns: 1fr; max-width: 420px; margin-top: 10px;">
+          <a class="dl-btn" href="https://ollama.com/download/mac" target="_blank" rel="noopener">
+            Download Ollama for Mac
+            <span class="arch">Drag to Applications, launch once. No Homebrew required.</span>
+          </a>
+        </div>
+        <p style="margin-top: 14px; font-size: 14.5px; color: var(--muted);"><em>Already have Homebrew?</em> You can use Terminal instead:</p>
         <div class="code-row">
           <code>brew install ollama</code>
           <button class="copy-btn" data-copy="brew install ollama">COPY</button>
         </div>
-        <p class="hint">No Homebrew? Download the installer from <a href="https://ollama.com" target="_blank" rel="noopener">ollama.com</a> instead.</p>
+        <p class="hint">If you see <code>command not found: brew</code>, that means Homebrew isn't installed. Use the download button above, you don't need Homebrew.</p>
       </div>
 
       <div class="step" data-key="mac-2">
         <h3>2. Start Ollama</h3>
-        <p>Run Ollama in the background. You only do this once, it runs every time you log in.</p>
+        <p><strong>If you used the download above:</strong> Ollama is already running. Look for a llama icon in your menu bar (top right of your screen). That means it's live.</p>
+        <p style="margin-top: 14px; font-size: 14.5px; color: var(--muted);"><em>If you used Homebrew instead:</em> Start Ollama as a background service once, it'll auto-start every time you log in:</p>
         <div class="code-row">
           <code>brew services start ollama</code>
           <button class="copy-btn" data-copy="brew services start ollama">COPY</button>
         </div>
-        <p class="hint">Verify it's running: <code>curl http://localhost:11434/api/version</code> should print a version number.</p>
+        <p class="hint"><strong>Verify either way worked:</strong> <code>curl http://localhost:11434/api/version</code> should print JSON with a version number.</p>
       </div>
 
       <div class="step" data-key="mac-3">
