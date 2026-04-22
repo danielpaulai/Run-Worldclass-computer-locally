@@ -1,5 +1,11 @@
 node_modules/
 dist/
-build/
 *.log
 .DS_Store
+
+# build/ is used by electron-builder for intermediate artifacts,
+# but we do want to track the app icons that live there.
+build/*
+!build/icon.png
+!build/icon.icns
+!build/icon.ico
