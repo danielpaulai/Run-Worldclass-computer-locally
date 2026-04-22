@@ -31,6 +31,98 @@ ipcMain.handle("pick-folder", async (event) => {
   return result.filePaths[0];
 });
 
+// Recursively walk a folder and return every text-readable file's content.
+// Used by the in-app RAG feature to index a user's own archive.
+ipcMain.handle("read-folder-text", async (_event, folderPath) => {
+  const fs = require("fs").promises;
+  const path = require("path");
+
+  const TEXT_EXTS = new Set([
+    ".txt", ".md", ".markdown", ".rst",
+    ".csv", ".tsv", ".json", ".jsonl", ".yaml", ".yml", ".toml",
+    ".html", ".htm", ".xml",
+    ".js", ".ts", ".tsx", ".jsx", ".mjs", ".cjs",
+    ".py", ".rb", ".go", ".rs", ".java", ".kt", ".swift",
+    ".c", ".cpp", ".cc", ".h", ".hpp",
+    ".sh", ".bash", ".zsh", ".fish",
+    ".sql", ".env", ".ini", ".cfg", ".conf",
+    ".log", ".eml",
+  ]);
+
+  const SKIP_DIRS = new Set([
+    ".git", "node_modules", "__pycache__", ".venv", "venv", "env",
+    "dist", "build", ".next", ".nuxt", ".cache", ".svelte-kit",
+    "target", "out", ".idea", ".vscode", ".DS_Store",
+  ]);
+
+  const MAX_FILE_BYTES = 300 * 1024;   // skip files larger than 300 KB
+  const MAX_TOTAL_FILES = 250;         // soft cap
+  const MAX_TOTAL_BYTES = 4 * 1024 * 1024; // 4 MB of text total
+
+  const out = [];
+  let totalBytes = 0;
+  let skippedBig = 0;
+  let skippedBinary = 0;
+
+  async function walk(dir, relBase) {
+    if (out.length >= MAX_TOTAL_FILES || totalBytes >= MAX_TOTAL_BYTES) return;
+    let entries;
+    try { entries = await fs.readdir(dir, { withFileTypes: true }); }
+    catch { return; }
+
+    for (const entry of entries) {
+      if (out.length >= MAX_TOTAL_FILES || totalBytes >= MAX_TOTAL_BYTES) break;
+      if (entry.name.startsWith(".") && entry.name !== ".env") continue;
+      if (SKIP_DIRS.has(entry.name)) continue;
+
+      const full = path.join(dir, entry.name);
+      const rel  = path.join(relBase, entry.name);
+
+      if (entry.isDirectory()) {
+        await walk(full, rel);
+      } else if (entry.isFile()) {
+        const ext = path.extname(entry.name).toLowerCase();
+        if (!TEXT_EXTS.has(ext)) { skippedBinary++; continue; }
+
+        let stat;
+        try { stat = await fs.stat(full); } catch { continue; }
+        if (stat.size > MAX_FILE_BYTES) { skippedBig++; continue; }
+        if (totalBytes + stat.size > MAX_TOTAL_BYTES) break;
+
+        try {
+          const content = await fs.readFile(full, "utf8");
+          // Skip content that's mostly binary (high non-printable ratio)
+          let nonPrintable = 0;
+          const sample = content.slice(0, 1000);
+          for (const ch of sample) {
+            const c = ch.charCodeAt(0);
+            if (c < 9 || (c > 13 && c < 32)) nonPrintable++;
+          }
+          if (sample.length > 0 && nonPrintable / sample.length > 0.05) {
+            skippedBinary++;
+            continue;
+          }
+          out.push({ relPath: rel, content, size: stat.size });
+          totalBytes += stat.size;
+        } catch { /* unreadable, skip */ }
+      }
+    }
+  }
+
+  await walk(folderPath, "");
+  return {
+    folderPath,
+    files: out,
+    stats: {
+      fileCount: out.length,
+      totalBytes,
+      skippedBig,
+      skippedBinary,
+      hitCap: out.length >= MAX_TOTAL_FILES || totalBytes >= MAX_TOTAL_BYTES,
+    },
+  };
+});
+
 // Save a string (typically markdown) to a user-chosen file path.
 ipcMain.handle("save-file", async (event, { content, defaultName, title }) => {
   const win = BrowserWindow.fromWebContents(event.sender);

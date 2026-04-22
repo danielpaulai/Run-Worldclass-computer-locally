@@ -458,6 +458,76 @@
     line-height: 1.7;
   }
 
+  /* ---------- RAG BANNER + PROGRESS ---------- */
+  .rag-banner {
+    background: var(--coral);
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: 8px;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 13.5px;
+    line-height: 1.5;
+  }
+  .rag-banner strong { font-weight: 700; }
+  .rag-exit-btn {
+    background: rgba(255,255,255,0.2);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.4);
+    padding: 5px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: inherit;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .rag-exit-btn:hover { background: rgba(255,255,255,0.3); }
+
+  .rag-progress {
+    margin: 14px 0;
+    padding: 14px 16px;
+    background: var(--cream-deep);
+    border-radius: 8px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .rag-progress .bar {
+    height: 6px;
+    background: var(--line);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-top: 8px;
+  }
+  .rag-progress .bar-fill {
+    height: 100%;
+    background: var(--coral);
+    transition: width .25s;
+    width: 0;
+  }
+  .rag-sources {
+    margin-top: 16px;
+    padding: 12px 14px;
+    background: var(--cream-deep);
+    border-radius: 6px;
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  .rag-sources strong { color: var(--ink); }
+  .rag-sources code {
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 11.5px;
+    background: var(--card);
+    padding: 1px 5px;
+    border-radius: 3px;
+    color: var(--coral-deep);
+  }
+
   /* ---------- CHAT (the live chat box) ---------- */
   .chat {
     background: var(--card);
@@ -1135,11 +1205,27 @@
   <div class="brand-right">
     <span class="brand-privacy">Local only</span>
     <button type="button" class="brand-btn" id="new-chat">New chat</button>
+    <button type="button" class="brand-btn" id="open-docs">Docs</button>
     <button type="button" class="brand-btn" id="open-history">History</button>
     <button type="button" class="brand-btn" id="open-prompts">Prompts</button>
     <button type="button" class="brand-btn" id="open-kit">Marketing kit</button>
     <button type="button" class="brand-btn" id="theme-toggle">Dark</button>
     <button type="button" class="brand-btn" id="save-convo">Save chat</button>
+  </div>
+</div>
+
+<!-- DOCS (RAG) POPOVER -->
+<div class="popover-backdrop" id="docs-backdrop">
+  <div class="popover" id="docs-popover" role="dialog" aria-labelledby="docs-title">
+    <div class="popover-head">
+      <h3 id="docs-title">Your indexed folders</h3>
+      <button type="button" class="popover-close" data-close="docs">\u2715</button>
+    </div>
+    <div class="popover-body" id="docs-list"></div>
+    <div class="popover-foot">
+      <button type="button" class="foot-btn" id="docs-add-btn">+ Index a folder</button>
+      <p class="foot-help">Pick any folder on your laptop. The app reads text-like files (~300 KB each max, 4 MB total), chunks them, and embeds each chunk. Click "Ask this" on an indexed folder to chat with its contents. Everything stays local.</p>
+    </div>
   </div>
 </div>
 
@@ -1218,6 +1304,11 @@
       <!-- Hidden element kept in sync with the selected model for any code that
            still reads chatModel.textContent -->
       <span id="chat-model" hidden></span>
+    </div>
+
+    <div class="rag-banner" id="rag-banner" style="display:none;">
+      <span>Querying <strong id="rag-banner-name">folder</strong>. Every question you ask is answered using this folder's contents.</span>
+      <button type="button" id="rag-exit" class="rag-exit-btn">Exit query mode</button>
     </div>
 
     <div class="chat-messages" id="chat-messages">
@@ -1570,6 +1661,321 @@ copyBtn.addEventListener("click", async () => {
     copyBtn.textContent = original;
     copyBtn.classList.remove("copied");
   }, 1600);
+});
+
+/* ---------- RAG (Docs) ---------- */
+// Index folders locally. Embed chunks via Ollama's nomic-embed-text.
+// When a folder is "active," every chat message injects the top-k most
+// similar chunks as context + cited sources.
+//
+// Storage: localStorage "pp-rag" = [{ id, name, path, files, chunkCount,
+// lastIndexed, chunks: [{text, file, emb}] }]
+// Embeddings are stored as plain arrays; Float32Array would be denser
+// but JSON is simpler and 5MB is enough for a typical notes folder.
+
+const EMBED_MODEL = "nomic-embed-text";
+const MAX_CHUNK_CHARS = 900;
+const CHUNK_OVERLAP   = 100;
+const TOP_K           = 5;
+
+let activeRag = null;   // { id, name } of the folder currently in query mode
+
+// ----- persistence -----
+function loadRag() {
+  try { return JSON.parse(localStorage.getItem("pp-rag") || "[]"); }
+  catch { return []; }
+}
+function saveRag(arr) {
+  localStorage.setItem("pp-rag", JSON.stringify(arr));
+}
+
+// ----- chunking -----
+function chunkText(text) {
+  const out = [];
+  const normalized = (text || "").replace(/\r\n/g, "\n");
+  if (!normalized.trim()) return out;
+
+  // Split on paragraph boundaries first, then regroup into ~MAX_CHUNK_CHARS blocks.
+  const paragraphs = normalized.split(/\n{2,}/).map(p => p.trim()).filter(Boolean);
+
+  let current = "";
+  for (const para of paragraphs) {
+    if (para.length > MAX_CHUNK_CHARS) {
+      // Single huge paragraph — hard-split on sentence boundaries.
+      if (current) { out.push(current); current = ""; }
+      const sentences = para.match(/[^.!?]+[.!?]?/g) || [para];
+      let buf = "";
+      for (const s of sentences) {
+        if ((buf + s).length > MAX_CHUNK_CHARS && buf) {
+          out.push(buf.trim());
+          buf = buf.slice(-CHUNK_OVERLAP) + s;
+        } else {
+          buf += s;
+        }
+      }
+      if (buf.trim()) out.push(buf.trim());
+    } else if ((current + "\n\n" + para).length > MAX_CHUNK_CHARS && current) {
+      out.push(current);
+      current = para;
+    } else {
+      current = current ? current + "\n\n" + para : para;
+    }
+  }
+  if (current.trim()) out.push(current);
+  return out;
+}
+
+// ----- embedding -----
+async function ensureEmbedModel() {
+  // Check if nomic-embed-text is installed. If not, pull it.
+  const tags = await fetch(`${OLLAMA_BASE}/api/tags`).then(r => r.json()).catch(() => ({ models: [] }));
+  const installed = (tags.models || []).some(m => (m.name || "").startsWith(EMBED_MODEL));
+  if (installed) return;
+
+  // Pull with streaming progress (blocks until done).
+  const resp = await fetch(`${OLLAMA_BASE}/api/pull`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ model: EMBED_MODEL, stream: true }),
+  });
+  const reader = resp.body.getReader();
+  const decoder = new TextDecoder();
+  let buf = "";
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    buf += decoder.decode(value, { stream: true });
+    // Drain complete JSON lines — we don't need them for the MVP,
+    // just letting the stream finish so the pull completes.
+    let nl;
+    while ((nl = buf.indexOf("\n")) !== -1) {
+      buf = buf.slice(nl + 1);
+    }
+  }
+}
+
+async function embedOne(text) {
+  const resp = await fetch(`${OLLAMA_BASE}/api/embeddings`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ model: EMBED_MODEL, prompt: text }),
+  });
+  if (!resp.ok) throw new Error("embedding failed: " + resp.status);
+  const data = await resp.json();
+  return data.embedding;   // array of 768 floats
+}
+
+function cosineSim(a, b) {
+  let dot = 0, na = 0, nb = 0;
+  const len = Math.min(a.length, b.length);
+  for (let i = 0; i < len; i++) {
+    dot += a[i] * b[i];
+    na  += a[i] * a[i];
+    nb  += b[i] * b[i];
+  }
+  const denom = Math.sqrt(na) * Math.sqrt(nb);
+  return denom === 0 ? 0 : dot / denom;
+}
+
+// ----- ingest flow -----
+async function indexFolder() {
+  if (!window.electronAPI || !window.electronAPI.pickFolder) {
+    alert("Folder indexing needs the desktop app.");
+    return;
+  }
+  const folderPath = await window.electronAPI.pickFolder();
+  if (!folderPath) return;
+
+  const existing = loadRag();
+  const existingFolder = existing.find(f => f.path === folderPath);
+  if (existingFolder) {
+    if (!confirm(`"${existingFolder.name}" is already indexed. Re-index?`)) return;
+  }
+
+  // Swap the popover body for a progress view while we index.
+  const list = document.getElementById("docs-list");
+  const nameForDisplay = folderPath.split("/").filter(Boolean).pop() || folderPath;
+  list.innerHTML = `
+    <div class="rag-progress" id="rag-progress">
+      <div><strong>Indexing \u201c${escapeHtml(nameForDisplay)}\u201d\u2026</strong></div>
+      <div id="rag-progress-status" style="margin-top: 6px;">Reading files\u2026</div>
+      <div class="bar"><div class="bar-fill" id="rag-progress-bar"></div></div>
+    </div>
+  `;
+  const setStatus = (msg, pct) => {
+    const s = document.getElementById("rag-progress-status");
+    const b = document.getElementById("rag-progress-bar");
+    if (s) s.textContent = msg;
+    if (b && pct != null) b.style.width = `${Math.min(100, Math.max(0, pct))}%`;
+  };
+
+  try {
+    // 1. Walk the folder
+    const walk = await window.electronAPI.readFolderText(folderPath);
+    if (!walk || !walk.files || walk.files.length === 0) {
+      alert("No readable text files found in that folder.");
+      renderDocsList();
+      return;
+    }
+    setStatus(`Read ${walk.files.length} files (${(walk.stats.totalBytes/1024).toFixed(0)} KB). Preparing chunks\u2026`, 5);
+
+    // 2. Chunk every file
+    const allChunks = [];
+    for (const f of walk.files) {
+      const pieces = chunkText(f.content);
+      for (let i = 0; i < pieces.length; i++) {
+        allChunks.push({ text: pieces[i], file: f.relPath, idx: i });
+      }
+    }
+    if (allChunks.length === 0) {
+      alert("No indexable content found in that folder.");
+      renderDocsList();
+      return;
+    }
+    setStatus(`Prepared ${allChunks.length} chunks. Ensuring embedding model\u2026`, 10);
+
+    // 3. Make sure the embedding model is pulled
+    await ensureEmbedModel();
+    setStatus(`Embedding chunks 0 / ${allChunks.length}\u2026`, 12);
+
+    // 4. Embed each chunk (sequentially; Ollama handles batches poorly over HTTP)
+    const embedded = [];
+    for (let i = 0; i < allChunks.length; i++) {
+      const c = allChunks[i];
+      try {
+        const emb = await embedOne(c.text);
+        embedded.push({ text: c.text, file: c.file, emb });
+      } catch (err) {
+        // Skip failed chunks but keep going
+        console.warn("embed failed for chunk", c.file, c.idx, err);
+      }
+      const pct = 12 + (i + 1) / allChunks.length * 86;
+      setStatus(`Embedding chunks ${i + 1} / ${allChunks.length}\u2026`, pct);
+    }
+
+    // 5. Save
+    const folders = loadRag().filter(f => f.path !== folderPath);
+    const id = "rag-" + Date.now() + "-" + Math.random().toString(36).slice(2, 6);
+    folders.push({
+      id,
+      name: nameForDisplay,
+      path: folderPath,
+      fileCount: walk.files.length,
+      chunkCount: embedded.length,
+      lastIndexed: Date.now(),
+      chunks: embedded,
+      stats: walk.stats,
+    });
+    try {
+      saveRag(folders);
+    } catch (e) {
+      alert("Could not save the index \u2014 the folder may be too large for local storage. Try a smaller folder (target under ~500 chunks).");
+      renderDocsList();
+      return;
+    }
+    setStatus(`Done. ${embedded.length} chunks indexed.`, 100);
+    setTimeout(renderDocsList, 700);
+  } catch (err) {
+    console.error(err);
+    alert("Indexing failed: " + err.message);
+    renderDocsList();
+  }
+}
+
+// ----- query retrieval -----
+async function ragSearch(folderId, question, k = TOP_K) {
+  const folder = loadRag().find(f => f.id === folderId);
+  if (!folder) return [];
+  const qEmb = await embedOne(question);
+  const scored = folder.chunks.map(c => ({
+    score: cosineSim(qEmb, c.emb),
+    text: c.text,
+    file: c.file,
+  }));
+  scored.sort((a, b) => b.score - a.score);
+  return scored.slice(0, k);
+}
+
+// ----- popover UI -----
+function renderDocsList() {
+  const list = document.getElementById("docs-list");
+  const folders = loadRag();
+  if (folders.length === 0) {
+    list.innerHTML = `<div class="popover-empty">No folders indexed yet.<br><br>Click "+ Index a folder" to turn a folder of your notes, docs, or past work into a queryable archive. Everything stays on your laptop.</div>`;
+    return;
+  }
+  const sorted = [...folders].sort((a, b) => (b.lastIndexed || 0) - (a.lastIndexed || 0));
+  list.innerHTML = "";
+  sorted.forEach(f => {
+    const when = new Date(f.lastIndexed || Date.now()).toLocaleDateString();
+    const row = document.createElement("div");
+    row.className = "popover-item";
+    const active = (activeRag && activeRag.id === f.id)
+      ? ` <span style="font-size:10px;color:var(--coral);font-weight:700;letter-spacing:0.08em;">\u00b7 QUERYING</span>`
+      : "";
+    row.innerHTML = `
+      <div class="item-name">${escapeHtml(f.name)}${active}</div>
+      <div class="item-preview">${f.fileCount} files \u00b7 ${f.chunkCount} chunks \u00b7 indexed ${escapeHtml(when)}</div>
+      <div class="item-actions">
+        <button type="button" data-action="ask" data-id="${f.id}">Ask this</button>
+        <button type="button" data-action="delete" data-id="${f.id}" class="delete">Delete</button>
+      </div>
+    `;
+    list.appendChild(row);
+  });
+  list.querySelectorAll("[data-action]").forEach(btn => {
+    btn.addEventListener("click", (ev) => {
+      ev.stopPropagation();
+      const id = btn.getAttribute("data-id");
+      const action = btn.getAttribute("data-action");
+      if (action === "ask") {
+        const f = loadRag().find(x => x.id === id);
+        if (!f) return;
+        activeRag = { id: f.id, name: f.name };
+        updateRagBanner();
+        closeDocs();
+        // Start fresh chat so context is clean
+        newChat();
+      } else if (action === "delete") {
+        const f = loadRag().find(x => x.id === id);
+        if (!f) return;
+        if (!confirm(`Delete the index for "${f.name}"? The source folder stays on your disk.`)) return;
+        saveRag(loadRag().filter(x => x.id !== id));
+        if (activeRag && activeRag.id === id) { activeRag = null; updateRagBanner(); }
+        renderDocsList();
+      }
+    });
+  });
+}
+
+function openDocs() {
+  renderDocsList();
+  document.getElementById("docs-backdrop").classList.add("open");
+}
+function closeDocs() {
+  document.getElementById("docs-backdrop").classList.remove("open");
+}
+
+function updateRagBanner() {
+  const banner = document.getElementById("rag-banner");
+  const nameEl = document.getElementById("rag-banner-name");
+  if (activeRag) {
+    banner.style.display = "flex";
+    nameEl.textContent = activeRag.name;
+  } else {
+    banner.style.display = "none";
+  }
+}
+
+document.getElementById("open-docs").addEventListener("click", openDocs);
+document.getElementById("docs-backdrop").addEventListener("click", (e) => {
+  if (e.target.id === "docs-backdrop") closeDocs();
+});
+document.querySelectorAll("[data-close='docs']").forEach(btn => btn.addEventListener("click", closeDocs));
+document.getElementById("docs-add-btn").addEventListener("click", indexFolder);
+document.getElementById("rag-exit").addEventListener("click", () => {
+  activeRag = null;
+  updateRagBanner();
 });
 
 /* ---------- CONVERSATION HISTORY ---------- */
@@ -1956,6 +2362,7 @@ document.addEventListener("keydown", (e) => {
     closeKit();
     closePrompts();
     closeHistory();
+    closeDocs();
   }
 });
 
@@ -2360,18 +2767,43 @@ chatForm.addEventListener("submit", async (e) => {
 
   // Build the UI display string and the model prompt separately.
   // UI shows the user's text + a small "[attached: name]" marker.
-  // The model sees: file contents + user's text.
+  // The model sees: file contents (+ RAG context if active) + user's text.
   let displayText = userText;
   let modelPrompt = userText;
+  let ragSources = null;   // for rendering citations under the assistant msg
+
+  // If Docs / RAG mode is active, retrieve top-k chunks and prepend them.
+  if (activeRag && userText) {
+    try {
+      const hits = await ragSearch(activeRag.id, userText, TOP_K);
+      if (hits.length > 0) {
+        const context = hits.map((h, i) =>
+          `[Source ${i + 1}: ${h.file}]\n${h.text}`
+        ).join("\n\n");
+        modelPrompt =
+          `You are answering a question about a folder called "${activeRag.name}" on the user's own laptop. ` +
+          `Use ONLY the excerpts below. Cite the source filename (e.g. "from notes.md") for each claim. ` +
+          `If the excerpts don't contain the answer, say so instead of inventing facts.\n\n` +
+          `---\n\n${context}\n\n---\n\nQuestion: ${userText}`;
+        ragSources = hits.map(h => ({ file: h.file, score: h.score }));
+      }
+    } catch (err) {
+      console.warn("RAG retrieval failed, falling back to plain chat:", err);
+    }
+  }
+
   if (attachedFile) {
     displayText = (userText || "(no message)") + `\n\n\ud83d\udcce attached: ${attachedFile.name}`;
     modelPrompt = `File attached by the user: ${attachedFile.name}\n\n\`\`\`\n${attachedFile.content}\n\`\`\`\n\n` +
                   (userText || "Summarize this file in 3\u20135 bullets and flag anything unusual.");
+    ragSources = null;   // attachment overrides RAG for this turn
   }
 
   addChatMessage("user", displayText);
   convo.push({ role: "user", content: modelPrompt });
   chatInput.value = "";
+  // Stash ragSources on the form so we can render them after the assistant finishes
+  chatForm._pendingRagSources = ragSources;
   chatInput.disabled = true;
   // Swap Send into a Stop button while the request is in flight
   chatSend.textContent = "Stop";
@@ -2442,6 +2874,18 @@ chatForm.addEventListener("submit", async (e) => {
     // Re-render the final body as markdown (bold, lists, headings, etc.)
     bodyEl.classList.add("rendered");
     bodyEl.innerHTML = renderMarkdown(fullText);
+
+    // If this turn used RAG, show the sources under the response.
+    const srcs = chatForm._pendingRagSources;
+    if (srcs && srcs.length > 0) {
+      const srcEl = document.createElement("div");
+      srcEl.className = "rag-sources";
+      srcEl.innerHTML = `<strong>Sources from ${activeRag ? escapeHtml(activeRag.name) : "your folder"}:</strong><br>` +
+        srcs.map(s => `<code>${escapeHtml(s.file)}</code> \u00b7 relevance ${(s.score*100).toFixed(0)}%`).join("<br>");
+      assistantEl.appendChild(srcEl);
+      chatForm._pendingRagSources = null;
+    }
+
     convo.push({ role: "assistant", content: fullText });
     // Auto-save after each complete exchange so nothing's lost on close
     try { autosaveCurrentConvo(); } catch {}
@@ -2467,6 +2911,7 @@ chatForm.addEventListener("submit", async (e) => {
     }
   } finally {
     currentAbortController = null;
+    chatForm._pendingRagSources = null;
     chatInput.disabled = false;
     chatSend.classList.remove("stopping");
     chatSend.textContent = "Send";

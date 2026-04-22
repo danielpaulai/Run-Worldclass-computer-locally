@@ -20,4 +20,8 @@ contextBridge.exposeInMainWorld("electronAPI", {
   // Write a string to a user-chosen path (via a native Save dialog).
   // Returns the saved path, or null if the user cancelled.
   saveFile: (opts) => ipcRenderer.invoke("save-file", opts),
+
+  // Walk a folder and return every text-readable file's content.
+  // Used by the in-app RAG indexer. Enforces file size and count caps.
+  readFolderText: (folderPath) => ipcRenderer.invoke("read-folder-text", folderPath),
 });
