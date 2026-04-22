@@ -1015,6 +1015,9 @@ brew services start ollama">COPY</button>
 
     <!-- Windows -->
     <div class="os-panel" id="os-win">
+      <div class="callout warn" style="margin-bottom: 22px;">
+        <strong>⚠ Don't use <code>git clone</code> on Windows.</strong> You don't need it. Just follow the 4 steps below: Ollama installer → pull the model → download the <code>.exe</code> → run it.
+      </div>
       <div class="steps">
         <div class="step">
           <h4>Install Ollama</h4>
@@ -1090,7 +1093,11 @@ curl http://localhost:11434/api/version">COPY</button>
 
         <div class="step">
           <h4>Clone the repo (no desktop app yet on Linux)</h4>
+          <div class="callout warn" style="margin-bottom: 12px;">
+            <strong>⚠ On Mac or Windows?</strong> Skip this step. You use the <code>.dmg</code> or <code>.exe</code> installer, not <code>git clone</code>. Scroll back up to your OS tab.
+          </div>
           <p>Electron app ships on Mac/Windows for now. On Linux, clone and use the included scripts.</p>
+          <p class="hint">Tip: run this from your home folder (<code>cd ~</code>), not from a system directory.</p>
           <div class="code-row">
             <pre>git clone https://github.com/danielpaulai/Run-Worldclass-computer-locally.git
 cd Run-Worldclass-computer-locally
@@ -1358,6 +1365,24 @@ cd Run-Worldclass-computer-locally
       <summary>Windows: "Windows protected your PC"</summary>
       <div class="body">
         <p>Click <strong>More info</strong>, then <strong>Run anyway</strong>.</p>
+      </div>
+    </details>
+
+    <details class="deep">
+      <summary>Windows: "fatal: could not create work tree dir · Permission denied"</summary>
+      <div class="body">
+        <p>Two problems at once:</p>
+        <ul>
+          <li>You're running PowerShell from <code>C:\WINDOWS\system32</code>. Windows protects that folder from regular users, so <code>git clone</code> can't write anything there.</li>
+          <li><strong>You don't need <code>git clone</code> on Windows.</strong> That step is only for Linux. On Windows, you download the <code>.exe</code> installer from the GitHub release.</li>
+        </ul>
+        <p><strong>The fix:</strong></p>
+        <ol style="padding-left: 22px;">
+          <li>Close the current PowerShell window.</li>
+          <li>Open a new one (no Administrator needed).</li>
+          <li>Follow the Windows install tab at the top of this page. Don't clone the repo.</li>
+        </ol>
+        <p>If you <em>want</em> to clone the repo (optional, for source code reading): first run <code>cd $HOME</code> to move out of the system folder, then clone.</p>
       </div>
     </details>
 
