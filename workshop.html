@@ -196,6 +196,34 @@
     font-family: inherit;
   }
   .popover-close:hover { color: var(--coral); }
+  .kit-tabs {
+    display: flex;
+    gap: 4px;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--line);
+    background: var(--cream-deep);
+    overflow-x: auto;
+  }
+  .kit-tabs button {
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--muted);
+    padding: 7px 12px;
+    font-size: 12.5px;
+    font-weight: 600;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: inherit;
+    white-space: nowrap;
+    transition: background .12s, color .12s, border-color .12s;
+  }
+  .kit-tabs button:hover { color: var(--ink); background: var(--card); }
+  .kit-tabs button.active {
+    background: var(--card);
+    color: var(--coral);
+    border-color: var(--coral);
+  }
+
   .popover-body {
     flex: 1;
     overflow-y: auto;
@@ -1208,7 +1236,7 @@
     <button type="button" class="brand-btn" id="open-docs">Docs</button>
     <button type="button" class="brand-btn" id="open-history">History</button>
     <button type="button" class="brand-btn" id="open-prompts">Prompts</button>
-    <button type="button" class="brand-btn" id="open-kit">Marketing kit</button>
+    <button type="button" class="brand-btn" id="open-kit">Templates</button>
     <button type="button" class="brand-btn" id="theme-toggle">Dark</button>
     <button type="button" class="brand-btn" id="save-convo">Save chat</button>
   </div>
@@ -1259,16 +1287,17 @@
   </div>
 </div>
 
-<!-- MARKETING KIT POPOVER -->
+<!-- TEMPLATES POPOVER (Writing / Marketing / Meetings / Learning) -->
 <div class="popover-backdrop" id="kit-backdrop">
   <div class="popover" id="kit-popover" role="dialog" aria-labelledby="kit-title">
     <div class="popover-head">
-      <h3 id="kit-title">Marketing Kit</h3>
+      <h3 id="kit-title">Templates</h3>
       <button type="button" class="popover-close" data-close="kit">\u2715</button>
     </div>
+    <div class="kit-tabs" id="kit-tabs"></div>
     <div class="popover-body" id="kit-list"></div>
     <div class="popover-foot">
-      <p class="foot-help">Click "Load" to drop a file into the chat as context. Then tell the AI how to adapt it for you \u2014 your voice, your niche, your audience.</p>
+      <p class="foot-help">Click a template. The AI loads it and helps you adapt it to your voice.</p>
     </div>
   </div>
 </div>
@@ -1280,17 +1309,17 @@
     <div class="kicker">Your AI. Your laptop. Your data.</div>
     <h1>Purely <em>Personal.</em><br>Nothing ever leaves.</h1>
     <p class="lead">
-      A private AI running on your own machine — not in the cloud, not behind a login, not billed by the token. Chat with it below, or try one of the real use cases designed for people who handle confidential work every day.
+      A private AI that runs on your own laptop. Not in the cloud. No login. No monthly fee. Ask it anything below.
     </p>
-    <div class="scroll-cue">Scroll, or just start typing in the chat below</div>
+    <div class="scroll-cue">Or just start typing</div>
   </section>
 
   <!-- CHAT (real, talks to local Ollama) -->
   <section class="chat">
     <div class="chat-header">
       <div>
-        <h2>Talk to your local AI now.</h2>
-        <p class="chat-sub">Your machine, your data, no internet. Ask anything below. The response streams back in real time.</p>
+        <h2>Talk to your AI.</h2>
+        <p class="chat-sub">Ask anything. Everything stays on your laptop.</p>
       </div>
       <div class="chat-status">
         <div class="model-line">
@@ -1312,7 +1341,7 @@
     </div>
 
     <div class="chat-messages" id="chat-messages">
-      <div class="msg msg-system">Type a question, try a real use case below, or <strong>drag a text file onto this window</strong> to include it as context. The model runs on this laptop \u2014 nothing leaves your machine.</div>
+      <div class="msg msg-system">Type a question. Click a starter below. Or <strong>drag any file onto this window</strong> to work on it. Everything stays on your laptop.</div>
     </div>
 
     <div class="chat-drop-hint">Drop it anywhere on this box \u2014 the file will be attached to your next message</div>
@@ -1328,19 +1357,19 @@
     </div>
 
     <div class="chat-quickstart">
-      <div class="quickstart-label">Try a real use case \u2014 one click, realistic output</div>
+      <div class="quickstart-label">One-click starters</div>
       <div class="quickstart-btns" id="quickstart-btns">
-        <button type="button" data-key="contract-risks">Spot risks in a contract clause</button>
-        <button type="button" data-key="draft-reply">Draft a reply to a tough email</button>
-        <button type="button" data-key="action-items">Extract meeting action items</button>
-        <button type="button" data-key="categorize-expenses">Categorize messy expenses</button>
-        <button type="button" data-key="interview-questions">Generate interview questions</button>
-        <button type="button" data-key="explain-concept">Explain a concept for a client</button>
+        <button type="button" data-key="summarize">Summarize something</button>
+        <button type="button" data-key="reply">Write a reply</button>
+        <button type="button" data-key="clearer">Make it clearer</button>
+        <button type="button" data-key="explain">Explain it simply</button>
+        <button type="button" data-key="decide">Help me decide</button>
+        <button type="button" data-key="brainstorm">Brainstorm with me</button>
       </div>
     </div>
 
     <form class="chat-input-row" id="chat-form">
-      <input type="text" id="chat-input" placeholder="e.g. Explain HTTPS in 3 sentences" autocomplete="off">
+      <input type="text" id="chat-input" placeholder="Ask anything. Or click a starter below." autocomplete="off">
       <button type="submit" class="chat-send" id="chat-send">Send</button>
     </form>
   </section>
@@ -1348,55 +1377,19 @@
   <!-- PERSONAS -->
   <div class="section-head">
     <div class="number">One</div>
-    <h2>Click the one most like you.</h2>
-    <p>Each card is a real pattern from real people running real businesses. Their Mondays look different — but they all share one problem they can't send to the cloud.</p>
+    <h2>Who else uses this?</h2>
+    <p>Five real people and the work they get done on their own laptop. Click a card to try a prompt in their style.</p>
   </div>
 
   <div class="personas" id="personas">
     <!-- Cards injected by JS -->
   </div>
 
-  <!-- DETAIL -->
-  <div class="section-head">
-    <div class="number">Two</div>
-    <h2>A day in their life.</h2>
-  </div>
-  <div class="detail empty" id="detail">
-    Click any persona above to see their Monday morning and the exact commands they'd run.
-  </div>
-
-  <!-- TRY IT YOURSELF -->
-  <div class="section-head">
-    <div class="number">Three</div>
-    <h2>Now make it yours.</h2>
-    <p>Fill in these two things. The page generates the exact terminal command you'd paste on your machine. One click to copy.</p>
-  </div>
-
-  <div class="try">
-    <label class="label" for="persona-select">Pick the persona closest to your work</label>
-    <select id="persona-select">
-      <option value="">— choose one —</option>
-    </select>
-
-    <label class="label" for="file-path">Path to a file on your laptop you'd like summarized</label>
-    <div class="picker-row">
-      <input type="text" id="file-path" placeholder="~/Documents/your-file.pdf — or click Choose file \u2192" autocomplete="off">
-      <button type="button" class="picker-btn" id="pick-main-file">Choose file\u2026</button>
-    </div>
-
-    <label class="label">Your command</label>
-    <div class="output-row">
-      <div class="generated" id="generated-cmd">Fill the two fields above to generate your command.</div>
-      <button class="copy-btn" id="copy-btn" type="button">Copy</button>
-    </div>
-    <p class="hint">Paste this into Terminal (Mac) or PowerShell (Windows, swap <code>./ai</code> for <code>bash ai</code>). Nothing leaves your computer.</p>
-  </div>
-
   <!-- PRIVACY PROOF -->
   <div class="section-head">
-    <div class="number">Four</div>
+    <div class="number">Two</div>
     <h2>Prove it's private.</h2>
-    <p>Your laptop talks to a program on itself. The internet isn't part of the conversation. Try turning it off.</p>
+    <p>The chat above talks to a program on your own laptop. The internet is not part of it. Turn off your WiFi and see for yourself.</p>
   </div>
 
   <div class="privacy">
@@ -1419,66 +1412,43 @@
   <!-- NEXT STEPS -->
   <div class="next">
     <div class="section-head">
-      <div class="number">Five</div>
+      <div class="number">Three</div>
       <h2>Three things to try this week.</h2>
-      <p>Pick a file or folder with the button, then copy the generated command into Terminal and press Enter. One per day this week is a habit by Friday.</p>
+      <p>Simple. 5 minutes each. Do one a day.</p>
     </div>
 
     <div class="three-things">
 
-      <!-- Task 1: Summarize a doc -->
-      <section class="try-card" data-task="summarize">
+      <section class="try-card">
         <div class="try-card-head">
           <div class="step-num">1</div>
-          <h3>Summarize a confidential doc</h3>
+          <h3>Summarize a real document</h3>
         </div>
-        <p class="sub">A contract, financial report, meeting notes \u2014 anything you'd never paste into ChatGPT.</p>
+        <p class="sub">Drop any file onto the chat above. Hit <strong>TLDR</strong>. See the summary.</p>
         <div class="try-card-body">
-          <div class="picker-row">
-            <input type="text" id="task1-path" placeholder="Click Choose file \u2192" autocomplete="off">
-            <button type="button" class="picker-btn" data-pick="file" data-target="task1-path">Choose file\u2026</button>
-          </div>
-          <div class="output-row">
-            <div class="generated" id="task1-cmd">./ai summarize tldr &lt;your file&gt;</div>
-            <button class="copy-btn" data-copy="task1-cmd" type="button">Copy</button>
-          </div>
-          <p class="hint">Paste this into Terminal and press Enter.</p>
+          <p class="hint">Try it on a long email, a contract, or a PDF you've been putting off.</p>
         </div>
       </section>
 
-      <!-- Task 2: RAG over a folder -->
-      <section class="try-card" data-task="rag">
+      <section class="try-card">
         <div class="try-card-head">
           <div class="step-num">2</div>
-          <h3>Index a folder and ask it questions</h3>
+          <h3>Turn a folder into an AI you can ask</h3>
         </div>
-        <p class="sub">Point the tool at a folder of your own work \u2014 notes, past emails, project docs. It becomes a searchable memory.</p>
+        <p class="sub">Click <strong>Docs</strong> in the top right. Pick any folder of notes. Ask it questions.</p>
         <div class="try-card-body">
-          <div class="picker-row">
-            <input type="text" id="task2-path" placeholder="Click Choose folder \u2192" autocomplete="off">
-            <button type="button" class="picker-btn" data-pick="folder" data-target="task2-path">Choose folder\u2026</button>
-          </div>
-          <div class="output-row">
-            <div class="generated" id="task2-cmd">./ai local-rag ingest &lt;your folder&gt;</div>
-            <button class="copy-btn" data-copy="task2-cmd" type="button">Copy</button>
-          </div>
-          <p class="hint">After ingest finishes, ask questions with <code>./ai local-rag query "your question"</code>.</p>
+          <p class="hint">Good first try: your notes folder, a year of exported emails, or any project docs.</p>
         </div>
       </section>
 
-      <!-- Task 3: Privacy audit (no picker needed) -->
-      <section class="try-card" data-task="privacy">
+      <section class="try-card">
         <div class="try-card-head">
           <div class="step-num">3</div>
-          <h3>Run the privacy audit</h3>
+          <h3>Prove it's really private</h3>
         </div>
-        <p class="sub">Proves to you (and your boss) that nothing is leaving your machine. No file needed.</p>
+        <p class="sub">Turn off your WiFi. Ask the AI something. Watch it still work.</p>
         <div class="try-card-body">
-          <div class="output-row">
-            <div class="generated">./ai privacy-audit check</div>
-            <button class="copy-btn" data-copy-literal="./ai privacy-audit check" type="button">Copy</button>
-          </div>
-          <p class="hint">Then try it yourself \u2014 turn off WiFi, run a chat, watch it still work.</p>
+          <p class="hint">That's the moment it stops being a slogan and becomes real.</p>
         </div>
       </section>
 
@@ -1549,12 +1519,20 @@ const personas = [
 ];
 
 /* ---------- RENDER PERSONA CARDS ---------- */
+// A persona card is a tiny inspiration panel. Click it to pre-fill the
+// chat with a realistic prompt that persona might actually type.
 const personasEl = document.getElementById("personas");
-const detailEl   = document.getElementById("detail");
-const selectEl   = document.getElementById("persona-select");
+
+// A sample task each persona would ask the AI to do. Chat-ready, no terminal.
+const personaTasks = {
+  priya:   "I'm a strategy consultant. Draft a 4-sentence email to a client explaining why the market research we commissioned came back with mixed signals and what I recommend we do about it.",
+  gus:     "I'm a small-practice accountant. Write a 3-sentence note to a client who just asked why their tax bill jumped this year. Keep it plain, warm, and accurate. I'll fill in the specific reason.",
+  siobhan: "I'm an executive coach. My client keeps committing to things and not following through. Help me design three questions I could ask in our next session that would surface the real block, not the stated one.",
+  tomas:   "I'm a solo SaaS founder. Write me a short message to my 200-person newsletter explaining why I'm raising prices by 20%. Frame it as something they'll thank me for.",
+  ottilie: "I'm a solo attorney. Draft a warm-but-firm email to a client who hasn't paid an invoice for 45 days. Preserve the relationship. Give them a concrete way forward.",
+};
 
 personas.forEach(p => {
-  // Card
   const card = document.createElement("div");
   card.className = "persona";
   card.dataset.id = p.id;
@@ -1562,105 +1540,17 @@ personas.forEach(p => {
     <div class="role">${p.role}</div>
     <h3>${p.name}</h3>
     <p class="pain">${p.pain}</p>
-    <div class="expand-hint">Click to see their Monday →</div>
+    <div class="expand-hint">Click to try ${p.name}'s prompt \u2192</div>
   `;
-  card.addEventListener("click", () => selectPersona(p.id, true));
-  personasEl.appendChild(card);
-
-  // Dropdown option
-  const opt = document.createElement("option");
-  opt.value = p.id;
-  opt.textContent = `${p.name} — ${p.role}`;
-  selectEl.appendChild(opt);
-});
-
-/* ---------- PERSONA SELECTION ---------- */
-function selectPersona(id, scroll) {
-  const p = personas.find(x => x.id === id);
-  if (!p) return;
-
-  // Card active state
-  document.querySelectorAll(".persona").forEach(c => {
-    c.classList.toggle("active", c.dataset.id === id);
+  card.addEventListener("click", () => {
+    const prompt = personaTasks[p.id];
+    if (!prompt) return;
+    chatInput.value = prompt;
+    chatInput.focus();
+    // Scroll back up to the chat so they see the input filled
+    document.querySelector(".chat").scrollIntoView({ behavior: "smooth", block: "start" });
   });
-
-  // Detail panel
-  detailEl.classList.remove("empty");
-  detailEl.innerHTML = `
-    <div class="day">${p.day}</div>
-    <h3>${p.name} — ${p.role}</h3>
-    <p class="moment">${p.moment}</p>
-    <div class="commands">$ ./ai ${p.task} &lt;your-file&gt;</div>
-  `;
-
-  // Sync dropdown
-  selectEl.value = id;
-
-  // Regenerate command
-  updateCommand();
-
-  if (scroll) {
-    detailEl.scrollIntoView({ behavior: "smooth", block: "start" });
-  }
-}
-
-/* ---------- COMMAND GENERATION ---------- */
-const fileInput = document.getElementById("file-path");
-const genEl     = document.getElementById("generated-cmd");
-const copyBtn   = document.getElementById("copy-btn");
-
-function updateCommand() {
-  const id   = selectEl.value;
-  const path = fileInput.value.trim();
-  const p    = personas.find(x => x.id === id);
-
-  if (!p && !path) {
-    genEl.textContent = "Fill the two fields above to generate your command.";
-    return;
-  }
-  if (!p) {
-    genEl.textContent = "Pick a persona above.";
-    return;
-  }
-  if (!path) {
-    genEl.textContent = `./ai ${p.task} <your file path here>`;
-    return;
-  }
-
-  genEl.textContent = `./ai ${p.task} "${path}"`;
-}
-
-selectEl.addEventListener("change",  updateCommand);
-fileInput.addEventListener("input",  updateCommand);
-
-selectEl.addEventListener("change", () => {
-  if (selectEl.value) selectPersona(selectEl.value, false);
-});
-
-/* ---------- COPY TO CLIPBOARD ---------- */
-copyBtn.addEventListener("click", async () => {
-  const text = genEl.textContent;
-  if (!text || text.startsWith("Fill") || text.startsWith("Pick")) return;
-
-  try {
-    await navigator.clipboard.writeText(text);
-  } catch {
-    // Fallback
-    const ta = document.createElement("textarea");
-    ta.value = text;
-    document.body.appendChild(ta);
-    ta.select();
-    document.execCommand("copy");
-    ta.remove();
-  }
-
-  const original = copyBtn.textContent;
-  copyBtn.textContent = "Copied ✓";
-  copyBtn.classList.add("copied");
-  setTimeout(() => {
-    copyBtn.textContent = original;
-    copyBtn.classList.remove("copied");
-  }, 1600);
+  personasEl.appendChild(card);
 });
 
 /* ---------- RAG (Docs) ---------- */
@@ -2234,78 +2124,475 @@ document.getElementById("save-prompt-btn").addEventListener("click", () => {
   renderSavedPrompts();
 });
 
-/* ---------- MARKETING KIT POPOVER ---------- */
-// Each entry: title, one-line blurb, suggested "adapt" prompt, full content (markdown).
-// Content is a trimmed excerpt — enough for the model to grasp the shape without
-// blowing the context window.
+/* ---------- TEMPLATES POPOVER (4 categories) ---------- */
+// Categorized library of click-to-load templates. Click a template:
+// the content attaches as context AND the input pre-fills with an
+// adapt prompt customized for the user's niche.
+const kitCategories = [
+  { id: "writing",   label: "Writing"   },
+  { id: "marketing", label: "Marketing" },
+  { id: "meetings",  label: "Meetings"  },
+  { id: "learning",  label: "Learning"  },
+];
+let kitActiveCategory = "writing";
+
 const kitItems = [
-  {
-    id: "positioning",
-    title: "Positioning — the core pitch",
-    blurb: "One-line pitch, three-line problem, value stack, tagline options, belief breakers.",
-    adapt: "Adapt this positioning for [your niche]. Keep the same punchy rhythm \u2014 one idea per line, specific nouns, no jargon.",
-    content: `# Positioning — Purely Personal\n\n## The one-line pitch\nA private AI that runs on your laptop. Your files never leave.\n\n## The one-line that converts\nEvery consultant has a folder of documents they won't paste into ChatGPT.\nWe built the AI for that folder.\n\n## The problem, in three lines\nYou pay $20/month for ChatGPT.\nBut you've never pasted a client contract, session notes, or tax returns into it.\nBecause those aren't yours to share.\n\n## What you get\n- Summarize a 40-page contract in 12 seconds. Never uploaded.\n- Draft a response to a frustrated client. Their email never leaves your screen.\n- Extract action items from meeting notes. The meeting stays private.\n- Spot hidden risks in a clause. The clause stays privileged.\n- Categorize a messy expense CSV. Your financials stay on disk.\n- Index a folder of your own notes and query it. Your past work, searchable.\n\n## The tagline options\n1. Your AI. Your laptop. Your data. Nothing ever leaves.\n2. ChatGPT-grade answers on the stuff you can't send to ChatGPT.\n3. The AI that doesn't phone home.\n4. Private by default.\n\n## The belief breakers\n- \"Local AI must be janky.\" Qwen 2.5 on a 2024 MacBook feels as fast as ChatGPT for summarization, code review, drafts.\n- \"If it's free, it's a toy.\" The code is MIT. Weights are Apache-2.0. It's free because the components were already free.\n- \"I'll have to become a Linux person.\" You double-click a DMG, drag to Applications, open. Same as Slack.\n\n## The guarantee\nTurn off your WiFi. Open the app. Ask a question. If the answer arrives, the model is running 100% locally.`,
-  },
-  {
-    id: "linkedin",
-    title: "LinkedIn launch post",
-    blurb: "In Daniel's voice. Reflective opener, short beat lines, P.S. question at the end.",
-    adapt: "Rewrite this LinkedIn post in my voice for [your audience]. Keep the \"I think\" opener, the one-thought-per-line rhythm, the \"Yeah, so this is what I want you to take away from this\" pivot, and the P.S. that asks the reader a question. Swap the examples for ones that fit [your industry]. No em dashes.",
-    content: `I think no one is saying this out loud.\n\nWe all got excited about AI.\n\nChatGPT. Claude. Everyone's talking about it.\n\nBut here is what nobody's admitting.\n\nYou're not actually using AI for half of what matters.\n\nThe confidential half.\n\nThe files you signed NDAs about.\n\nThe ones you'd never paste into a cloud service.\n\nSo what do you do with those?\n\nYou do them by hand.\n\n45 minutes. Twice a week. Maybe more.\n\nAnd yes.\n\nAI is replacing many things.\n\nBut it never touches the work you actually get paid to handle.\n\nThat is what nobody is talking about.\n\nYeah, so this is what I want you to take away from this.\n\nUse AI for the public stuff.\n\nBut for the private stuff, use an AI that runs entirely on your laptop.\n\nNothing uploaded. No login. No monthly fee.\n\nYour file stays yours.\n\nYour NDA is still an NDA.\n\nThat is what the next year of AI should actually look like.\n\nNot smarter. Not faster. Private.\n\nP.S. What is one document on your laptop right now that you'd love AI help with, but you'd never paste into ChatGPT?`,
-  },
-  {
-    id: "twitter",
-    title: "X / Twitter launch thread",
-    blurb: "12-tweet thread. Same pattern-interrupt opener, specific stories, one link at the end.",
-    adapt: "Adapt this 12-tweet thread for [your audience]. Keep the numbered structure and hook. Swap the examples for things [your audience] would recognize.",
-    content: `1/ Most people don't use AI for half of what matters.\nThe confidential half.\nThe half you signed NDAs about.\n\n2/ You open ChatGPT. You're about to paste the client contract. You hesitate. You close the tab. You summarize 40 pages by hand. 45 minutes gone.\n\n3/ I built the thing for those 45 minutes. It's called Purely Personal. A private AI that runs entirely on your laptop.\n\n4/ Your file never leaves your hard drive. Model runs on your own CPU/GPU via a runtime listening only on localhost. Verifiable: turn off WiFi, it keeps working.\n\n5/ Lawyer drops a 40-page NDA. Asks \"3 riskiest clauses?\" Specific answer in 12 seconds. Offline.\n\n6/ Accountant pastes 20 messy expense rows. Clean categorized table back, 3 anomalies flagged. Offline.\n\n7/ Coach pastes session notes. \"What did they commit to vs. dodge?\" Both lists, instantly.\n\n8/ Under the hood: Qwen 2.5 (7B, Apache-2.0) + Ollama + Electron app (MIT). ~5 GB one-time. $0/month. Mac+Windows+Linux.\n\n9/ Honest: 7B local doesn't beat frontier Claude on hard reasoning. But for the 20x-a-day stuff \u2014 summarize, draft, review, extract \u2014 it's right there. And it's the only option for privileged work.\n\n10/ Who it's for: consultants under NDA, lawyers on privileged matters, accountants in tax season, coaches with session notes, clinicians, founders with proprietary code.\n\n11/ v0.1 shipped. 15-minute install. $0. Works forever. Open-source, MIT.\n\n12/ Link: github.com/danielpaulai/Run-Worldclass-computer-locally`,
-  },
-  {
-    id: "email-sequence",
-    title: "5-email launch sequence",
-    blurb: "Pre-launch through day 7. Punchy voice, one CTA per email.",
-    adapt: "Rewrite these 5 emails for [your niche]. Keep the structure (pre-launch, launch day, day-1 recap, day-3 tip, day-7 verdict). Adapt the stories for [your audience].",
-    content: `## Email 1 \u2014 Pre-launch (24\u201348h before)\nSubject: About the tool you use for half your work\n\nYou have a folder.\nContracts. Session notes. Internal docs. Things under NDA.\nYou've never pasted those into ChatGPT.\nSo you do them by hand. 45 minutes each time.\nTomorrow's session is about those 45 minutes.\n\n## Email 2 \u2014 Launch morning (2h before session)\nSubject: Doors open in 2 hours\n\nQuick list:\n- Laptop, charged.\n- The app installed.\n- One document you'd like summarized (non-confidential).\n- One thing you do manually that AI might help with.\nIf your install didn't finish \u2014 come anyway.\n\n## Email 3 \u2014 Day-1 recap (evening)\nSubject: Your 5-day plan\n\nMonday: summarize a real document.\nTuesday: draft something you dread writing.\nWednesday: drop a folder of your own notes in, ask it a question.\nThursday: run a document through it you'd never paste into ChatGPT.\nFriday: ask it to teach you something.\n\n## Email 4 \u2014 Day-3 (Wednesday)\nSubject: The feature I didn't explain properly\n\nDrop a folder of your own notes into the app.\nIndex takes 60 seconds.\nThen ask it questions \u2014 from YOUR archive.\nYour past self becomes a colleague you can query.\n\n## Email 5 \u2014 Day-7 check\nSubject: Did it stick?\n\nTwo honest answers:\n1. Yes. It's in my workflow for [X]. Tell me X.\n2. No. I installed it, didn't use it. Tell me why.\n\nBoth answers are useful. Reply.`,
-  },
-  {
-    id: "faq",
-    title: "FAQ \u2014 12 questions people ask",
-    blurb: "The 12 objections you'll hear, with sharp answers. Belief-breakers, receipts.",
-    adapt: "Adapt this FAQ for [your niche]. Add 3\u20135 questions specific to [your audience]'s concerns (regulations, workflows, team size). Keep the direct answer style.",
-    content: `### Is this really private?\nYes. The app talks to a model running on your hard drive via localhost:11434. No account, no API key, no telemetry. Verify: turn off WiFi, ask a question, answer streams back.\n\n### Is it really free?\nYes. MIT-licensed open-source. No subscription, no per-token billing, no tier. Install once, use for your career.\n\n### How is this different from ChatGPT?\nChatGPT is smarter on hard reasoning. Purely Personal is private, offline, free. For daily work \u2014 summarize, draft, extract \u2014 they're equivalent. For confidential work \u2014 Purely Personal is the only option.\n\n### How is this different from Ollama?\nOllama is the engine. Purely Personal is the desktop app on top. Docker vs. Docker Desktop.\n\n### What model does it run?\nDefault: Qwen 2.5 (7B), ~5 GB. Swappable to ~100 others. Picks by RAM automatically.\n\n### How much RAM do I need?\n8 GB: Llama 3.2 3B. 16 GB: Qwen 2.5 7B (default). 32 GB+: 14B. 64 GB+: GPT-OSS 20B.\n\n### Does it work on Windows?\nYes. EXE installer ships alongside the Mac DMG.\n\n### Does it work offline?\nYes. After the ~5 GB one-time download, zero internet required.\n\n### Is it as smart as ChatGPT?\nHonest: no, not on hard reasoning. A 7B local model is roughly GPT-3.5 from 2023. Strong on summarization, drafting, extraction. For once-a-month hard problems, use cloud.\n\n### Can I use it for legal/medical/financial work?\nYou're responsible for verifying output. For regulated work (HIPAA, privilege, SEC) where you can't upload to cloud, it's often the only workable AI option.\n\n### What about my IT department?\nIf IT lets you install Slack/Zoom/Notion, they'll let you install this. No server component, no phone-home, no ports.\n\n### Is this a business?\nNot yet. A tool I built and shared. If it has pull, paid tier comes with signed builds + easier team install.`,
-  },
-  {
-    id: "landing",
-    title: "Landing page copy",
-    blurb: "Full landing page \u2014 hero, 3-step how-it-works, 6 use cases, comparison, pricing, final CTA.",
-    adapt: "Rewrite this landing page for [your niche]. Keep the section order. Replace the 6 use cases with ones specific to [your audience].",
-    content: `# Your AI. Your laptop. Nothing ever leaves.\n\nA private AI that runs entirely on your own machine. No cloud, no login, no monthly bill.\n\nBuilt for the documents you'd never paste into ChatGPT.\n\n---\n\n## You already stopped using AI for the important half.\n\nYou have a folder.\nClient contracts. Session notes. Financial docs. Things you signed NDAs about.\nYou don't paste those into ChatGPT.\nSo you do them by hand.\n\nThat's the half Purely Personal handles.\n\n---\n\n## How it works\n\n1. Install. Download, drag to Applications, open. One minute.\n2. Drop a file in. Any document. It stays on your hard drive.\n3. Ask anything. Summarize, find risks, draft a reply, extract items. 12 seconds to answer.\n\n---\n\n## The six real things\n\n- Spot risks in a contract clause\n- Draft a reply to a tough email\n- Extract meeting action items\n- Categorize messy expenses\n- Generate interview questions\n- Explain a concept at client level\n\nEach one: click to try. All run locally.\n\n---\n\n## The comparison\n\nChatGPT: not private.\nClaude: not private.\nRaw Ollama: not easy.\n\nPurely Personal: private AND easy. The only one.\n\n---\n\n## Privacy you can verify in 30 seconds\n\n1. Install the app.\n2. Turn off your WiFi.\n3. Ask a question.\n4. Watch the answer stream back.\n\nYou don't take our word for anything.\n\n---\n\n## Pricing\n\nFree. Forever. Yours.\nNo tier. No subscription. No gated pro plan.\nMIT app. Apache-2.0 model. Install once, use forever.`,
-  },
-  {
-    id: "press-release",
-    title: "Press release (~390 words)",
-    blurb: "For tech blogs, newsletters, podcast hosts. Specific, pattern-interrupting, quote-ready.",
-    adapt: "Adapt this press release for [your launch target]. Swap the developer quote for one in my voice. Add one specific use case from [your industry].",
-    content: `FOR IMMEDIATE RELEASE\n\n# Purely Personal launches: the AI for the half of work you couldn't put in the cloud\n\n## Free, open-source desktop app runs a world-class AI model entirely on your laptop. No cloud, no login, no subscription.\n\nSAN FRANCISCO, CA \u2014 April 2026 \u2014 Most AI users stopped using AI for half of what matters.\n\nThe confidential half. Client contracts under NDA. Session notes. Legal work. Tax documents. Medical data. The private 80% of what professionals actually get paid to handle.\n\nToday Purely Personal launches to fix that gap.\n\nPurely Personal is a free, open-source desktop app that runs Qwen 2.5 \u2014 an Apache-2.0 open-weights AI model from Alibaba \u2014 entirely on the user's own laptop. No data ever leaves the machine.\n\nSix real-world use cases are built in as one-click templates: spot contract risks, draft a reply to a tough email, extract meeting action items, categorize messy expenses, generate interview questions, explain a concept at client level.\n\nThe privacy claim is verifiable by the user. Turn off WiFi. The app keeps working.\n\nInstall: 15 minutes. Cost: $0. Open-source: MIT.`,
-  },
-  {
-    id: "readme",
-    title: "Kit index (this folder)",
-    blurb: "Your reference doc for the whole marketing kit \u2014 what's in here, how to use it.",
-    adapt: "Summarize the marketing kit for a teammate in one paragraph.",
-    content: `# Purely Personal \u2014 Marketing Kit\n\n8 files in this folder, each a standalone asset.\n\n- positioning.md \u2014 the foundation. Read this first and memorize the taglines.\n- launch-post-linkedin.md \u2014 three variants. Post Variant A on launch day.\n- launch-post-twitter.md \u2014 a 12-tweet thread. Post as one thread, pin it.\n- email-sequence.md \u2014 5 emails from pre-launch through day-7 verdict.\n- faq.md \u2014 12 questions people ask, with direct answers.\n- landing-copy.md \u2014 full landing page, ready for Framer/Webflow.\n- press-release.md \u2014 390-word release for tech blogs.\n- README.md \u2014 this index.\n\nVoice rules: short sentences, one idea per line, specific nouns, no jargon, name the objection, prove the claim.`,
-  },
+  { id:"cover-letter", category:"writing",
+    title:"Cover letter",
+    blurb:"Job application cover letter. Warm, specific, one page.",
+    adapt:`Rewrite this cover letter for me. The job I'm applying for is [paste the job description]. My background: [write 3 to 5 sentences about your experience]. Keep it warm, specific, one page.`,
+    content:`Dear [Hiring Manager],
+
+I saw the opening for [role] at [company] and I want to tell you why I'd be a good fit.
+
+The reason I'm writing isn't just that I've done this work before. It's that I've done it in the exact situation you're describing. When [company] says you need someone who can [specific challenge from the job post], that's been my last three years.
+
+Here's what I've done that's most relevant:
+
+- [Concrete win 1, with a number]
+- [Concrete win 2, with a number]
+- [Concrete win 3, showing soft skill]
+
+I'd love twenty minutes to walk you through how I'd approach the first ninety days. If that's useful, I'm at [email] or [phone].
+
+Thanks for your time,
+[Your name]` },
+  { id:"thank-you", category:"writing",
+    title:"Thank-you note",
+    blurb:"Short, sincere, specific. For after a meeting, favor, or gift.",
+    adapt:`Rewrite this thank-you note for me. The person I'm thanking: [their name and what they did]. My relationship to them: [context]. Keep it short, sincere, specific to the thing they did.`,
+    content:`Hey [Name],
+
+Just wanted to say thanks for [the specific thing they did].
+
+I noticed [something specific and true about what they did, not a generic compliment]. That meant a lot.
+
+If I can ever return the favor, let me know.
+
+[Your name]` },
+  { id:"polite-decline", category:"writing",
+    title:"Polite decline",
+    blurb:"Say no to a request without burning the bridge.",
+    adapt:`Rewrite this polite-decline message for me. What I'm declining: [paste the request]. Reason I'm saying no (pick one): I don't have capacity, it's not a fit, I'm already committed, I'm stepping back. Keep it warm. Don't over-explain.`,
+    content:`Hi [Name],
+
+I'd love to help with [the thing they asked]. The honest answer is that I don't have the right capacity to give it the attention it needs right now.
+
+If you want, I can introduce you to [someone better suited] who might be a better fit.
+
+Thank you for thinking of me.
+
+[Your name]` },
+  { id:"intro-email", category:"writing",
+    title:"Cold intro email",
+    blurb:"Short reach-out to someone new. No ask up front.",
+    adapt:`Write a cold email for me to [person's name + what they do]. My reason for reaching out: [one specific real reason]. What I want from them: [optional]. Keep it under 100 words. Make the first sentence about them, not me.`,
+    content:`Hi [Name],
+
+I read your piece on [specific thing] last week. The line about [quote or paraphrase] was exactly what I needed to hear.
+
+I'm [one sentence about you that's relevant to what they wrote]. Been thinking about this problem from [your angle].
+
+No ask. Just wanted to say the work landed.
+
+If you're ever open to a 15-minute chat, I'd love it. No worries if not.
+
+[Your name]` },
+  { id:"follow-up", category:"writing",
+    title:"Follow-up after no reply",
+    blurb:"Second email after silence. No guilt-trip, graceful exit.",
+    adapt:`Rewrite this follow-up for me. What I emailed them about: [the original topic]. How long ago: [days or weeks]. My tone should be relaxed, not desperate.`,
+    content:`Hi [Name],
+
+Circling back on my note from [when]. No pressure at all. If it's not the right time, I totally understand.
+
+If you've moved on to other things, just reply with a one-word "pass" and I won't bug you again.
+
+Otherwise, happy to chat whenever works.
+
+Thanks,
+[Your name]` },
+  { id:"apology", category:"writing",
+    title:"Sincere apology",
+    blurb:"When you messed up. Own it, don't over-explain.",
+    adapt:`Rewrite this apology for me. What I did wrong: [the mistake]. Who it affected: [the person or team]. Short. No blaming anyone else. End with what I'll do differently.`,
+    content:`[Name],
+
+I'm sorry about [what happened]. I know it [the real impact on them].
+
+I don't have a good excuse. I [took the action / missed the thing / said the wrong thing], and I should have done better.
+
+What I'm doing next: [one concrete thing you're changing so it doesn't happen again].
+
+Thank you for giving me the chance to say this.
+
+[Your name]` },
+  { id:"positioning", category:"marketing",
+    title:"Positioning (tagline + pitch)",
+    blurb:"One-line pitch, three-line problem, tagline options.",
+    adapt:`Rewrite this positioning for [your niche]. Keep the same punchy rhythm. One idea per line. Specific nouns. No jargon.`,
+    content:`## The one-line pitch
+A private AI that runs on your laptop. Your files never leave.
+
+## The problem, in three lines
+You pay $20 a month for ChatGPT.
+But you've never pasted a client contract, session notes, or tax returns into it.
+Because those aren't yours to share.
+
+## Tagline options
+1. Your AI. Your laptop. Your data. Nothing ever leaves.
+2. ChatGPT-grade answers on the stuff you can't send to ChatGPT.
+3. The AI that doesn't phone home.
+
+## Belief breakers
+- "Local AI must be slow." Nope. On a 2024 Mac it feels as fast as ChatGPT for most tasks.
+- "If it's free, it's a toy." Open source, same model class as the paid one.
+- "I'll have to be technical." Double-click an app. Same as installing Slack.` },
+  { id:"linkedin", category:"marketing",
+    title:"LinkedIn launch post",
+    blurb:"Reflective opener, short beat lines, P.S. question at the end.",
+    adapt:`Rewrite this LinkedIn post in my voice for [your audience]. Keep the "I think" opener, the one-thought-per-line rhythm, and the P.S. that asks the reader a question. No em dashes.`,
+    content:`I think no one is saying this out loud.
+
+We all got excited about AI.
+
+ChatGPT. Claude. Everyone's talking about it.
+
+But here is what nobody's admitting.
+
+You're not actually using AI for half of what matters.
+
+The confidential half.
+
+The files you signed NDAs about.
+
+So what do you do with those? You do them by hand. 45 minutes, twice a week, maybe more.
+
+And yes. AI is replacing many things. But it never touches the work you actually get paid to handle.
+
+Yeah, so this is what I want you to take away from this.
+
+Use AI for the public stuff.
+
+But for the private stuff, use an AI that runs entirely on your laptop.
+
+Nothing uploaded. No login. No monthly fee.
+
+P.S. What is one document on your laptop right now that you'd love AI help with, but you'd never paste into ChatGPT?` },
+  { id:"twitter", category:"marketing",
+    title:"Twitter / X thread",
+    blurb:"12-tweet thread with hook and stories.",
+    adapt:`Adapt this 12-tweet thread for [your audience]. Keep the numbered structure. Swap the examples for things [your audience] would recognize.`,
+    content:`1/ Most people don't use AI for half of what matters.
+The confidential half.
+The half you signed NDAs about.
+
+2/ You open ChatGPT. You're about to paste the client contract. You hesitate. You close the tab. You summarize 40 pages by hand. 45 minutes gone.
+
+3/ I built the thing for those 45 minutes. A private AI that runs entirely on your laptop.
+
+4/ Your file never leaves your hard drive. Turn off WiFi: it keeps working.
+
+5/ A lawyer drops a 40-page NDA. Asks for the 3 riskiest clauses. Specific answer in 12 seconds.
+
+6/ An accountant pastes 20 messy expense rows. Gets a clean categorized table.
+
+7/ A coach pastes session notes. Asks what the client committed to vs. dodged. Both lists, instantly.
+
+8/ $0 per month. Open source. Mac + Windows + Linux.` },
+  { id:"email-sequence", category:"marketing",
+    title:"5-email launch sequence",
+    blurb:"Pre-launch through day-7 verdict. One CTA each.",
+    adapt:`Rewrite these 5 emails for [your niche]. Keep the structure. Adapt the stories for [your audience].`,
+    content:`## Email 1, pre-launch
+Subject: About the tool you use for half your work
+
+You have a folder.
+Contracts. Session notes. Internal docs.
+You've never pasted those into ChatGPT.
+So you do them by hand. 45 minutes each time.
+
+## Email 2, launch day
+Subject: Doors open in 2 hours
+
+Laptop charged. App installed. One doc to try. One task you do manually.
+
+## Email 3, day-1 recap
+Subject: Your 5-day plan
+
+Monday: summarize. Tuesday: draft. Wednesday: folder. Thursday: a private doc. Friday: teach me.
+
+## Email 4, day-3
+Subject: The feature I didn't explain properly
+
+Drop a folder of your own notes. It becomes a searchable AI of your past work.
+
+## Email 5, day-7
+Subject: Did it stick?
+
+Two answers. Both useful.
+1. Yes, it's in my workflow for X.
+2. No, and here's why.` },
+  { id:"faq", category:"marketing",
+    title:"12-question FAQ",
+    blurb:"The questions people ask, with short direct answers.",
+    adapt:`Adapt this FAQ for [your niche]. Add 3 to 5 questions specific to [your audience]'s concerns.`,
+    content:`### Is this really private?
+Yes. The app talks to a model on your hard drive via localhost. No account, no API key. Verify: turn off WiFi, ask a question.
+
+### Is it really free?
+Yes. Open source. No subscription.
+
+### Different from ChatGPT?
+ChatGPT is smarter on hard reasoning. This is private, offline, free. For daily work they're equivalent.
+
+### How much RAM do I need?
+8 GB works. 16 GB recommended.
+
+### Windows?
+Yes. EXE installer alongside the Mac one.
+
+### Offline?
+Yes, after the one-time download.
+
+### Regulated work?
+For HIPAA / privilege / SEC work where you can't upload, this is often the only workable AI.
+
+### IT department?
+If they let you install Slack, they'll let you install this. No server, no phone-home.` },
+  { id:"landing", category:"marketing",
+    title:"Landing page copy",
+    blurb:"Hero, how-it-works, use cases, comparison, pricing.",
+    adapt:`Rewrite this landing page for [your niche]. Replace the use cases with ones specific to [your audience].`,
+    content:`# Your AI. Your laptop. Nothing ever leaves.
+
+A private AI that runs entirely on your own machine. No cloud, no login, no monthly bill.
+
+## You already stopped using AI for the important half.
+
+You have a folder. Client contracts. Session notes. Financial docs.
+You don't paste those into ChatGPT.
+So you do them by hand.
+That's the half this handles.
+
+## How it works
+1. Install. One minute.
+2. Drop a file in. It stays on your hard drive.
+3. Ask anything. 12 seconds to answer.
+
+## Pricing
+Free. Forever. Yours.` },
+  { id:"press-release", category:"marketing",
+    title:"Press release (~390 words)",
+    blurb:"For tech blogs, newsletters, podcast hosts.",
+    adapt:`Adapt this press release for [your launch target]. Swap the developer quote for one in my voice.`,
+    content:`FOR IMMEDIATE RELEASE
+
+# Purely Personal launches: the AI for the half of work you couldn't put in the cloud
+
+SAN FRANCISCO, April 2026. Most AI users stopped using AI for half of what matters. The confidential half. Client contracts. Session notes. Legal work. Tax documents.
+
+Today Purely Personal launches to fix that gap. A free, open-source desktop app that runs a world-class AI model entirely on the user's own laptop. No data ever leaves the machine.
+
+Six one-click use cases built in. The privacy claim is verifiable: turn off WiFi, the app keeps working.
+
+Install: 15 minutes. Cost: $0. Open source.` },
+  { id:"agenda", category:"meetings",
+    title:"Meeting agenda",
+    blurb:"Clear structure for a 30 or 60 minute meeting.",
+    adapt:`Turn this agenda template into a real agenda. Topic: [describe the meeting]. Who's attending: [names/roles]. Goal by the end: [one sentence]. Duration: [30 or 60 minutes].`,
+    content:`# [Meeting title]
+**Date:** [date]  **Time:** [time]  **Length:** [30 / 60 min]
+**Attendees:** [names]
+
+## Goal
+One sentence. What does a good meeting look like by the end?
+
+## Agenda
+1. Check-in + context (5 min)
+2. Review what we already know (5 min)
+3. Open questions to resolve (15 min)
+4. Decisions (5 min)
+5. Actions + owners (5 min)
+
+## Parking lot
+(Anything we don't have time for)
+
+## Decisions made
+-
+
+## Actions
+- [ ] Who | What | When` },
+  { id:"one-on-one", category:"meetings",
+    title:"1:1 prep",
+    blurb:"Five prompts to walk into a 1:1 ready, not scrambling.",
+    adapt:`Use this 1:1 prep template to help me think through my next 1:1. The person I'm meeting: [their name and role]. What's been on my mind: [one or two things]. Help me fill each section with sharp, honest answers.`,
+    content:`# 1:1 prep, [date]
+**With:** [name]
+
+## What I want to get out of this meeting
+One sentence. Not generic. The specific outcome.
+
+## What I'm proud of since last time
+- Specific win 1
+- Specific win 2
+
+## What I'm stuck on
+- The thing I want help thinking through. Be honest.
+
+## A question I'd ask if I were braver
+(This is the one that matters. Don't skip it.)
+
+## What I want from them specifically
+Advice? A decision? Air cover? Feedback? Name it.` },
+  { id:"recap", category:"meetings",
+    title:"Meeting recap with action items",
+    blurb:"Turn rough notes into a clean recap everyone can act on.",
+    adapt:`I'll paste my rough meeting notes. Turn them into a clean recap with: (1) one-paragraph summary, (2) decisions, (3) action items as a checklist with owners and dates, (4) open questions.`,
+    content:`# Recap: [meeting name], [date]
+
+## Summary
+One paragraph. What happened and what's different now.
+
+## Decisions
+- [Decision 1]
+- [Decision 2]
+
+## Action items
+- [ ] [Person] | [Action] | [By when]
+- [ ] [Person] | [Action] | [By when]
+
+## Open questions
+- [What we didn't resolve, to handle next time]` },
+  { id:"decision-doc", category:"meetings",
+    title:"Decision document",
+    blurb:"Write a decision down so future-you remembers why.",
+    adapt:`Help me write a decision document. The decision: [one sentence]. The options we considered: [2-4]. Use this template to capture context, trade-offs, and what would make us revisit.`,
+    content:`# Decision: [one-line decision]
+**Date:** [date]  **Made by:** [name or group]
+
+## Context
+What's happening that forces a choice? 2-4 sentences.
+
+## Options we considered
+1. Option A: description. Pros. Cons.
+2. Option B: description. Pros. Cons.
+
+## What we chose and why
+The option + 2-3 real reasons.
+
+## What would make us revisit this
+Specific signals. If X happens, we reopen this decision.` },
+  { id:"retrospective", category:"meetings",
+    title:"Team retrospective",
+    blurb:"Keep / stop / start, with honest answers.",
+    adapt:`Run a retrospective with me. Time period: [last week / last sprint / last quarter]. Help me fill each section honestly, including hard truths.`,
+    content:`# Retrospective: [period]
+
+## What went well (keep doing)
+-
+
+## What didn't (stop doing)
+-
+
+## What we should try next
+-
+
+## The hard truth
+The thing we're avoiding saying out loud. Name it here.
+
+## One experiment we commit to for next period
+-` },
+  { id:"explain-simply", category:"learning",
+    title:"Explain something simply",
+    blurb:"The thing you never understood, in everyday language.",
+    adapt:`Explain [the topic I ask about] in simple everyday language. Pretend I'm 10 years old. Use one small example from daily life. Five sentences or fewer. No jargon.`,
+    content:`Replace this text with the topic you want explained, and hit send.
+
+Examples:
+- How does a mortgage actually work?
+- What is machine learning?
+- Why does inflation happen?
+- How does my immune system fight a cold?
+- What's a power of attorney?` },
+  { id:"feynman", category:"learning",
+    title:"Feynman mode",
+    blurb:"You explain it back. I tell you where it's fuzzy.",
+    adapt:`Quiz me Feynman-style on [the topic I say next]. Ask me to explain it back in my own words. Then point out what I got right, what I got wrong, and where my understanding is fuzziest. Be honest.`,
+    content:`The Feynman technique:
+
+1. Pick a topic you think you understand.
+2. Try to explain it to a 10-year-old.
+3. Notice where you get stuck.
+4. Go back to the source, fill the gap, try again.
+
+Replace this text with the topic you want to learn, and hit send.` },
+  { id:"quiz-me", category:"learning",
+    title:"Quiz me (5 questions)",
+    blurb:"Five questions on a topic. Self-grading.",
+    adapt:`Quiz me on [the topic I say next]. 5 questions, mixing easy, medium, and hard. After each answer, tell me if I was right, what I missed, and the correct answer.`,
+    content:`Replace this text with the topic you want to be quizzed on, and hit send.
+
+Examples:
+- US constitutional law basics
+- Basic statistics
+- French revolution
+- How to read a balance sheet` },
+  { id:"compare-concepts", category:"learning",
+    title:"Compare two concepts",
+    blurb:"Two things side-by-side. End with when to pick which.",
+    adapt:`Compare [concept A] and [concept B]. Give me a side-by-side table with 5 to 7 rows. End with a one-sentence summary of when to pick which.`,
+    content:`Replace this text with the two concepts you want compared.
+
+Examples:
+- SEP IRA vs. Solo 401(k)
+- LLC vs. S-Corp
+- Cohort analysis vs. funnel analysis
+- Socratic method vs. Feynman technique` },
+  { id:"flashcards", category:"learning",
+    title:"Make me flashcards",
+    blurb:"Turn notes or an article into Q&A flashcards.",
+    adapt:`Turn the text I paste into flashcards. For each key idea: one question on one line, the answer on the next. 8 to 15 cards. Short and sharp, not wordy.`,
+    content:`Paste any text or notes below and hit send.
+
+Good inputs:
+- A textbook chapter
+- Your own class notes
+- An article you want to remember
+- Meeting notes you need to recall later` }
 ];
 
-function openKit() {
+function renderKitTabs() {
+  const tabs = document.getElementById("kit-tabs");
+  tabs.innerHTML = "";
+  kitCategories.forEach((cat) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.textContent = cat.label;
+    if (cat.id === kitActiveCategory) btn.classList.add("active");
+    btn.addEventListener("click", () => {
+      kitActiveCategory = cat.id;
+      renderKitTabs();
+      renderKitList();
+    });
+    tabs.appendChild(btn);
+  });
+}
+
+function renderKitList() {
   const listEl = document.getElementById("kit-list");
   listEl.innerHTML = "";
-  kitItems.forEach((item) => {
+  const filtered = kitItems.filter((k) => k.category === kitActiveCategory);
+  if (filtered.length === 0) {
+    listEl.innerHTML = `<div class="popover-empty">No templates in this category yet.</div>`;
+    return;
+  }
+  filtered.forEach((item) => {
     const row = document.createElement("div");
     row.className = "popover-item";
     row.innerHTML = `
-      <div class="item-name">${item.title}</div>
-      <div class="item-preview">${item.blurb}</div>
+      <div class="item-name">${escapeHtml(item.title)}</div>
+      <div class="item-preview">${escapeHtml(item.blurb)}</div>
       <div class="item-actions">
         <button type="button" data-action="load" data-id="${item.id}">Load into chat</button>
         <button type="button" data-action="copy" data-id="${item.id}">Copy text</button>
@@ -2314,7 +2601,6 @@ function openKit() {
     listEl.appendChild(row);
   });
 
-  // Wire up the buttons (delegation would also work — explicit is clearer)
   listEl.querySelectorAll("[data-action]").forEach((btn) => {
     btn.addEventListener("click", async (ev) => {
       ev.stopPropagation();
@@ -2328,8 +2614,7 @@ function openKit() {
         btn.textContent = "Copied \u2713";
         setTimeout(() => (btn.textContent = orig), 1500);
       } else if (action === "load") {
-        // Attach the content as if the user had dragged the file in,
-        // and pre-fill the input with the suggested adapt prompt.
+        // Attach the content as context + pre-fill the adapt prompt.
         attachedFile = {
           name: item.id + ".md",
           size: new Blob([item.content]).size,
@@ -2342,7 +2627,11 @@ function openKit() {
       }
     });
   });
+}
 
+function openKit() {
+  renderKitTabs();
+  renderKitList();
   document.getElementById("kit-backdrop").classList.add("open");
 }
 
@@ -2702,51 +2991,21 @@ function addChatMessage(role, content) {
   return el;
 }
 
-/* ---------- Real-use-case prompts (click a button, auto-fill + send) ---------- */
+/* ---------- Quick-start prompts (click a button, auto-fill + send) ---------- */
+// Six universal tasks anyone might want from an AI. Short, plain-language
+// instructions that work for any profession and any context the user adds.
 const quickstartPrompts = {
-  "contract-risks": `Here's a clause from an NDA a client sent me. Identify the 3 most risky items in plain English, one sentence each. Be specific about what could go wrong:
+  "summarize":  "Summarize the text I'm about to paste. Give me 3 to 5 short bullets in plain language. Highlight anything surprising or worth a second look. No preamble. No restating the prompt. Just the bullets.",
 
-"The Recipient shall hold all Confidential Information in strict confidence for a period of five (5) years from the date of disclosure. The Recipient shall not use any Confidential Information for any purpose other than evaluating the proposed transaction. The Discloser may, at its sole discretion, require the immediate return or destruction of all Confidential Information, and the Recipient must certify such destruction in writing within 10 business days. Recipient agrees that monetary damages would be insufficient remedy for any breach, and the Discloser shall be entitled to injunctive relief without posting any bond. Recipient shall be liable for all fees and costs, including attorneys' fees, incurred by Discloser in enforcing this Agreement."`,
+  "reply":      "I'll paste a message below. Draft a reply for me. Keep it short, warm, and clear. Match the tone of the person I'm replying to. If the message is emotional, give me three versions: one warm, one firm, one neutral.",
 
-  "draft-reply": `A client emailed me frustrated that a project is behind schedule. Draft a professional, warm response that (1) acknowledges their frustration honestly, (2) explains the cause without making excuses (a supplier delay), and (3) proposes two concrete next steps. Keep it under 120 words.
+  "clearer":    "Rewrite the text I paste next to be clearer and simpler. Keep the meaning the same. Cut the words it doesn't need. No jargon. Short sentences. Easy for a smart 12-year-old to read.",
 
-Their email:
-"I'm incredibly disappointed. You promised we'd have this by Monday and it's now Thursday with no update from your side. This is unacceptable for the rates I'm paying. I need to know exactly when this will be done and what you're doing about it."`,
+  "explain":    "Explain the thing I ask about next in simple, everyday language. Pretend I'm ten years old. Use one small example from real life. Five sentences or fewer.",
 
-  "action-items": `Here are rough notes from a client meeting I just had. Extract: (1) commitments I made, (2) commitments they made, (3) the 3 follow-up questions I should have asked but didn't.
+  "decide":     "I want to think through a decision. I'll describe it in my next message. Give me: the three best reasons to do it, the three best reasons not to, one question I should answer before deciding, and what a wise friend would tell me.",
 
-Notes:
-- Discussed Q3 strategy
-- Client wants to expand to EU next quarter
-- I agreed to research GDPR requirements by Friday
-- They said they'd send their Q2 numbers Tuesday
-- Mentioned possibly hiring a second consultant
-- Budget seemed tight but they didn't say explicitly
-- Next meeting: Thursday 2pm
-- They asked if I had capacity for a separate branding project`,
-
-  "categorize-expenses": `Here's a messy list of business expenses from last month. For each line: (1) assign a category from [Software, Travel, Meals, Office, Marketing, Contractor, Other], (2) flag anything that looks unusual or worth a second look.
-
-Return as a clean table.
-
-- 2024-10-15: $847.23 "Stripe fees October"
-- 2024-10-16: $32.50 "Lunch with client Acme"
-- 2024-10-17: $14,230 "Facebook ads Q4 launch"
-- 2024-10-18: $89 "Adobe Creative Cloud"
-- 2024-10-20: $1,247 "United Airlines SFO-JFK"
-- 2024-10-21: $45 "Uber to airport"
-- 2024-10-22: $380 "W Hotel New York - 1 night"
-- 2024-10-23: $12 "Starbucks"
-- 2024-10-24: $9,500 "Bonus to Alex (contractor)"
-- 2024-10-25: $23 "Printer paper Staples"`,
-
-  "interview-questions": `Generate 5 interview questions for a candidate applying to a Senior Product Designer role at a Series A SaaS startup. Role focus: redesigning a clunky onboarding flow.
-
-Mix: 2 behavioral, 2 portfolio-walkthrough, 1 situational.
-
-For each, include a one-line "what I'm listening for" note so I know when the answer is strong.`,
-
-  "explain-concept": `A client asked me to explain what a "backdoor Roth conversion" is and whether it applies to their situation. Write a plain-English explanation in exactly 5 sentences, aimed at someone with basic finance knowledge but no tax background. At the end, include one specific scenario where it WOULD be a smart move and one where it WOULDN'T.`,
+  "brainstorm": "I'm going to tell you what I'm stuck on. Give me ten different angles, ideas, or approaches. Don't repeat yourself. Include at least one idea most people wouldn't think of.",
 };
 
 document.querySelectorAll("#quickstart-btns button").forEach((btn) => {
