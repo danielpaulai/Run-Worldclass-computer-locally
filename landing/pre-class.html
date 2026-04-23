@@ -401,6 +401,23 @@
     margin-top: 6px;
   }
 
+  /* ---------- HERO VIDEO ---------- */
+  .hero-video {
+    max-width: 720px;
+    margin: 40px auto 8px;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 24px 48px -16px rgba(0,0,0,0.22), 0 0 0 1px var(--line);
+    background: var(--ink);
+  }
+  .hero-video video { display: block; width: 100%; height: auto; }
+  .hero-video-caption {
+    text-align: center;
+    font-size: 13.5px;
+    color: var(--muted);
+    margin: 6px 0 30px;
+  }
+
 </style>
 </head>
 <body>
@@ -423,6 +440,14 @@
     <h3>Why we're doing this first</h3>
     <p>Tomorrow's class is hands-on. We don't want to watch 100 people install software while the clock ticks. If you hit setup tonight, you get 5 minutes of trouble that never touches the class, and tomorrow you spend the hour actually <em>using</em> what you built.</p>
   </div>
+
+  <div class="hero-video">
+    <video controls preload="metadata" poster="/media/preclass-poster.jpg" playsinline>
+      <source src="/media/preclass.mp4" type="video/mp4">
+      Your browser doesn't support video. <a href="/media/preclass.mp4">Download the file.</a>
+    </video>
+  </div>
+  <p class="hero-video-caption">Watch the 3-minute walkthrough before you start.</p>
 
   <div class="progress-wrap">
     <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
